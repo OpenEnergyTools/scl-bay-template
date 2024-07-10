@@ -1,0 +1,127 @@
+{
+  "name": "function-specification-editor",
+  "description": "TBD",
+  "license": "Apache-2.0",
+  "author": "Jakob Vogelsang",
+  "version": "0.0.1",
+  "main": "dist/scl-communication-editor.js",
+  "module": "dist/scl-communication-editor.js",
+  "exports": {
+    ".": "./dist/scl-communication-editor.js"
+  },
+  "scripts": {
+    "analyze": "cem analyze --litelement",
+    "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\"",
+    "build": "rimraf dist && rollup -c rollup.config.js",
+    "deploy": "npm run build && gh-pages --dist 'dist'",
+    "prepublish": "tsc && npm run analyze -- --exclude dist",
+    "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
+    "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
+    "test": "playwright install && tsc && wtr --coverage",
+    "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\"",
+    "test:visual": "playwright install && tsc && wtr --group visual --coverage",
+    "test:unit": "playwright install && tsc && wtr --group unit --coverage",
+    "test:update": "tsc && wtr --group visual --update-visual-baseline",
+    "test:unit:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group unit --watch\"",
+    "test:visual:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --group visual --watch\""
+  },
+  "dependencies": {
+    "@material/mwc-button": "^0.27.0",
+    "@material/mwc-checkbox": "^0.27.0",
+    "@material/mwc-dialog": "0.27.0",
+    "@material/mwc-fab": "0.27.0",
+    "@material/mwc-list": "^0.27.0",
+    "@material/mwc-icon": "^0.27.0",
+    "@material/mwc-formfield": "0.27.0",
+    "@material/mwc-icon-button": "^0.27.0",
+    "@material/mwc-icon-button-toggle": "^0.27.0",
+    "@material/mwc-select": "^0.27.0",
+    "@material/mwc-textfield": "^0.27.0",
+    "@openscd/oscd-filtered-list": "^1.1.1",
+    "@openenergytools/scl-lib": "0.14.4",
+    "@openenergytools/filterable-lists": "0.0.4",
+    "@openscd/oscd-tree-grid": "^0.0.1-alpha.12",
+    "@openscd/open-scd-core": "^0.0.2",
+    "lit": "^2.4.0"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.6.6",
+    "@open-wc/building-rollup": "^2.0.2",
+    "@open-wc/eslint-config": "^8.0.2",
+    "@open-wc/testing": "^3.1.6",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^9.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/parser": "^5.41.0",
+    "@web/dev-server": "^0.1.35",
+    "@web/dev-server-esbuild": "^1.0.0",
+    "@web/rollup-plugin-import-meta-assets": "^2.0.2",
+    "@web/test-runner": "^0.15.0",
+    "@web/test-runner-commands": "0.09",
+    "@web/test-runner-playwright": "^0.11.0",
+    "@web/test-runner-visual-regression": "^0.9.0",
+    "concurrently": "^7.5.0",
+    "deepmerge": "^4.2.2",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "gh-pages": "^4.0.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.79.1",
+    "sinon": "^17.0.1",
+    "tslib": "^2.4.1",
+    "typescript": "^4.8.4"
+  },
+  "customElements": "custom-elements.json",
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "extends": [
+      "@open-wc",
+      "prettier"
+    ],
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "rules": {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "error"
+      ],
+      "import/no-unresolved": "off",
+      "import/no-extraneous-dependencies": [
+        "error",
+        {
+          "devDependencies": [
+            "**/*.test.ts",
+            "**/*.spec.ts",
+            "rollup.config.js"
+          ]
+        }
+      ],
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "ignorePackages": true
+        }
+      ]
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "arrowParens": "avoid"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
