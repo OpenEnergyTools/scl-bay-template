@@ -11272,6 +11272,7 @@ function getSourceDef(paths) {
 let LIBDOC;
 let LIBDOCNAME;
 const uri6100 = 'http://www.iec.ch/61850/2019/SCL/6-100';
+const xmlnsNs = 'http://www.w3.org/2000/xmlns/';
 const prefix6100 = 'eTr_6-100';
 function compare(a, b) {
     const as = `${a.getAttribute('input')}${a.getAttribute('inputInst')}${a.getAttribute('source')}`;
@@ -11440,7 +11441,7 @@ class SclBayTemplate extends s$2 {
         let private6100 = (_b = this.selectedLNode) === null || _b === void 0 ? void 0 : _b.querySelector(':scope > Private[type="eIEC61850-6-100"]');
         if (!lNodeInputs && !private6100) {
             lNodeInputs = this.doc.createElementNS(uri6100, `${prefix6100}:LNodeInputs`);
-            private6100 = this.doc.createElement('Private');
+            private6100 = this.doc.createElementNS(this.doc.documentElement.namespaceURI, 'Private');
             private6100.setAttribute('type', 'eIEC61850-6-100');
             sourceRefEdits.push({
                 parent: this.selectedLNode,
@@ -11467,10 +11468,10 @@ class SclBayTemplate extends s$2 {
             const path = source.split('/');
             const input = path[path.length - 2];
             const inst = ((_b = (_a = this.selectedLNode) === null || _a === void 0 ? void 0 : _a.querySelectorAll('SourceRef').length) !== null && _b !== void 0 ? _b : 0) + i + 1;
-            sourceRef.setAttribute('source', source);
-            sourceRef.setAttribute('input', input);
-            sourceRef.setAttribute('inputInst', `${inst}`);
-            sourceRef.setAttribute('service', service);
+            sourceRef.setAttributeNS(uri6100, 'source', source);
+            sourceRef.setAttributeNS(uri6100, 'input', input);
+            sourceRef.setAttributeNS(uri6100, 'inputInst', `${inst}`);
+            sourceRef.setAttributeNS(uri6100, 'service', service);
             sourceRefEdits.push({
                 parent: lNodeInputs,
                 node: sourceRef,
@@ -11801,6 +11802,15 @@ class SclBayTemplate extends s$2 {
         type="file"
       />
     </div>`;
+    }
+    updated(changedProperties) {
+        // make sure to put the 6-100 on the SCL element as defined by the IEC 61850-6
+        if (!changedProperties.has('doc'))
+            return;
+        const sldNsPrefix = this.doc.documentElement.lookupPrefix(uri6100);
+        if (!sldNsPrefix) {
+            this.doc.documentElement.setAttributeNS(xmlnsNs, `xmlns:${prefix6100}`, uri6100);
+        }
     }
     render() {
         if (!this.substation)

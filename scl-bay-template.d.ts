@@ -53,6 +53,7 @@ export default class SclBayTemplate extends LitElement {
     renderFuncDetail(): TemplateResult;
     renderFuncContainers(): TemplateResult;
     renderSettings(): TemplateResult;
+    updated(changedProperties: Map<string, any>): void;
     render(): TemplateResult<1>;
     static styles: import("lit").CSSResult;
 }
