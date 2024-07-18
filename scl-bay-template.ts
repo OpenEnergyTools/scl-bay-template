@@ -36,6 +36,7 @@ let LIBDOC: XMLDocument;
 let LIBDOCNAME: string;
 
 const uri6100 = 'http://www.iec.ch/61850/2019/SCL/6-100';
+const xmlnsNs = 'http://www.w3.org/2000/xmlns/';
 const prefix6100 = 'eTr_6-100';
 
 /*
@@ -334,7 +335,10 @@ export default class SclBayTemplate extends LitElement {
         uri6100,
         `${prefix6100}:LNodeInputs`
       );
-      private6100 = this.doc!.createElement('Private');
+      private6100 = this.doc!.createElementNS(
+        this.doc!.documentElement.namespaceURI,
+        'Private'
+      );
       private6100.setAttribute('type', 'eIEC61850-6-100');
 
       sourceRefEdits.push({
@@ -372,10 +376,10 @@ export default class SclBayTemplate extends LitElement {
       const inst =
         (this.selectedLNode?.querySelectorAll('SourceRef').length ?? 0) + i + 1;
 
-      sourceRef.setAttribute('source', source);
-      sourceRef.setAttribute('input', input);
-      sourceRef.setAttribute('inputInst', `${inst}`);
-      sourceRef.setAttribute('service', service);
+      sourceRef.setAttributeNS(uri6100, 'source', source);
+      sourceRef.setAttributeNS(uri6100, 'input', input);
+      sourceRef.setAttributeNS(uri6100, 'inputInst', `${inst}`);
+      sourceRef.setAttributeNS(uri6100, 'service', service);
 
       sourceRefEdits.push({
         parent: lNodeInputs!,
@@ -759,6 +763,19 @@ export default class SclBayTemplate extends LitElement {
         type="file"
       />
     </div>`;
+  }
+
+  updated(changedProperties: Map<string, any>) {
+    // make sure to put the 6-100 on the SCL element as defined by the IEC 61850-6
+    if (!changedProperties.has('doc')) return;
+    const sldNsPrefix = this.doc!.documentElement.lookupPrefix(uri6100);
+    if (!sldNsPrefix) {
+      this.doc!.documentElement.setAttributeNS(
+        xmlnsNs,
+        `xmlns:${prefix6100}`,
+        uri6100
+      );
+    }
   }
 
   render() {
