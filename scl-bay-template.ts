@@ -177,12 +177,14 @@ function parentDepth(lNode: Element): number {
   return i;
 }
 
-function createSingleLNode(parent: Element, ln: Element): Insert | null {
+function createSingleLNode(parent: Element, ln: Element): Insert[] {
+  const inserts: Insert[] = [];
+
   const lnClass = ln.getAttribute('lnClass');
-  if (!lnClass) return null;
+  if (!lnClass) return [];
   const lnType = ln.getAttribute('id');
   const lnInst = lnInstGenerator(parent, 'LNode')(lnClass);
-  if (!lnInst) return null;
+  if (!lnInst) return [];
 
   const node = createElement(parent.ownerDocument, 'LNode', {
     iedName: 'None',
@@ -190,12 +192,45 @@ function createSingleLNode(parent: Element, ln: Element): Insert | null {
     lnInst,
     lnType,
   });
-
-  return {
+  inserts.push({
     parent,
     node,
     reference: getReference(parent, 'LNode'),
+  });
+
+  const private6100 = parent.ownerDocument.createElementNS(
+    parent.ownerDocument.documentElement.namespaceURI,
+    'Private'
+  );
+  private6100.setAttribute('type', 'eIEC61850-6-100');
+
+  inserts.push({
+    parent: node,
+    node: private6100,
+    reference: null,
+  });
+
+  const lNodeSpec = parent.ownerDocument.createElementNS(
+    uri6100,
+    `${prefix6100}:LNodeSpecNaming`
+  );
+
+  const attrs: Record<string, string> = {
+    iedName: 'sIedName',
+    ldInst: 'sLdInst',
+    prefix: 'sPrefix',
+    lnClass: 'sLnClass',
+    lnInst: 'sLnInst',
   };
+
+  Object.entries(attrs).forEach(([attr, sAttr]) => {
+    const value = node.getAttribute(attr);
+    if (value) lNodeSpec!.setAttributeNS(uri6100, sAttr, value);
+  });
+
+  inserts.push({ parent: private6100, node: lNodeSpec, reference: null });
+
+  return inserts;
 }
 
 export default class SclBayTemplate extends LitElement {
@@ -299,9 +334,9 @@ export default class SclBayTemplate extends LitElement {
       .map(id => find(LIBDOC, 'LNodeType', id))
       .filter(item => item !== null) as Element[];
 
-    const edits = selectedLNs
-      .map(ln => createSingleLNode(this.lnodeparent!, ln))
-      .filter(insert => insert) as Insert[];
+    const edits = selectedLNs.flatMap(ln =>
+      createSingleLNode(this.lnodeparent!, ln)
+    );
 
     edits.push(
       ...selectedLNs.flatMap(lNodeType => importLNodeType(lNodeType, this.doc!))
@@ -329,12 +364,11 @@ export default class SclBayTemplate extends LitElement {
     let private6100 = this.selectedLNode?.querySelector(
       ':scope > Private[type="eIEC61850-6-100"]'
     );
+    let lNodeSpec = this.selectedLNode?.querySelector(
+      ':scope > Private[type="eIEC61850-6-100"] > LNodeSpecNaming'
+    );
 
-    if (!lNodeInputs && !private6100) {
-      lNodeInputs = this.doc!.createElementNS(
-        uri6100,
-        `${prefix6100}:LNodeInputs`
-      );
+    const addPrivate = (): void => {
       private6100 = this.doc!.createElementNS(
         this.doc!.documentElement.namespaceURI,
         'Private'
@@ -346,23 +380,48 @@ export default class SclBayTemplate extends LitElement {
         node: private6100,
         reference: null,
       });
-      sourceRefEdits.push({
-        parent: private6100,
-        node: lNodeInputs,
-        reference: null,
-      });
-    } else if (!lNodeInputs && private6100) {
+    };
+
+    const addLNodeSpecNaming = (parent: Element): void => {
+      if (!lNodeSpec) {
+        lNodeSpec = this.doc!.createElementNS(
+          uri6100,
+          `${prefix6100}:LNodeSpecNaming`
+        );
+
+        const attrs: Record<string, string> = {
+          iedName: 'sIedName',
+          ldInst: 'sLdInst',
+          prefix: 'sPrefix',
+          lnClass: 'sLnClass',
+          lnInst: 'sLnInst',
+        };
+
+        Object.entries(attrs).forEach(([attr, sAttr]) => {
+          const value = this.selectedLNode!.getAttribute(attr);
+          if (value) lNodeSpec!.setAttributeNS(uri6100, sAttr, value);
+        });
+      }
+
+      sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
+    };
+
+    const addLNodeInputs = (parent: Element): void => {
       lNodeInputs = this.doc!.createElementNS(
         uri6100,
         `${prefix6100}:LNodeInputs`
       );
 
       sourceRefEdits.push({
-        parent: private6100,
+        parent,
         node: lNodeInputs,
         reference: null,
       });
-    }
+    };
+
+    if (!private6100) addPrivate();
+    if (!lNodeSpec) addLNodeSpecNaming(private6100!);
+    if (!lNodeInputs) addLNodeInputs(private6100!);
 
     sources.forEach((source, i) => {
       const sourceRef = this.doc!.createElementNS(
