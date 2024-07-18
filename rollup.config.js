@@ -4,7 +4,7 @@ import {importMetaAssets}  from '@web/rollup-plugin-import-meta-assets';
 
 
 export default {
-  input: './scl-communication-editor.ts',
+  input: './scl-bay-template.ts',
   output: {
     sourcemap: true,        // Add source map to build output
     format:'es',            // ES module type export
