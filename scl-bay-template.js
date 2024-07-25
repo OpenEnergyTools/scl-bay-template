@@ -11264,7 +11264,7 @@ function getSourceDef(paths) {
             else
                 source += `.${name}`;
         }
-        sourceRefs.push(source);
+        sourceRefs.push(source.slice(1));
     }
     return sourceRefs;
 }
@@ -11390,7 +11390,7 @@ function createSingleLNode(parent, ln) {
     Object.entries(attrs).forEach(([attr, sAttr]) => {
         const value = node.getAttribute(attr);
         if (value)
-            lNodeSpec.setAttributeNS(uri6100, sAttr, value);
+            lNodeSpec.setAttribute(sAttr, value);
     });
     inserts.push({ parent: private6100, node: lNodeSpec, reference: null });
     return inserts;
@@ -11483,7 +11483,7 @@ class SclBayTemplate extends s$2 {
                 Object.entries(attrs).forEach(([attr, sAttr]) => {
                     const value = this.selectedLNode.getAttribute(attr);
                     if (value)
-                        lNodeSpec.setAttributeNS(uri6100, sAttr, value);
+                        lNodeSpec.setAttribute(sAttr, value);
                 });
             }
             sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
@@ -11508,10 +11508,10 @@ class SclBayTemplate extends s$2 {
             const path = source.split('/');
             const input = path[path.length - 2];
             const inst = ((_b = (_a = this.selectedLNode) === null || _a === void 0 ? void 0 : _a.querySelectorAll('SourceRef').length) !== null && _b !== void 0 ? _b : 0) + i + 1;
-            sourceRef.setAttributeNS(uri6100, 'source', source);
-            sourceRef.setAttributeNS(uri6100, 'input', input);
-            sourceRef.setAttributeNS(uri6100, 'inputInst', `${inst}`);
-            sourceRef.setAttributeNS(uri6100, 'service', service);
+            sourceRef.setAttribute('source', source);
+            sourceRef.setAttribute('input', input);
+            sourceRef.setAttribute('inputInst', `${inst}`);
+            sourceRef.setAttribute('service', service);
             sourceRefEdits.push({
                 parent: lNodeInputs,
                 node: sourceRef,
