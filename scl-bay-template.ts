@@ -225,7 +225,7 @@ function createSingleLNode(parent: Element, ln: Element): Insert[] {
 
   Object.entries(attrs).forEach(([attr, sAttr]) => {
     const value = node.getAttribute(attr);
-    if (value) lNodeSpec!.setAttributeNS(uri6100, sAttr, value);
+    if (value) lNodeSpec!.setAttribute(sAttr, value);
   });
 
   inserts.push({ parent: private6100, node: lNodeSpec, reference: null });
@@ -399,7 +399,7 @@ export default class SclBayTemplate extends LitElement {
 
         Object.entries(attrs).forEach(([attr, sAttr]) => {
           const value = this.selectedLNode!.getAttribute(attr);
-          if (value) lNodeSpec!.setAttributeNS(uri6100, sAttr, value);
+          if (value) lNodeSpec!.setAttribute(sAttr, value);
         });
       }
 
@@ -435,10 +435,10 @@ export default class SclBayTemplate extends LitElement {
       const inst =
         (this.selectedLNode?.querySelectorAll('SourceRef').length ?? 0) + i + 1;
 
-      sourceRef.setAttributeNS(uri6100, 'source', source);
-      sourceRef.setAttributeNS(uri6100, 'input', input);
-      sourceRef.setAttributeNS(uri6100, 'inputInst', `${inst}`);
-      sourceRef.setAttributeNS(uri6100, 'service', service);
+      sourceRef.setAttribute('source', source);
+      sourceRef.setAttribute('input', input);
+      sourceRef.setAttribute('inputInst', `${inst}`);
+      sourceRef.setAttribute('service', service);
 
       sourceRefEdits.push({
         parent: lNodeInputs!,

@@ -298,7 +298,7 @@ export function getSourceDef(paths: string[][]): string[] {
       else source += `.${name}`;
     }
 
-    sourceRefs.push(source);
+    sourceRefs.push(source.slice(1));
   }
 
   return sourceRefs;
