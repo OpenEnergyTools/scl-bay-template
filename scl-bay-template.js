@@ -1377,7 +1377,7 @@ function e$3(e){return o$4({descriptor:r=>({async get(){var r;return await this.
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var cssClasses$6 = {
+var cssClasses$9 = {
     CLOSING: 'mdc-dialog--closing',
     OPEN: 'mdc-dialog--open',
     OPENING: 'mdc-dialog--opening',
@@ -1411,7 +1411,7 @@ var cssClasses$6 = {
     // scrim clicks.
     SCRIM_HIDDEN: 'mdc-dialog__scrim--hidden',
 };
-var strings$4 = {
+var strings$7 = {
     ACTION_ATTRIBUTE: 'data-mdc-dialog-action',
     BUTTON_DEFAULT_ATTRIBUTE: 'data-mdc-dialog-button-default',
     BUTTON_SELECTOR: '.mdc-dialog__button',
@@ -1432,7 +1432,7 @@ var strings$4 = {
     ].join(', '),
     SURFACE_SELECTOR: '.mdc-dialog__surface',
 };
-var numbers$4 = {
+var numbers$7 = {
     DIALOG_ANIMATION_CLOSE_TIME_MS: 75,
     DIALOG_ANIMATION_OPEN_TIME_MS: 150,
 };
@@ -1630,11 +1630,11 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
         _this.isFullscreen = false;
         _this.animationFrame = 0;
         _this.animationTimer = 0;
-        _this.escapeKeyAction = strings$4.CLOSE_ACTION;
-        _this.scrimClickAction = strings$4.CLOSE_ACTION;
+        _this.escapeKeyAction = strings$7.CLOSE_ACTION;
+        _this.scrimClickAction = strings$7.CLOSE_ACTION;
         _this.autoStackButtons = true;
         _this.areButtonsStacked = false;
-        _this.suppressDefaultPressSelector = strings$4.SUPPRESS_DEFAULT_PRESS_SELECTOR;
+        _this.suppressDefaultPressSelector = strings$7.SUPPRESS_DEFAULT_PRESS_SELECTOR;
         _this.animFrame = new AnimationFrame();
         _this.contentScrollHandler = function () {
             _this.handleScrollEvent();
@@ -1649,21 +1649,21 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     }
     Object.defineProperty(MDCDialogFoundation, "cssClasses", {
         get: function () {
-            return cssClasses$6;
+            return cssClasses$9;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(MDCDialogFoundation, "strings", {
         get: function () {
-            return strings$4;
+            return strings$7;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(MDCDialogFoundation, "numbers", {
         get: function () {
-            return numbers$4;
+            return numbers$7;
         },
         enumerable: false,
         configurable: true
@@ -1701,10 +1701,10 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
         configurable: true
     });
     MDCDialogFoundation.prototype.init = function () {
-        if (this.adapter.hasClass(cssClasses$6.STACKED)) {
+        if (this.adapter.hasClass(cssClasses$9.STACKED)) {
             this.setAutoStackButtons(false);
         }
-        this.isFullscreen = this.adapter.hasClass(cssClasses$6.FULLSCREEN);
+        this.isFullscreen = this.adapter.hasClass(cssClasses$9.FULLSCREEN);
     };
     MDCDialogFoundation.prototype.destroy = function () {
         if (this.animationTimer) {
@@ -1722,7 +1722,7 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
         var _this = this;
         this.dialogOpen = true;
         this.adapter.notifyOpening();
-        this.adapter.addClass(cssClasses$6.OPENING);
+        this.adapter.addClass(cssClasses$9.OPENING);
         if (this.isFullscreen) {
             // A scroll event listener is registered even if the dialog is not
             // scrollable on open, since the window resize event, or orientation
@@ -1730,21 +1730,21 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
             this.adapter.registerContentEventHandler('scroll', this.contentScrollHandler);
         }
         if (dialogOptions && dialogOptions.isAboveFullscreenDialog) {
-            this.adapter.addClass(cssClasses$6.SCRIM_HIDDEN);
+            this.adapter.addClass(cssClasses$9.SCRIM_HIDDEN);
         }
         this.adapter.registerWindowEventHandler('resize', this.windowResizeHandler);
         this.adapter.registerWindowEventHandler('orientationchange', this.windowOrientationChangeHandler);
         // Wait a frame once display is no longer "none", to establish basis for
         // animation
         this.runNextAnimationFrame(function () {
-            _this.adapter.addClass(cssClasses$6.OPEN);
-            _this.adapter.addBodyClass(cssClasses$6.SCROLL_LOCK);
+            _this.adapter.addClass(cssClasses$9.OPEN);
+            _this.adapter.addBodyClass(cssClasses$9.SCROLL_LOCK);
             _this.layout();
             _this.animationTimer = setTimeout(function () {
                 _this.handleAnimationTimerEnd();
                 _this.adapter.trapFocus(_this.adapter.getInitialFocusEl());
                 _this.adapter.notifyOpened();
-            }, numbers$4.DIALOG_ANIMATION_OPEN_TIME_MS);
+            }, numbers$7.DIALOG_ANIMATION_OPEN_TIME_MS);
         });
     };
     MDCDialogFoundation.prototype.close = function (action) {
@@ -1757,9 +1757,9 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
         }
         this.dialogOpen = false;
         this.adapter.notifyClosing(action);
-        this.adapter.addClass(cssClasses$6.CLOSING);
-        this.adapter.removeClass(cssClasses$6.OPEN);
-        this.adapter.removeBodyClass(cssClasses$6.SCROLL_LOCK);
+        this.adapter.addClass(cssClasses$9.CLOSING);
+        this.adapter.removeClass(cssClasses$9.OPEN);
+        this.adapter.removeBodyClass(cssClasses$9.SCROLL_LOCK);
         if (this.isFullscreen) {
             this.adapter.deregisterContentEventHandler('scroll', this.contentScrollHandler);
         }
@@ -1772,7 +1772,7 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
             _this.adapter.releaseFocus();
             _this.handleAnimationTimerEnd();
             _this.adapter.notifyClosed(action);
-        }, numbers$4.DIALOG_ANIMATION_CLOSE_TIME_MS);
+        }, numbers$7.DIALOG_ANIMATION_CLOSE_TIME_MS);
     };
     /**
      * Used only in instances of showing a secondary dialog over a full-screen
@@ -1780,9 +1780,9 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
      */
     MDCDialogFoundation.prototype.showSurfaceScrim = function () {
         var _this = this;
-        this.adapter.addClass(cssClasses$6.SURFACE_SCRIM_SHOWING);
+        this.adapter.addClass(cssClasses$9.SURFACE_SCRIM_SHOWING);
         this.runNextAnimationFrame(function () {
-            _this.adapter.addClass(cssClasses$6.SURFACE_SCRIM_SHOWN);
+            _this.adapter.addClass(cssClasses$9.SURFACE_SCRIM_SHOWN);
         });
     };
     /**
@@ -1790,16 +1790,16 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
      * dialog. Hides the "surface scrim" displayed over the full-screen dialog.
      */
     MDCDialogFoundation.prototype.hideSurfaceScrim = function () {
-        this.adapter.removeClass(cssClasses$6.SURFACE_SCRIM_SHOWN);
-        this.adapter.addClass(cssClasses$6.SURFACE_SCRIM_HIDING);
+        this.adapter.removeClass(cssClasses$9.SURFACE_SCRIM_SHOWN);
+        this.adapter.addClass(cssClasses$9.SURFACE_SCRIM_HIDING);
     };
     /**
      * Handles `transitionend` event triggered when surface scrim animation is
      * finished.
      */
     MDCDialogFoundation.prototype.handleSurfaceScrimTransitionEnd = function () {
-        this.adapter.removeClass(cssClasses$6.SURFACE_SCRIM_HIDING);
-        this.adapter.removeClass(cssClasses$6.SURFACE_SCRIM_SHOWING);
+        this.adapter.removeClass(cssClasses$9.SURFACE_SCRIM_HIDING);
+        this.adapter.removeClass(cssClasses$9.SURFACE_SCRIM_SHOWING);
     };
     MDCDialogFoundation.prototype.isOpen = function () {
         return this.dialogOpen;
@@ -1836,7 +1836,7 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     };
     /** Handles click on the dialog root element. */
     MDCDialogFoundation.prototype.handleClick = function (evt) {
-        var isScrim = this.adapter.eventTargetMatches(evt.target, strings$4.SCRIM_SELECTOR);
+        var isScrim = this.adapter.eventTargetMatches(evt.target, strings$7.SCRIM_SELECTOR);
         // Check for scrim click first since it doesn't require querying ancestors.
         if (isScrim && this.scrimClickAction !== '') {
             this.close(this.scrimClickAction);
@@ -1910,8 +1910,8 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     };
     MDCDialogFoundation.prototype.handleAnimationTimerEnd = function () {
         this.animationTimer = 0;
-        this.adapter.removeClass(cssClasses$6.OPENING);
-        this.adapter.removeClass(cssClasses$6.CLOSING);
+        this.adapter.removeClass(cssClasses$9.OPENING);
+        this.adapter.removeClass(cssClasses$9.CLOSING);
     };
     /**
      * Runs the given logic on the next animation frame, using setTimeout to
@@ -1928,10 +1928,10 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     };
     MDCDialogFoundation.prototype.detectStackedButtons = function () {
         // Remove the class first to let us measure the buttons' natural positions.
-        this.adapter.removeClass(cssClasses$6.STACKED);
+        this.adapter.removeClass(cssClasses$9.STACKED);
         var areButtonsStacked = this.adapter.areButtonsStacked();
         if (areButtonsStacked) {
-            this.adapter.addClass(cssClasses$6.STACKED);
+            this.adapter.addClass(cssClasses$9.STACKED);
         }
         if (areButtonsStacked !== this.areButtonsStacked) {
             this.adapter.reverseButtons();
@@ -1941,9 +1941,9 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     MDCDialogFoundation.prototype.toggleScrollableClasses = function () {
         // Remove the class first to let us measure the natural height of the
         // content.
-        this.adapter.removeClass(cssClasses$6.SCROLLABLE);
+        this.adapter.removeClass(cssClasses$9.SCROLLABLE);
         if (this.adapter.isContentScrollable()) {
-            this.adapter.addClass(cssClasses$6.SCROLLABLE);
+            this.adapter.addClass(cssClasses$9.SCROLLABLE);
             if (this.isFullscreen) {
                 // If dialog is full-screen and scrollable, check if a scroll divider
                 // should be shown.
@@ -1954,18 +1954,18 @@ var MDCDialogFoundation = /** @class */ (function (_super) {
     };
     MDCDialogFoundation.prototype.toggleScrollDividerHeader = function () {
         if (!this.adapter.isScrollableContentAtTop()) {
-            this.adapter.addClass(cssClasses$6.SCROLL_DIVIDER_HEADER);
+            this.adapter.addClass(cssClasses$9.SCROLL_DIVIDER_HEADER);
         }
-        else if (this.adapter.hasClass(cssClasses$6.SCROLL_DIVIDER_HEADER)) {
-            this.adapter.removeClass(cssClasses$6.SCROLL_DIVIDER_HEADER);
+        else if (this.adapter.hasClass(cssClasses$9.SCROLL_DIVIDER_HEADER)) {
+            this.adapter.removeClass(cssClasses$9.SCROLL_DIVIDER_HEADER);
         }
     };
     MDCDialogFoundation.prototype.toggleScrollDividerFooter = function () {
         if (!this.adapter.isScrollableContentAtBottom()) {
-            this.adapter.addClass(cssClasses$6.SCROLL_DIVIDER_FOOTER);
+            this.adapter.addClass(cssClasses$9.SCROLL_DIVIDER_FOOTER);
         }
-        else if (this.adapter.hasClass(cssClasses$6.SCROLL_DIVIDER_FOOTER)) {
-            this.adapter.removeClass(cssClasses$6.SCROLL_DIVIDER_FOOTER);
+        else if (this.adapter.hasClass(cssClasses$9.SCROLL_DIVIDER_FOOTER)) {
+            this.adapter.removeClass(cssClasses$9.SCROLL_DIVIDER_FOOTER);
         }
     };
     return MDCDialogFoundation;
@@ -2388,7 +2388,7 @@ class DialogBase extends BaseElement {
     }
     render() {
         const classes = {
-            [cssClasses$6.STACKED]: this.stacked,
+            [cssClasses$9.STACKED]: this.stacked,
         };
         let heading = x ``;
         if (this.heading) {
@@ -2607,7 +2607,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$8 = i$5 `.mdc-dialog .mdc-dialog__surface{background-color:#fff;background-color:var(--mdc-theme-surface, #fff)}.mdc-dialog .mdc-dialog__scrim{background-color:rgba(0,0,0,.32)}.mdc-dialog .mdc-dialog__surface-scrim{background-color:rgba(0,0,0,.32)}.mdc-dialog .mdc-dialog__title{color:rgba(0,0,0,.87)}.mdc-dialog .mdc-dialog__content{color:rgba(0,0,0,.6)}.mdc-dialog .mdc-dialog__close{color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-dialog .mdc-dialog__close .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close .mdc-icon-button__ripple::after{background-color:#000;background-color:var(--mdc-ripple-color, var(--mdc-theme-on-surface, #000))}.mdc-dialog .mdc-dialog__close:hover .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close.mdc-ripple-surface--hover .mdc-icon-button__ripple::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-dialog .mdc-dialog__close.mdc-ripple-upgraded--background-focused .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded):focus .mdc-icon-button__ripple::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded) .mdc-icon-button__ripple::after{transition:opacity 150ms linear}.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded):active .mdc-icon-button__ripple::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-dialog .mdc-dialog__close.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions,.mdc-dialog.mdc-dialog--scrollable.mdc-dialog-scroll-divider-footer .mdc-dialog__actions{border-color:rgba(0,0,0,.12)}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title{border-bottom:1px solid rgba(0,0,0,.12);margin-bottom:0}.mdc-dialog.mdc-dialog-scroll-divider-header.mdc-dialog--fullscreen .mdc-dialog__header{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0,0,0,.12)}.mdc-dialog .mdc-dialog__surface{border-radius:4px;border-radius:var(--mdc-shape-medium, 4px)}.mdc-dialog__surface{box-shadow:0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0,0,0,.12)}.mdc-dialog__title{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-headline6-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1.25rem;font-size:var(--mdc-typography-headline6-font-size, 1.25rem);line-height:2rem;line-height:var(--mdc-typography-headline6-line-height, 2rem);font-weight:500;font-weight:var(--mdc-typography-headline6-font-weight, 500);letter-spacing:0.0125em;letter-spacing:var(--mdc-typography-headline6-letter-spacing, 0.0125em);text-decoration:inherit;text-decoration:var(--mdc-typography-headline6-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-headline6-text-transform, inherit)}.mdc-dialog__content{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-body1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-body1-font-size, 1rem);line-height:1.5rem;line-height:var(--mdc-typography-body1-line-height, 1.5rem);font-weight:400;font-weight:var(--mdc-typography-body1-font-weight, 400);letter-spacing:0.03125em;letter-spacing:var(--mdc-typography-body1-letter-spacing, 0.03125em);text-decoration:inherit;text-decoration:var(--mdc-typography-body1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-body1-text-transform, inherit)}.mdc-elevation-overlay{position:absolute;border-radius:inherit;pointer-events:none;opacity:0;opacity:var(--mdc-elevation-overlay-opacity, 0);transition:opacity 280ms cubic-bezier(0.4, 0, 0.2, 1);background-color:#fff;background-color:var(--mdc-elevation-overlay-color, #fff)}.mdc-dialog,.mdc-dialog__scrim{position:fixed;top:0;left:0;align-items:center;justify-content:center;box-sizing:border-box;width:100%;height:100%}.mdc-dialog{display:none;z-index:7;z-index:var(--mdc-dialog-z-index, 7)}.mdc-dialog .mdc-dialog__content{padding:20px 24px 20px 24px}.mdc-dialog .mdc-dialog__surface{min-width:280px}@media(max-width: 592px){.mdc-dialog .mdc-dialog__surface{max-width:calc(100vw - 32px)}}@media(min-width: 592px){.mdc-dialog .mdc-dialog__surface{max-width:560px}}.mdc-dialog .mdc-dialog__surface{max-height:calc(100% - 32px)}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-width:none}@media(max-width: 960px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:560px;width:560px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}@media(max-width: 720px)and (max-width: 672px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:calc(100vw - 112px)}}@media(max-width: 720px)and (min-width: 672px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:560px}}@media(max-width: 720px)and (max-height: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:calc(100vh - 160px)}}@media(max-width: 720px)and (min-height: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:560px}}@media(max-width: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}@media(max-width: 720px)and (max-height: 400px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{height:100%;max-height:100vh;max-width:100vw;width:100vw;border-radius:0}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{order:-1;left:-12px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__header{padding:0 16px 9px;justify-content:flex-start}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__title{margin-left:calc(16px - 2 * 12px)}}@media(max-width: 600px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{height:100%;max-height:100vh;max-width:100vw;width:100vw;border-radius:0}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{order:-1;left:-12px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__header{padding:0 16px 9px;justify-content:flex-start}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__title{margin-left:calc(16px - 2 * 12px)}}@media(min-width: 960px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:calc(100vw - 400px)}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}.mdc-dialog.mdc-dialog__scrim--hidden .mdc-dialog__scrim{opacity:0}.mdc-dialog__scrim{opacity:0;z-index:-1}.mdc-dialog__container{display:flex;flex-direction:row;align-items:center;justify-content:space-around;box-sizing:border-box;height:100%;transform:scale(0.8);opacity:0;pointer-events:none}.mdc-dialog__surface{position:relative;display:flex;flex-direction:column;flex-grow:0;flex-shrink:0;box-sizing:border-box;max-width:100%;max-height:100%;pointer-events:auto;overflow-y:auto}.mdc-dialog__surface .mdc-elevation-overlay{width:100%;height:100%;top:0;left:0}[dir=rtl] .mdc-dialog__surface,.mdc-dialog__surface[dir=rtl]{text-align:right}@media screen and (forced-colors: active),(-ms-high-contrast: active){.mdc-dialog__surface{outline:2px solid windowText}}.mdc-dialog__surface::before{position:absolute;box-sizing:border-box;width:100%;height:100%;top:0;left:0;border:2px solid transparent;border-radius:inherit;content:"";pointer-events:none}@media screen and (forced-colors: active){.mdc-dialog__surface::before{border-color:CanvasText}}@media screen and (-ms-high-contrast: active),screen and (-ms-high-contrast: none){.mdc-dialog__surface::before{content:none}}.mdc-dialog__title{display:block;margin-top:0;position:relative;flex-shrink:0;box-sizing:border-box;margin:0 0 1px;padding:0 24px 9px}.mdc-dialog__title::before{display:inline-block;width:0;height:40px;content:"";vertical-align:0}[dir=rtl] .mdc-dialog__title,.mdc-dialog__title[dir=rtl]{text-align:right}.mdc-dialog--scrollable .mdc-dialog__title{margin-bottom:1px;padding-bottom:15px}.mdc-dialog--fullscreen .mdc-dialog__header{align-items:baseline;border-bottom:1px solid transparent;display:inline-flex;justify-content:space-between;padding:0 24px 9px;z-index:1}@media screen and (forced-colors: active){.mdc-dialog--fullscreen .mdc-dialog__header{border-bottom-color:CanvasText}}.mdc-dialog--fullscreen .mdc-dialog__header .mdc-dialog__close{right:-12px}.mdc-dialog--fullscreen .mdc-dialog__title{margin-bottom:0;padding:0;border-bottom:0}.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__title{border-bottom:0;margin-bottom:0}.mdc-dialog--fullscreen .mdc-dialog__close{top:5px}.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__actions{border-top:1px solid transparent}@media screen and (forced-colors: active){.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__actions{border-top-color:CanvasText}}.mdc-dialog__content{flex-grow:1;box-sizing:border-box;margin:0;overflow:auto}.mdc-dialog__content>:first-child{margin-top:0}.mdc-dialog__content>:last-child{margin-bottom:0}.mdc-dialog__title+.mdc-dialog__content,.mdc-dialog__header+.mdc-dialog__content{padding-top:0}.mdc-dialog--scrollable .mdc-dialog__title+.mdc-dialog__content{padding-top:8px;padding-bottom:8px}.mdc-dialog__content .mdc-deprecated-list:first-child:last-child{padding:6px 0 0}.mdc-dialog--scrollable .mdc-dialog__content .mdc-deprecated-list:first-child:last-child{padding:0}.mdc-dialog__actions{display:flex;position:relative;flex-shrink:0;flex-wrap:wrap;align-items:center;justify-content:flex-end;box-sizing:border-box;min-height:52px;margin:0;padding:8px;border-top:1px solid transparent}@media screen and (forced-colors: active){.mdc-dialog__actions{border-top-color:CanvasText}}.mdc-dialog--stacked .mdc-dialog__actions{flex-direction:column;align-items:flex-end}.mdc-dialog__button{margin-left:8px;margin-right:0;max-width:100%;text-align:right}[dir=rtl] .mdc-dialog__button,.mdc-dialog__button[dir=rtl]{margin-left:0;margin-right:8px}.mdc-dialog__button:first-child{margin-left:0;margin-right:0}[dir=rtl] .mdc-dialog__button:first-child,.mdc-dialog__button:first-child[dir=rtl]{margin-left:0;margin-right:0}[dir=rtl] .mdc-dialog__button,.mdc-dialog__button[dir=rtl]{text-align:left}.mdc-dialog--stacked .mdc-dialog__button:not(:first-child){margin-top:12px}.mdc-dialog--open,.mdc-dialog--opening,.mdc-dialog--closing{display:flex}.mdc-dialog--opening .mdc-dialog__scrim{transition:opacity 150ms linear}.mdc-dialog--opening .mdc-dialog__container{transition:opacity 75ms linear,transform 150ms 0ms cubic-bezier(0, 0, 0.2, 1)}.mdc-dialog--closing .mdc-dialog__scrim,.mdc-dialog--closing .mdc-dialog__container{transition:opacity 75ms linear}.mdc-dialog--closing .mdc-dialog__container{transform:none}.mdc-dialog--open .mdc-dialog__scrim{opacity:1}.mdc-dialog--open .mdc-dialog__container{transform:none;opacity:1}.mdc-dialog--open.mdc-dialog__surface-scrim--shown .mdc-dialog__surface-scrim{opacity:1;z-index:1}.mdc-dialog--open.mdc-dialog__surface-scrim--hiding .mdc-dialog__surface-scrim{transition:opacity 75ms linear}.mdc-dialog--open.mdc-dialog__surface-scrim--showing .mdc-dialog__surface-scrim{transition:opacity 150ms linear}.mdc-dialog__surface-scrim{display:none;opacity:0;position:absolute;width:100%;height:100%}.mdc-dialog__surface-scrim--shown .mdc-dialog__surface-scrim,.mdc-dialog__surface-scrim--showing .mdc-dialog__surface-scrim,.mdc-dialog__surface-scrim--hiding .mdc-dialog__surface-scrim{display:block}.mdc-dialog-scroll-lock{overflow:hidden}.mdc-dialog--no-content-padding .mdc-dialog__content{padding:0}.mdc-dialog--sheet .mdc-dialog__close{right:12px;top:9px;position:absolute;z-index:1}#actions:not(.mdc-dialog__actions){display:none}.mdc-dialog__surface{box-shadow:var(--mdc-dialog-box-shadow, 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12))}@media(min-width: 560px){.mdc-dialog .mdc-dialog__surface{max-width:560px;max-width:var(--mdc-dialog-max-width, 560px)}}.mdc-dialog .mdc-dialog__scrim{background-color:rgba(0, 0, 0, 0.32);background-color:var(--mdc-dialog-scrim-color, rgba(0, 0, 0, 0.32))}.mdc-dialog .mdc-dialog__title{color:rgba(0, 0, 0, 0.87);color:var(--mdc-dialog-heading-ink-color, rgba(0, 0, 0, 0.87))}.mdc-dialog .mdc-dialog__content{color:rgba(0, 0, 0, 0.6);color:var(--mdc-dialog-content-ink-color, rgba(0, 0, 0, 0.6))}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions{border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-dialog-scroll-divider-color, rgba(0, 0, 0, 0.12))}.mdc-dialog .mdc-dialog__surface{min-width:280px;min-width:var(--mdc-dialog-min-width, 280px)}.mdc-dialog .mdc-dialog__surface{max-height:var(--mdc-dialog-max-height, calc(100% - 32px))}#actions ::slotted(*){margin-left:8px;margin-right:0;max-width:100%;text-align:right}[dir=rtl] #actions ::slotted(*),#actions ::slotted(*[dir=rtl]){margin-left:0;margin-right:8px}[dir=rtl] #actions ::slotted(*),#actions ::slotted(*[dir=rtl]){text-align:left}.mdc-dialog--stacked #actions{flex-direction:column-reverse}.mdc-dialog--stacked #actions *:not(:last-child) ::slotted(*){flex-basis:.000000001px;margin-top:12px}`;
+const styles$b = i$5 `.mdc-dialog .mdc-dialog__surface{background-color:#fff;background-color:var(--mdc-theme-surface, #fff)}.mdc-dialog .mdc-dialog__scrim{background-color:rgba(0,0,0,.32)}.mdc-dialog .mdc-dialog__surface-scrim{background-color:rgba(0,0,0,.32)}.mdc-dialog .mdc-dialog__title{color:rgba(0,0,0,.87)}.mdc-dialog .mdc-dialog__content{color:rgba(0,0,0,.6)}.mdc-dialog .mdc-dialog__close{color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-dialog .mdc-dialog__close .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close .mdc-icon-button__ripple::after{background-color:#000;background-color:var(--mdc-ripple-color, var(--mdc-theme-on-surface, #000))}.mdc-dialog .mdc-dialog__close:hover .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close.mdc-ripple-surface--hover .mdc-icon-button__ripple::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-dialog .mdc-dialog__close.mdc-ripple-upgraded--background-focused .mdc-icon-button__ripple::before,.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded):focus .mdc-icon-button__ripple::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded) .mdc-icon-button__ripple::after{transition:opacity 150ms linear}.mdc-dialog .mdc-dialog__close:not(.mdc-ripple-upgraded):active .mdc-icon-button__ripple::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-dialog .mdc-dialog__close.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions,.mdc-dialog.mdc-dialog--scrollable.mdc-dialog-scroll-divider-footer .mdc-dialog__actions{border-color:rgba(0,0,0,.12)}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title{border-bottom:1px solid rgba(0,0,0,.12);margin-bottom:0}.mdc-dialog.mdc-dialog-scroll-divider-header.mdc-dialog--fullscreen .mdc-dialog__header{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0,0,0,.12)}.mdc-dialog .mdc-dialog__surface{border-radius:4px;border-radius:var(--mdc-shape-medium, 4px)}.mdc-dialog__surface{box-shadow:0px 11px 15px -7px rgba(0, 0, 0, 0.2),0px 24px 38px 3px rgba(0, 0, 0, 0.14),0px 9px 46px 8px rgba(0,0,0,.12)}.mdc-dialog__title{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-headline6-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1.25rem;font-size:var(--mdc-typography-headline6-font-size, 1.25rem);line-height:2rem;line-height:var(--mdc-typography-headline6-line-height, 2rem);font-weight:500;font-weight:var(--mdc-typography-headline6-font-weight, 500);letter-spacing:0.0125em;letter-spacing:var(--mdc-typography-headline6-letter-spacing, 0.0125em);text-decoration:inherit;text-decoration:var(--mdc-typography-headline6-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-headline6-text-transform, inherit)}.mdc-dialog__content{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-body1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-body1-font-size, 1rem);line-height:1.5rem;line-height:var(--mdc-typography-body1-line-height, 1.5rem);font-weight:400;font-weight:var(--mdc-typography-body1-font-weight, 400);letter-spacing:0.03125em;letter-spacing:var(--mdc-typography-body1-letter-spacing, 0.03125em);text-decoration:inherit;text-decoration:var(--mdc-typography-body1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-body1-text-transform, inherit)}.mdc-elevation-overlay{position:absolute;border-radius:inherit;pointer-events:none;opacity:0;opacity:var(--mdc-elevation-overlay-opacity, 0);transition:opacity 280ms cubic-bezier(0.4, 0, 0.2, 1);background-color:#fff;background-color:var(--mdc-elevation-overlay-color, #fff)}.mdc-dialog,.mdc-dialog__scrim{position:fixed;top:0;left:0;align-items:center;justify-content:center;box-sizing:border-box;width:100%;height:100%}.mdc-dialog{display:none;z-index:7;z-index:var(--mdc-dialog-z-index, 7)}.mdc-dialog .mdc-dialog__content{padding:20px 24px 20px 24px}.mdc-dialog .mdc-dialog__surface{min-width:280px}@media(max-width: 592px){.mdc-dialog .mdc-dialog__surface{max-width:calc(100vw - 32px)}}@media(min-width: 592px){.mdc-dialog .mdc-dialog__surface{max-width:560px}}.mdc-dialog .mdc-dialog__surface{max-height:calc(100% - 32px)}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-width:none}@media(max-width: 960px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:560px;width:560px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}@media(max-width: 720px)and (max-width: 672px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:calc(100vw - 112px)}}@media(max-width: 720px)and (min-width: 672px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:560px}}@media(max-width: 720px)and (max-height: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:calc(100vh - 160px)}}@media(max-width: 720px)and (min-height: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{max-height:560px}}@media(max-width: 720px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}@media(max-width: 720px)and (max-height: 400px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{height:100%;max-height:100vh;max-width:100vw;width:100vw;border-radius:0}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{order:-1;left:-12px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__header{padding:0 16px 9px;justify-content:flex-start}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__title{margin-left:calc(16px - 2 * 12px)}}@media(max-width: 600px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{height:100%;max-height:100vh;max-width:100vw;width:100vw;border-radius:0}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{order:-1;left:-12px}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__header{padding:0 16px 9px;justify-content:flex-start}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__title{margin-left:calc(16px - 2 * 12px)}}@media(min-width: 960px){.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface{width:calc(100vw - 400px)}.mdc-dialog.mdc-dialog--fullscreen .mdc-dialog__surface .mdc-dialog__close{right:-12px}}.mdc-dialog.mdc-dialog__scrim--hidden .mdc-dialog__scrim{opacity:0}.mdc-dialog__scrim{opacity:0;z-index:-1}.mdc-dialog__container{display:flex;flex-direction:row;align-items:center;justify-content:space-around;box-sizing:border-box;height:100%;transform:scale(0.8);opacity:0;pointer-events:none}.mdc-dialog__surface{position:relative;display:flex;flex-direction:column;flex-grow:0;flex-shrink:0;box-sizing:border-box;max-width:100%;max-height:100%;pointer-events:auto;overflow-y:auto}.mdc-dialog__surface .mdc-elevation-overlay{width:100%;height:100%;top:0;left:0}[dir=rtl] .mdc-dialog__surface,.mdc-dialog__surface[dir=rtl]{text-align:right}@media screen and (forced-colors: active),(-ms-high-contrast: active){.mdc-dialog__surface{outline:2px solid windowText}}.mdc-dialog__surface::before{position:absolute;box-sizing:border-box;width:100%;height:100%;top:0;left:0;border:2px solid transparent;border-radius:inherit;content:"";pointer-events:none}@media screen and (forced-colors: active){.mdc-dialog__surface::before{border-color:CanvasText}}@media screen and (-ms-high-contrast: active),screen and (-ms-high-contrast: none){.mdc-dialog__surface::before{content:none}}.mdc-dialog__title{display:block;margin-top:0;position:relative;flex-shrink:0;box-sizing:border-box;margin:0 0 1px;padding:0 24px 9px}.mdc-dialog__title::before{display:inline-block;width:0;height:40px;content:"";vertical-align:0}[dir=rtl] .mdc-dialog__title,.mdc-dialog__title[dir=rtl]{text-align:right}.mdc-dialog--scrollable .mdc-dialog__title{margin-bottom:1px;padding-bottom:15px}.mdc-dialog--fullscreen .mdc-dialog__header{align-items:baseline;border-bottom:1px solid transparent;display:inline-flex;justify-content:space-between;padding:0 24px 9px;z-index:1}@media screen and (forced-colors: active){.mdc-dialog--fullscreen .mdc-dialog__header{border-bottom-color:CanvasText}}.mdc-dialog--fullscreen .mdc-dialog__header .mdc-dialog__close{right:-12px}.mdc-dialog--fullscreen .mdc-dialog__title{margin-bottom:0;padding:0;border-bottom:0}.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__title{border-bottom:0;margin-bottom:0}.mdc-dialog--fullscreen .mdc-dialog__close{top:5px}.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__actions{border-top:1px solid transparent}@media screen and (forced-colors: active){.mdc-dialog--fullscreen.mdc-dialog--scrollable .mdc-dialog__actions{border-top-color:CanvasText}}.mdc-dialog__content{flex-grow:1;box-sizing:border-box;margin:0;overflow:auto}.mdc-dialog__content>:first-child{margin-top:0}.mdc-dialog__content>:last-child{margin-bottom:0}.mdc-dialog__title+.mdc-dialog__content,.mdc-dialog__header+.mdc-dialog__content{padding-top:0}.mdc-dialog--scrollable .mdc-dialog__title+.mdc-dialog__content{padding-top:8px;padding-bottom:8px}.mdc-dialog__content .mdc-deprecated-list:first-child:last-child{padding:6px 0 0}.mdc-dialog--scrollable .mdc-dialog__content .mdc-deprecated-list:first-child:last-child{padding:0}.mdc-dialog__actions{display:flex;position:relative;flex-shrink:0;flex-wrap:wrap;align-items:center;justify-content:flex-end;box-sizing:border-box;min-height:52px;margin:0;padding:8px;border-top:1px solid transparent}@media screen and (forced-colors: active){.mdc-dialog__actions{border-top-color:CanvasText}}.mdc-dialog--stacked .mdc-dialog__actions{flex-direction:column;align-items:flex-end}.mdc-dialog__button{margin-left:8px;margin-right:0;max-width:100%;text-align:right}[dir=rtl] .mdc-dialog__button,.mdc-dialog__button[dir=rtl]{margin-left:0;margin-right:8px}.mdc-dialog__button:first-child{margin-left:0;margin-right:0}[dir=rtl] .mdc-dialog__button:first-child,.mdc-dialog__button:first-child[dir=rtl]{margin-left:0;margin-right:0}[dir=rtl] .mdc-dialog__button,.mdc-dialog__button[dir=rtl]{text-align:left}.mdc-dialog--stacked .mdc-dialog__button:not(:first-child){margin-top:12px}.mdc-dialog--open,.mdc-dialog--opening,.mdc-dialog--closing{display:flex}.mdc-dialog--opening .mdc-dialog__scrim{transition:opacity 150ms linear}.mdc-dialog--opening .mdc-dialog__container{transition:opacity 75ms linear,transform 150ms 0ms cubic-bezier(0, 0, 0.2, 1)}.mdc-dialog--closing .mdc-dialog__scrim,.mdc-dialog--closing .mdc-dialog__container{transition:opacity 75ms linear}.mdc-dialog--closing .mdc-dialog__container{transform:none}.mdc-dialog--open .mdc-dialog__scrim{opacity:1}.mdc-dialog--open .mdc-dialog__container{transform:none;opacity:1}.mdc-dialog--open.mdc-dialog__surface-scrim--shown .mdc-dialog__surface-scrim{opacity:1;z-index:1}.mdc-dialog--open.mdc-dialog__surface-scrim--hiding .mdc-dialog__surface-scrim{transition:opacity 75ms linear}.mdc-dialog--open.mdc-dialog__surface-scrim--showing .mdc-dialog__surface-scrim{transition:opacity 150ms linear}.mdc-dialog__surface-scrim{display:none;opacity:0;position:absolute;width:100%;height:100%}.mdc-dialog__surface-scrim--shown .mdc-dialog__surface-scrim,.mdc-dialog__surface-scrim--showing .mdc-dialog__surface-scrim,.mdc-dialog__surface-scrim--hiding .mdc-dialog__surface-scrim{display:block}.mdc-dialog-scroll-lock{overflow:hidden}.mdc-dialog--no-content-padding .mdc-dialog__content{padding:0}.mdc-dialog--sheet .mdc-dialog__close{right:12px;top:9px;position:absolute;z-index:1}#actions:not(.mdc-dialog__actions){display:none}.mdc-dialog__surface{box-shadow:var(--mdc-dialog-box-shadow, 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12))}@media(min-width: 560px){.mdc-dialog .mdc-dialog__surface{max-width:560px;max-width:var(--mdc-dialog-max-width, 560px)}}.mdc-dialog .mdc-dialog__scrim{background-color:rgba(0, 0, 0, 0.32);background-color:var(--mdc-dialog-scrim-color, rgba(0, 0, 0, 0.32))}.mdc-dialog .mdc-dialog__title{color:rgba(0, 0, 0, 0.87);color:var(--mdc-dialog-heading-ink-color, rgba(0, 0, 0, 0.87))}.mdc-dialog .mdc-dialog__content{color:rgba(0, 0, 0, 0.6);color:var(--mdc-dialog-content-ink-color, rgba(0, 0, 0, 0.6))}.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__title,.mdc-dialog.mdc-dialog--scrollable .mdc-dialog__actions{border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-dialog-scroll-divider-color, rgba(0, 0, 0, 0.12))}.mdc-dialog .mdc-dialog__surface{min-width:280px;min-width:var(--mdc-dialog-min-width, 280px)}.mdc-dialog .mdc-dialog__surface{max-height:var(--mdc-dialog-max-height, calc(100% - 32px))}#actions ::slotted(*){margin-left:8px;margin-right:0;max-width:100%;text-align:right}[dir=rtl] #actions ::slotted(*),#actions ::slotted(*[dir=rtl]){margin-left:0;margin-right:8px}[dir=rtl] #actions ::slotted(*),#actions ::slotted(*[dir=rtl]){text-align:left}.mdc-dialog--stacked #actions{flex-direction:column-reverse}.mdc-dialog--stacked #actions *:not(:last-child) ::slotted(*){flex-basis:.000000001px;margin-top:12px}`;
 
 /**
  * @license
@@ -2616,7 +2616,7 @@ const styles$8 = i$5 `.mdc-dialog .mdc-dialog__surface{background-color:#fff;bac
  */
 let Dialog = class Dialog extends DialogBase {
 };
-Dialog.styles = [styles$8];
+Dialog.styles = [styles$b];
 Dialog = __decorate([
     e$6('mwc-dialog')
 ], Dialog);
@@ -2626,7 +2626,7 @@ Dialog = __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$7 = i$5 `:host{font-family:var(--mdc-icon-font, "Material Icons");font-weight:normal;font-style:normal;font-size:var(--mdc-icon-size, 24px);line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}`;
+const styles$a = i$5 `:host{font-family:var(--mdc-icon-font, "Material Icons");font-weight:normal;font-style:normal;font-size:var(--mdc-icon-size, 24px);line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}`;
 
 /**
  * @license
@@ -2640,7 +2640,7 @@ let Icon = class Icon extends s$2 {
         return x `<span><slot></slot></span>`;
     }
 };
-Icon.styles = [styles$7];
+Icon.styles = [styles$a];
 Icon = __decorate([
     e$6('mwc-icon')
 ], Icon);
@@ -2667,7 +2667,7 @@ Icon = __decorate([
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var cssClasses$5 = {
+var cssClasses$8 = {
     // Ripple is a special case where the "root" component is really a "mixin" of sorts,
     // given that it's an 'upgrade' to an existing component. That being said it is the root
     // CSS class that all other CSS classes derive from.
@@ -2677,7 +2677,7 @@ var cssClasses$5 = {
     ROOT: 'mdc-ripple-upgraded',
     UNBOUNDED: 'mdc-ripple-upgraded--unbounded',
 };
-var strings$3 = {
+var strings$6 = {
     VAR_FG_SCALE: '--mdc-ripple-fg-scale',
     VAR_FG_SIZE: '--mdc-ripple-fg-size',
     VAR_FG_TRANSLATE_END: '--mdc-ripple-fg-translate-end',
@@ -2685,7 +2685,7 @@ var strings$3 = {
     VAR_LEFT: '--mdc-ripple-left',
     VAR_TOP: '--mdc-ripple-top',
 };
-var numbers$3 = {
+var numbers$6 = {
     DEACTIVATION_TIMEOUT_MS: 225,
     FG_DEACTIVATION_MS: 150,
     INITIAL_ORIGIN_SCALE: 0.6,
@@ -2789,21 +2789,21 @@ var MDCRippleFoundation = /** @class */ (function (_super) {
     }
     Object.defineProperty(MDCRippleFoundation, "cssClasses", {
         get: function () {
-            return cssClasses$5;
+            return cssClasses$8;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(MDCRippleFoundation, "strings", {
         get: function () {
-            return strings$3;
+            return strings$6;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(MDCRippleFoundation, "numbers", {
         get: function () {
-            return numbers$3;
+            return numbers$6;
         },
         enumerable: false,
         configurable: true
@@ -3148,7 +3148,7 @@ var MDCRippleFoundation = /** @class */ (function (_super) {
             this.adapter.addClass(FG_DEACTIVATION);
             this.fgDeactivationRemovalTimer = setTimeout(function () {
                 _this.adapter.removeClass(FG_DEACTIVATION);
-            }, numbers$3.FG_DEACTIVATION_MS);
+            }, numbers$6.FG_DEACTIVATION_MS);
         }
     };
     MDCRippleFoundation.prototype.rmBoundedActivationClasses = function () {
@@ -3482,7 +3482,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$6 = i$5 `.mdc-ripple-surface{--mdc-ripple-fg-size: 0;--mdc-ripple-left: 0;--mdc-ripple-top: 0;--mdc-ripple-fg-scale: 1;--mdc-ripple-fg-translate-end: 0;--mdc-ripple-fg-translate-start: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);will-change:transform,opacity;position:relative;outline:none;overflow:hidden}.mdc-ripple-surface::before,.mdc-ripple-surface::after{position:absolute;border-radius:50%;opacity:0;pointer-events:none;content:""}.mdc-ripple-surface::before{transition:opacity 15ms linear,background-color 15ms linear;z-index:1;z-index:var(--mdc-ripple-z-index, 1)}.mdc-ripple-surface::after{z-index:0;z-index:var(--mdc-ripple-z-index, 0)}.mdc-ripple-surface.mdc-ripple-upgraded::before{transform:scale(var(--mdc-ripple-fg-scale, 1))}.mdc-ripple-surface.mdc-ripple-upgraded::after{top:0;left:0;transform:scale(0);transform-origin:center center}.mdc-ripple-surface.mdc-ripple-upgraded--unbounded::after{top:var(--mdc-ripple-top, 0);left:var(--mdc-ripple-left, 0)}.mdc-ripple-surface.mdc-ripple-upgraded--foreground-activation::after{animation:mdc-ripple-fg-radius-in 225ms forwards,mdc-ripple-fg-opacity-in 75ms forwards}.mdc-ripple-surface.mdc-ripple-upgraded--foreground-deactivation::after{animation:mdc-ripple-fg-opacity-out 150ms;transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}.mdc-ripple-surface::before,.mdc-ripple-surface::after{top:calc(50% - 100%);left:calc(50% - 100%);width:200%;height:200%}.mdc-ripple-surface.mdc-ripple-upgraded::after{width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface[data-mdc-ripple-is-unbounded],.mdc-ripple-upgraded--unbounded{overflow:visible}.mdc-ripple-surface[data-mdc-ripple-is-unbounded]::before,.mdc-ripple-surface[data-mdc-ripple-is-unbounded]::after,.mdc-ripple-upgraded--unbounded::before,.mdc-ripple-upgraded--unbounded::after{top:calc(50% - 50%);left:calc(50% - 50%);width:100%;height:100%}.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::before,.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::after,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::before,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::after{top:var(--mdc-ripple-top, calc(50% - 50%));left:var(--mdc-ripple-left, calc(50% - 50%));width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::after,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::after{width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface::before,.mdc-ripple-surface::after{background-color:#000;background-color:var(--mdc-ripple-color, #000)}.mdc-ripple-surface:hover::before,.mdc-ripple-surface.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}@keyframes mdc-ripple-fg-radius-in{from{animation-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transform:translate(var(--mdc-ripple-fg-translate-start, 0)) scale(1)}to{transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}}@keyframes mdc-ripple-fg-opacity-in{from{animation-timing-function:linear;opacity:0}to{opacity:var(--mdc-ripple-fg-opacity, 0)}}@keyframes mdc-ripple-fg-opacity-out{from{animation-timing-function:linear;opacity:var(--mdc-ripple-fg-opacity, 0)}to{opacity:0}}:host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;display:block}:host .mdc-ripple-surface{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;will-change:unset}.mdc-ripple-surface--primary::before,.mdc-ripple-surface--primary::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary:hover::before,.mdc-ripple-surface--primary.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface--primary.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--primary.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--primary--activated::before{opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12)}.mdc-ripple-surface--primary--activated::before,.mdc-ripple-surface--primary--activated::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary--activated:hover::before,.mdc-ripple-surface--primary--activated.mdc-ripple-surface--hover::before{opacity:0.16;opacity:var(--mdc-ripple-hover-opacity, 0.16)}.mdc-ripple-surface--primary--activated.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-focus-opacity, 0.24)}.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--primary--activated.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--primary--selected::before{opacity:0.08;opacity:var(--mdc-ripple-selected-opacity, 0.08)}.mdc-ripple-surface--primary--selected::before,.mdc-ripple-surface--primary--selected::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary--selected:hover::before,.mdc-ripple-surface--primary--selected.mdc-ripple-surface--hover::before{opacity:0.12;opacity:var(--mdc-ripple-hover-opacity, 0.12)}.mdc-ripple-surface--primary--selected.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-focus-opacity, 0.2)}.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--primary--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--accent::before,.mdc-ripple-surface--accent::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent:hover::before,.mdc-ripple-surface--accent.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface--accent.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--accent.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--accent--activated::before{opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12)}.mdc-ripple-surface--accent--activated::before,.mdc-ripple-surface--accent--activated::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent--activated:hover::before,.mdc-ripple-surface--accent--activated.mdc-ripple-surface--hover::before{opacity:0.16;opacity:var(--mdc-ripple-hover-opacity, 0.16)}.mdc-ripple-surface--accent--activated.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-focus-opacity, 0.24)}.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--accent--activated.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--accent--selected::before{opacity:0.08;opacity:var(--mdc-ripple-selected-opacity, 0.08)}.mdc-ripple-surface--accent--selected::before,.mdc-ripple-surface--accent--selected::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent--selected:hover::before,.mdc-ripple-surface--accent--selected.mdc-ripple-surface--hover::before{opacity:0.12;opacity:var(--mdc-ripple-hover-opacity, 0.12)}.mdc-ripple-surface--accent--selected.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-focus-opacity, 0.2)}.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--accent--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--disabled{opacity:0}.mdc-ripple-surface--internal-use-state-layer-custom-properties::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties::after{background-color:#000;background-color:var(--mdc-ripple-hover-state-layer-color, #000)}.mdc-ripple-surface--internal-use-state-layer-custom-properties:hover::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-state-layer-opacity, 0.04)}.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-state-layer-opacity, 0.12)}.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-pressed-state-layer-opacity, 0.12)}.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-pressed-state-layer-opacity, 0.12)}`;
+const styles$9 = i$5 `.mdc-ripple-surface{--mdc-ripple-fg-size: 0;--mdc-ripple-left: 0;--mdc-ripple-top: 0;--mdc-ripple-fg-scale: 1;--mdc-ripple-fg-translate-end: 0;--mdc-ripple-fg-translate-start: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);will-change:transform,opacity;position:relative;outline:none;overflow:hidden}.mdc-ripple-surface::before,.mdc-ripple-surface::after{position:absolute;border-radius:50%;opacity:0;pointer-events:none;content:""}.mdc-ripple-surface::before{transition:opacity 15ms linear,background-color 15ms linear;z-index:1;z-index:var(--mdc-ripple-z-index, 1)}.mdc-ripple-surface::after{z-index:0;z-index:var(--mdc-ripple-z-index, 0)}.mdc-ripple-surface.mdc-ripple-upgraded::before{transform:scale(var(--mdc-ripple-fg-scale, 1))}.mdc-ripple-surface.mdc-ripple-upgraded::after{top:0;left:0;transform:scale(0);transform-origin:center center}.mdc-ripple-surface.mdc-ripple-upgraded--unbounded::after{top:var(--mdc-ripple-top, 0);left:var(--mdc-ripple-left, 0)}.mdc-ripple-surface.mdc-ripple-upgraded--foreground-activation::after{animation:mdc-ripple-fg-radius-in 225ms forwards,mdc-ripple-fg-opacity-in 75ms forwards}.mdc-ripple-surface.mdc-ripple-upgraded--foreground-deactivation::after{animation:mdc-ripple-fg-opacity-out 150ms;transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}.mdc-ripple-surface::before,.mdc-ripple-surface::after{top:calc(50% - 100%);left:calc(50% - 100%);width:200%;height:200%}.mdc-ripple-surface.mdc-ripple-upgraded::after{width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface[data-mdc-ripple-is-unbounded],.mdc-ripple-upgraded--unbounded{overflow:visible}.mdc-ripple-surface[data-mdc-ripple-is-unbounded]::before,.mdc-ripple-surface[data-mdc-ripple-is-unbounded]::after,.mdc-ripple-upgraded--unbounded::before,.mdc-ripple-upgraded--unbounded::after{top:calc(50% - 50%);left:calc(50% - 50%);width:100%;height:100%}.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::before,.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::after,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::before,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::after{top:var(--mdc-ripple-top, calc(50% - 50%));left:var(--mdc-ripple-left, calc(50% - 50%));width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface[data-mdc-ripple-is-unbounded].mdc-ripple-upgraded::after,.mdc-ripple-upgraded--unbounded.mdc-ripple-upgraded::after{width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-ripple-surface::before,.mdc-ripple-surface::after{background-color:#000;background-color:var(--mdc-ripple-color, #000)}.mdc-ripple-surface:hover::before,.mdc-ripple-surface.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}@keyframes mdc-ripple-fg-radius-in{from{animation-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transform:translate(var(--mdc-ripple-fg-translate-start, 0)) scale(1)}to{transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}}@keyframes mdc-ripple-fg-opacity-in{from{animation-timing-function:linear;opacity:0}to{opacity:var(--mdc-ripple-fg-opacity, 0)}}@keyframes mdc-ripple-fg-opacity-out{from{animation-timing-function:linear;opacity:var(--mdc-ripple-fg-opacity, 0)}to{opacity:0}}:host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;display:block}:host .mdc-ripple-surface{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;will-change:unset}.mdc-ripple-surface--primary::before,.mdc-ripple-surface--primary::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary:hover::before,.mdc-ripple-surface--primary.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface--primary.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--primary.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--primary--activated::before{opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12)}.mdc-ripple-surface--primary--activated::before,.mdc-ripple-surface--primary--activated::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary--activated:hover::before,.mdc-ripple-surface--primary--activated.mdc-ripple-surface--hover::before{opacity:0.16;opacity:var(--mdc-ripple-hover-opacity, 0.16)}.mdc-ripple-surface--primary--activated.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-focus-opacity, 0.24)}.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary--activated:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--primary--activated.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--primary--selected::before{opacity:0.08;opacity:var(--mdc-ripple-selected-opacity, 0.08)}.mdc-ripple-surface--primary--selected::before,.mdc-ripple-surface--primary--selected::after{background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-ripple-surface--primary--selected:hover::before,.mdc-ripple-surface--primary--selected.mdc-ripple-surface--hover::before{opacity:0.12;opacity:var(--mdc-ripple-hover-opacity, 0.12)}.mdc-ripple-surface--primary--selected.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-focus-opacity, 0.2)}.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--primary--selected:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--primary--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--accent::before,.mdc-ripple-surface--accent::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent:hover::before,.mdc-ripple-surface--accent.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-ripple-surface--accent.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--accent.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-ripple-surface--accent--activated::before{opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12)}.mdc-ripple-surface--accent--activated::before,.mdc-ripple-surface--accent--activated::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent--activated:hover::before,.mdc-ripple-surface--accent--activated.mdc-ripple-surface--hover::before{opacity:0.16;opacity:var(--mdc-ripple-hover-opacity, 0.16)}.mdc-ripple-surface--accent--activated.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-focus-opacity, 0.24)}.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent--activated:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.24;opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--accent--activated.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.24)}.mdc-ripple-surface--accent--selected::before{opacity:0.08;opacity:var(--mdc-ripple-selected-opacity, 0.08)}.mdc-ripple-surface--accent--selected::before,.mdc-ripple-surface--accent--selected::after{background-color:#018786;background-color:var(--mdc-ripple-color, var(--mdc-theme-secondary, #018786))}.mdc-ripple-surface--accent--selected:hover::before,.mdc-ripple-surface--accent--selected.mdc-ripple-surface--hover::before{opacity:0.12;opacity:var(--mdc-ripple-hover-opacity, 0.12)}.mdc-ripple-surface--accent--selected.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-focus-opacity, 0.2)}.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--accent--selected:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.2;opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--accent--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.2)}.mdc-ripple-surface--disabled{opacity:0}.mdc-ripple-surface--internal-use-state-layer-custom-properties::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties::after{background-color:#000;background-color:var(--mdc-ripple-hover-state-layer-color, #000)}.mdc-ripple-surface--internal-use-state-layer-custom-properties:hover::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-surface--hover::before{opacity:0.04;opacity:var(--mdc-ripple-hover-state-layer-opacity, 0.04)}.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-upgraded--background-focused::before,.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded):focus::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-state-layer-opacity, 0.12)}.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded)::after{transition:opacity 150ms linear}.mdc-ripple-surface--internal-use-state-layer-custom-properties:not(.mdc-ripple-upgraded):active::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-pressed-state-layer-opacity, 0.12)}.mdc-ripple-surface--internal-use-state-layer-custom-properties.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-pressed-state-layer-opacity, 0.12)}`;
 
 /**
  * @license
@@ -3492,7 +3492,7 @@ const styles$6 = i$5 `.mdc-ripple-surface{--mdc-ripple-fg-size: 0;--mdc-ripple-l
 /** @soyCompatible */
 let Ripple = class Ripple extends RippleBase {
 };
-Ripple.styles = [styles$6];
+Ripple.styles = [styles$9];
 Ripple = __decorate([
     e$6('mwc-ripple')
 ], Ripple);
@@ -3845,7 +3845,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$5 = i$5 `.mdc-button{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-button-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.875rem;font-size:var(--mdc-typography-button-font-size, 0.875rem);line-height:2.25rem;line-height:var(--mdc-typography-button-line-height, 2.25rem);font-weight:500;font-weight:var(--mdc-typography-button-font-weight, 500);letter-spacing:0.0892857143em;letter-spacing:var(--mdc-typography-button-letter-spacing, 0.0892857143em);text-decoration:none;text-decoration:var(--mdc-typography-button-text-decoration, none);text-transform:uppercase;text-transform:var(--mdc-typography-button-text-transform, uppercase)}.mdc-touch-target-wrapper{display:inline}.mdc-elevation-overlay{position:absolute;border-radius:inherit;pointer-events:none;opacity:0;opacity:var(--mdc-elevation-overlay-opacity, 0);transition:opacity 280ms cubic-bezier(0.4, 0, 0.2, 1);background-color:#fff;background-color:var(--mdc-elevation-overlay-color, #fff)}.mdc-button{position:relative;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:64px;border:none;outline:none;line-height:inherit;user-select:none;-webkit-appearance:none;overflow:visible;vertical-align:middle;background:transparent}.mdc-button .mdc-elevation-overlay{width:100%;height:100%;top:0;left:0}.mdc-button::-moz-focus-inner{padding:0;border:0}.mdc-button:active{outline:none}.mdc-button:hover{cursor:pointer}.mdc-button:disabled{cursor:default;pointer-events:none}.mdc-button .mdc-button__icon{margin-left:0;margin-right:8px;display:inline-block;position:relative;vertical-align:top}[dir=rtl] .mdc-button .mdc-button__icon,.mdc-button .mdc-button__icon[dir=rtl]{margin-left:8px;margin-right:0}.mdc-button .mdc-button__label{position:relative}.mdc-button .mdc-button__focus-ring{display:none}@media screen and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring{pointer-events:none;border:2px solid transparent;border-radius:6px;box-sizing:content-box;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc( 100% + 4px );width:calc( 100% + 4px );display:block}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring{border-color:CanvasText}}@media screen and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring::after,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring::after{content:"";border:2px solid transparent;border-radius:8px;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px)}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring::after,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring::after{border-color:CanvasText}}.mdc-button .mdc-button__touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}.mdc-button__label+.mdc-button__icon{margin-left:8px;margin-right:0}[dir=rtl] .mdc-button__label+.mdc-button__icon,.mdc-button__label+.mdc-button__icon[dir=rtl]{margin-left:0;margin-right:8px}svg.mdc-button__icon{fill:currentColor}.mdc-button--touch{margin-top:6px;margin-bottom:6px}.mdc-button{padding:0 8px 0 8px}.mdc-button--unelevated{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--unelevated.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--unelevated.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--raised{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--raised.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--raised.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--outlined{border-style:solid;transition:border 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button--outlined .mdc-button__ripple{border-style:solid;border-color:transparent}.mdc-button{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button:not(:disabled){color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}.mdc-button:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--raised,.mdc-button--unelevated{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--raised:not(:disabled),.mdc-button--unelevated:not(:disabled){background-color:#6200ee;background-color:var(--mdc-theme-primary, #6200ee)}.mdc-button--raised:disabled,.mdc-button--unelevated:disabled{background-color:rgba(0, 0, 0, 0.12)}.mdc-button--raised:not(:disabled),.mdc-button--unelevated:not(:disabled){color:#fff;color:var(--mdc-theme-on-primary, #fff)}.mdc-button--raised:disabled,.mdc-button--unelevated:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button--raised .mdc-button__icon,.mdc-button--unelevated .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button--raised .mdc-button__ripple,.mdc-button--unelevated .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--outlined{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px);padding:0 15px 0 15px;border-width:1px}.mdc-button--outlined:not(:disabled){color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}.mdc-button--outlined:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button--outlined .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button--outlined .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--outlined:not(:disabled){border-color:rgba(0, 0, 0, 0.12)}.mdc-button--outlined:disabled{border-color:rgba(0, 0, 0, 0.12)}.mdc-button--outlined.mdc-button--icon-trailing{padding:0 11px 0 15px}.mdc-button--outlined.mdc-button--icon-leading{padding:0 15px 0 11px}.mdc-button--outlined .mdc-button__ripple{top:-1px;left:-1px;bottom:-1px;right:-1px;border-width:1px}.mdc-button--outlined .mdc-button__touch{left:calc(-1 * 1px);width:calc(100% + 2 * 1px)}.mdc-button--raised{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0,0,0,.12);transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button--raised:hover,.mdc-button--raised:focus{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0,0,0,.12)}.mdc-button--raised:active{box-shadow:0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0,0,0,.12)}.mdc-button--raised:disabled{box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2),0px 0px 0px 0px rgba(0, 0, 0, 0.14),0px 0px 0px 0px rgba(0,0,0,.12)}:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:transparent;vertical-align:top}:host([fullwidth]){width:100%}:host([raised]),:host([unelevated]){--mdc-ripple-color:#fff;--mdc-ripple-focus-opacity:0.24;--mdc-ripple-hover-opacity:0.08;--mdc-ripple-press-opacity:0.24}.trailing-icon ::slotted(*),.trailing-icon .mdc-button__icon,.leading-icon ::slotted(*),.leading-icon .mdc-button__icon{margin-left:0;margin-right:8px;display:inline-block;position:relative;vertical-align:top;font-size:1.125rem;height:1.125rem;width:1.125rem}[dir=rtl] .trailing-icon ::slotted(*),[dir=rtl] .trailing-icon .mdc-button__icon,[dir=rtl] .leading-icon ::slotted(*),[dir=rtl] .leading-icon .mdc-button__icon,.trailing-icon ::slotted(*[dir=rtl]),.trailing-icon .mdc-button__icon[dir=rtl],.leading-icon ::slotted(*[dir=rtl]),.leading-icon .mdc-button__icon[dir=rtl]{margin-left:8px;margin-right:0}.trailing-icon ::slotted(*),.trailing-icon .mdc-button__icon{margin-left:8px;margin-right:0}[dir=rtl] .trailing-icon ::slotted(*),[dir=rtl] .trailing-icon .mdc-button__icon,.trailing-icon ::slotted(*[dir=rtl]),.trailing-icon .mdc-button__icon[dir=rtl]{margin-left:0;margin-right:8px}.slot-container{display:inline-flex;align-items:center;justify-content:center}.slot-container.flex{flex:auto}.mdc-button{flex:auto;overflow:hidden;padding-left:8px;padding-left:var(--mdc-button-horizontal-padding, 8px);padding-right:8px;padding-right:var(--mdc-button-horizontal-padding, 8px)}.mdc-button--raised{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow, 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised:focus{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-focus, var(--mdc-button-raised-box-shadow-hover, 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)))}.mdc-button--raised:hover{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-hover, 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised:active{box-shadow:0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-active, 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12))}.mdc-button--raised:disabled{box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-disabled, 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised,.mdc-button--unelevated{padding-left:16px;padding-left:var(--mdc-button-horizontal-padding, 16px);padding-right:16px;padding-right:var(--mdc-button-horizontal-padding, 16px)}.mdc-button--outlined{border-width:1px;border-width:var(--mdc-button-outline-width, 1px);padding-left:calc(16px - 1px);padding-left:calc(var(--mdc-button-horizontal-padding, 16px) - var(--mdc-button-outline-width, 1px));padding-right:calc(16px - 1px);padding-right:calc(var(--mdc-button-horizontal-padding, 16px) - var(--mdc-button-outline-width, 1px))}.mdc-button--outlined:not(:disabled){border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-button-outline-color, rgba(0, 0, 0, 0.12))}.mdc-button--outlined .ripple{top:calc(-1 * 1px);top:calc(-1 * var(--mdc-button-outline-width, 1px));left:calc(-1 * 1px);left:calc(-1 * var(--mdc-button-outline-width, 1px));right:initial;right:initial;border-width:1px;border-width:var(--mdc-button-outline-width, 1px);border-style:solid;border-color:transparent}[dir=rtl] .mdc-button--outlined .ripple,.mdc-button--outlined .ripple[dir=rtl]{left:initial;left:initial;right:calc(-1 * 1px);right:calc(-1 * var(--mdc-button-outline-width, 1px))}.mdc-button--dense{height:28px;margin-top:0;margin-bottom:0}.mdc-button--dense .mdc-button__touch{height:100%}:host([disabled]){pointer-events:none}:host([disabled]) .mdc-button{color:rgba(0, 0, 0, 0.38);color:var(--mdc-button-disabled-ink-color, rgba(0, 0, 0, 0.38))}:host([disabled]) .mdc-button--raised,:host([disabled]) .mdc-button--unelevated{background-color:rgba(0, 0, 0, 0.12);background-color:var(--mdc-button-disabled-fill-color, rgba(0, 0, 0, 0.12))}:host([disabled]) .mdc-button--outlined{border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-button-disabled-outline-color, rgba(0, 0, 0, 0.12))}`;
+const styles$8 = i$5 `.mdc-button{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-button-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.875rem;font-size:var(--mdc-typography-button-font-size, 0.875rem);line-height:2.25rem;line-height:var(--mdc-typography-button-line-height, 2.25rem);font-weight:500;font-weight:var(--mdc-typography-button-font-weight, 500);letter-spacing:0.0892857143em;letter-spacing:var(--mdc-typography-button-letter-spacing, 0.0892857143em);text-decoration:none;text-decoration:var(--mdc-typography-button-text-decoration, none);text-transform:uppercase;text-transform:var(--mdc-typography-button-text-transform, uppercase)}.mdc-touch-target-wrapper{display:inline}.mdc-elevation-overlay{position:absolute;border-radius:inherit;pointer-events:none;opacity:0;opacity:var(--mdc-elevation-overlay-opacity, 0);transition:opacity 280ms cubic-bezier(0.4, 0, 0.2, 1);background-color:#fff;background-color:var(--mdc-elevation-overlay-color, #fff)}.mdc-button{position:relative;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:64px;border:none;outline:none;line-height:inherit;user-select:none;-webkit-appearance:none;overflow:visible;vertical-align:middle;background:transparent}.mdc-button .mdc-elevation-overlay{width:100%;height:100%;top:0;left:0}.mdc-button::-moz-focus-inner{padding:0;border:0}.mdc-button:active{outline:none}.mdc-button:hover{cursor:pointer}.mdc-button:disabled{cursor:default;pointer-events:none}.mdc-button .mdc-button__icon{margin-left:0;margin-right:8px;display:inline-block;position:relative;vertical-align:top}[dir=rtl] .mdc-button .mdc-button__icon,.mdc-button .mdc-button__icon[dir=rtl]{margin-left:8px;margin-right:0}.mdc-button .mdc-button__label{position:relative}.mdc-button .mdc-button__focus-ring{display:none}@media screen and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring{pointer-events:none;border:2px solid transparent;border-radius:6px;box-sizing:content-box;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc( 100% + 4px );width:calc( 100% + 4px );display:block}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring{border-color:CanvasText}}@media screen and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring::after,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring::after{content:"";border:2px solid transparent;border-radius:8px;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px)}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring::after,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring::after{border-color:CanvasText}}.mdc-button .mdc-button__touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}.mdc-button__label+.mdc-button__icon{margin-left:8px;margin-right:0}[dir=rtl] .mdc-button__label+.mdc-button__icon,.mdc-button__label+.mdc-button__icon[dir=rtl]{margin-left:0;margin-right:8px}svg.mdc-button__icon{fill:currentColor}.mdc-button--touch{margin-top:6px;margin-bottom:6px}.mdc-button{padding:0 8px 0 8px}.mdc-button--unelevated{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--unelevated.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--unelevated.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--raised{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--raised.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--raised.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--outlined{border-style:solid;transition:border 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button--outlined .mdc-button__ripple{border-style:solid;border-color:transparent}.mdc-button{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button:not(:disabled){color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}.mdc-button:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--raised,.mdc-button--unelevated{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--raised:not(:disabled),.mdc-button--unelevated:not(:disabled){background-color:#6200ee;background-color:var(--mdc-theme-primary, #6200ee)}.mdc-button--raised:disabled,.mdc-button--unelevated:disabled{background-color:rgba(0, 0, 0, 0.12)}.mdc-button--raised:not(:disabled),.mdc-button--unelevated:not(:disabled){color:#fff;color:var(--mdc-theme-on-primary, #fff)}.mdc-button--raised:disabled,.mdc-button--unelevated:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button--raised .mdc-button__icon,.mdc-button--unelevated .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button--raised .mdc-button__ripple,.mdc-button--unelevated .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--outlined{height:36px;border-radius:4px;border-radius:var(--mdc-shape-small, 4px);padding:0 15px 0 15px;border-width:1px}.mdc-button--outlined:not(:disabled){color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}.mdc-button--outlined:disabled{color:rgba(0, 0, 0, 0.38)}.mdc-button--outlined .mdc-button__icon{font-size:1.125rem;width:1.125rem;height:1.125rem}.mdc-button--outlined .mdc-button__ripple{border-radius:4px;border-radius:var(--mdc-shape-small, 4px)}.mdc-button--outlined:not(:disabled){border-color:rgba(0, 0, 0, 0.12)}.mdc-button--outlined:disabled{border-color:rgba(0, 0, 0, 0.12)}.mdc-button--outlined.mdc-button--icon-trailing{padding:0 11px 0 15px}.mdc-button--outlined.mdc-button--icon-leading{padding:0 15px 0 11px}.mdc-button--outlined .mdc-button__ripple{top:-1px;left:-1px;bottom:-1px;right:-1px;border-width:1px}.mdc-button--outlined .mdc-button__touch{left:calc(-1 * 1px);width:calc(100% + 2 * 1px)}.mdc-button--raised{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(0, 0, 0, 0.14),0px 1px 5px 0px rgba(0,0,0,.12);transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button--raised:hover,.mdc-button--raised:focus{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2),0px 4px 5px 0px rgba(0, 0, 0, 0.14),0px 1px 10px 0px rgba(0,0,0,.12)}.mdc-button--raised:active{box-shadow:0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0,0,0,.12)}.mdc-button--raised:disabled{box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2),0px 0px 0px 0px rgba(0, 0, 0, 0.14),0px 0px 0px 0px rgba(0,0,0,.12)}:host{display:inline-flex;outline:none;-webkit-tap-highlight-color:transparent;vertical-align:top}:host([fullwidth]){width:100%}:host([raised]),:host([unelevated]){--mdc-ripple-color:#fff;--mdc-ripple-focus-opacity:0.24;--mdc-ripple-hover-opacity:0.08;--mdc-ripple-press-opacity:0.24}.trailing-icon ::slotted(*),.trailing-icon .mdc-button__icon,.leading-icon ::slotted(*),.leading-icon .mdc-button__icon{margin-left:0;margin-right:8px;display:inline-block;position:relative;vertical-align:top;font-size:1.125rem;height:1.125rem;width:1.125rem}[dir=rtl] .trailing-icon ::slotted(*),[dir=rtl] .trailing-icon .mdc-button__icon,[dir=rtl] .leading-icon ::slotted(*),[dir=rtl] .leading-icon .mdc-button__icon,.trailing-icon ::slotted(*[dir=rtl]),.trailing-icon .mdc-button__icon[dir=rtl],.leading-icon ::slotted(*[dir=rtl]),.leading-icon .mdc-button__icon[dir=rtl]{margin-left:8px;margin-right:0}.trailing-icon ::slotted(*),.trailing-icon .mdc-button__icon{margin-left:8px;margin-right:0}[dir=rtl] .trailing-icon ::slotted(*),[dir=rtl] .trailing-icon .mdc-button__icon,.trailing-icon ::slotted(*[dir=rtl]),.trailing-icon .mdc-button__icon[dir=rtl]{margin-left:0;margin-right:8px}.slot-container{display:inline-flex;align-items:center;justify-content:center}.slot-container.flex{flex:auto}.mdc-button{flex:auto;overflow:hidden;padding-left:8px;padding-left:var(--mdc-button-horizontal-padding, 8px);padding-right:8px;padding-right:var(--mdc-button-horizontal-padding, 8px)}.mdc-button--raised{box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow, 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised:focus{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-focus, var(--mdc-button-raised-box-shadow-hover, 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)))}.mdc-button--raised:hover{box-shadow:0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-hover, 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised:active{box-shadow:0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-active, 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12))}.mdc-button--raised:disabled{box-shadow:0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);box-shadow:var(--mdc-button-raised-box-shadow-disabled, 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12))}.mdc-button--raised,.mdc-button--unelevated{padding-left:16px;padding-left:var(--mdc-button-horizontal-padding, 16px);padding-right:16px;padding-right:var(--mdc-button-horizontal-padding, 16px)}.mdc-button--outlined{border-width:1px;border-width:var(--mdc-button-outline-width, 1px);padding-left:calc(16px - 1px);padding-left:calc(var(--mdc-button-horizontal-padding, 16px) - var(--mdc-button-outline-width, 1px));padding-right:calc(16px - 1px);padding-right:calc(var(--mdc-button-horizontal-padding, 16px) - var(--mdc-button-outline-width, 1px))}.mdc-button--outlined:not(:disabled){border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-button-outline-color, rgba(0, 0, 0, 0.12))}.mdc-button--outlined .ripple{top:calc(-1 * 1px);top:calc(-1 * var(--mdc-button-outline-width, 1px));left:calc(-1 * 1px);left:calc(-1 * var(--mdc-button-outline-width, 1px));right:initial;right:initial;border-width:1px;border-width:var(--mdc-button-outline-width, 1px);border-style:solid;border-color:transparent}[dir=rtl] .mdc-button--outlined .ripple,.mdc-button--outlined .ripple[dir=rtl]{left:initial;left:initial;right:calc(-1 * 1px);right:calc(-1 * var(--mdc-button-outline-width, 1px))}.mdc-button--dense{height:28px;margin-top:0;margin-bottom:0}.mdc-button--dense .mdc-button__touch{height:100%}:host([disabled]){pointer-events:none}:host([disabled]) .mdc-button{color:rgba(0, 0, 0, 0.38);color:var(--mdc-button-disabled-ink-color, rgba(0, 0, 0, 0.38))}:host([disabled]) .mdc-button--raised,:host([disabled]) .mdc-button--unelevated{background-color:rgba(0, 0, 0, 0.12);background-color:var(--mdc-button-disabled-fill-color, rgba(0, 0, 0, 0.12))}:host([disabled]) .mdc-button--outlined{border-color:rgba(0, 0, 0, 0.12);border-color:var(--mdc-button-disabled-outline-color, rgba(0, 0, 0, 0.12))}`;
 
 /**
  * @license
@@ -3855,7 +3855,7 @@ const styles$5 = i$5 `.mdc-button{-moz-osx-font-smoothing:grayscale;-webkit-font
 /** @soyCompatible */
 let Button = class Button extends ButtonBase {
 };
-Button.styles = [styles$5];
+Button.styles = [styles$8];
 Button = __decorate([
     e$6('mwc-button')
 ], Button);
@@ -3984,7 +3984,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$4 = i$5 `.material-icons{font-family:var(--mdc-icon-font, "Material Icons");font-weight:normal;font-style:normal;font-size:var(--mdc-icon-size, 24px);line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}.mdc-icon-button{font-size:24px;width:48px;height:48px;padding:12px}.mdc-icon-button .mdc-icon-button__focus-ring{display:none}.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{display:block;max-height:48px;max-width:48px}@media screen and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{pointer-events:none;border:2px solid transparent;border-radius:6px;box-sizing:content-box;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:100%;width:100%}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{border-color:CanvasText}}@media screen and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring::after,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring::after{content:"";border:2px solid transparent;border-radius:8px;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px)}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring::after,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring::after{border-color:CanvasText}}.mdc-icon-button.mdc-icon-button--reduced-size .mdc-icon-button__ripple{width:40px;height:40px;margin-top:4px;margin-bottom:4px;margin-right:4px;margin-left:4px}.mdc-icon-button.mdc-icon-button--reduced-size.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button.mdc-icon-button--reduced-size:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{max-height:40px;max-width:40px}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38))}.mdc-icon-button svg,.mdc-icon-button img{width:24px;height:24px}.mdc-icon-button{display:inline-block;position:relative;box-sizing:border-box;border:none;outline:none;background-color:transparent;fill:currentColor;color:inherit;text-decoration:none;cursor:pointer;user-select:none;z-index:0;overflow:visible}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{cursor:default;pointer-events:none}.mdc-icon-button--display-flex{align-items:center;display:inline-flex;justify-content:center}.mdc-icon-button__icon{display:inline-block}.mdc-icon-button__icon.mdc-icon-button__icon--on{display:none}.mdc-icon-button--on .mdc-icon-button__icon{display:none}.mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on{display:inline-block}.mdc-icon-button__link{height:100%;left:0;outline:none;position:absolute;top:0;width:100%}.mdc-icon-button{display:inline-block;position:relative;box-sizing:border-box;border:none;outline:none;background-color:transparent;fill:currentColor;color:inherit;text-decoration:none;cursor:pointer;user-select:none;z-index:0;overflow:visible}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{cursor:default;pointer-events:none}.mdc-icon-button--display-flex{align-items:center;display:inline-flex;justify-content:center}.mdc-icon-button__icon{display:inline-block}.mdc-icon-button__icon.mdc-icon-button__icon--on{display:none}.mdc-icon-button--on .mdc-icon-button__icon{display:none}.mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on{display:inline-block}.mdc-icon-button__link{height:100%;left:0;outline:none;position:absolute;top:0;width:100%}:host{display:inline-block;outline:none}:host([disabled]){pointer-events:none}.mdc-icon-button i,.mdc-icon-button svg,.mdc-icon-button img,.mdc-icon-button ::slotted(*){display:block}:host{--mdc-ripple-color: currentcolor;-webkit-tap-highlight-color:transparent}:host,.mdc-icon-button{vertical-align:top}.mdc-icon-button{width:var(--mdc-icon-button-size, 48px);height:var(--mdc-icon-button-size, 48px);padding:calc( (var(--mdc-icon-button-size, 48px) - var(--mdc-icon-size, 24px)) / 2 )}.mdc-icon-button i,.mdc-icon-button svg,.mdc-icon-button img,.mdc-icon-button ::slotted(*){display:block;width:var(--mdc-icon-size, 24px);height:var(--mdc-icon-size, 24px)}`;
+const styles$7 = i$5 `.material-icons{font-family:var(--mdc-icon-font, "Material Icons");font-weight:normal;font-style:normal;font-size:var(--mdc-icon-size, 24px);line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}.mdc-icon-button{font-size:24px;width:48px;height:48px;padding:12px}.mdc-icon-button .mdc-icon-button__focus-ring{display:none}.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{display:block;max-height:48px;max-width:48px}@media screen and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{pointer-events:none;border:2px solid transparent;border-radius:6px;box-sizing:content-box;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:100%;width:100%}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{border-color:CanvasText}}@media screen and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring::after,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring::after{content:"";border:2px solid transparent;border-radius:8px;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px)}}@media screen and (forced-colors: active)and (forced-colors: active){.mdc-icon-button.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring::after,.mdc-icon-button:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring::after{border-color:CanvasText}}.mdc-icon-button.mdc-icon-button--reduced-size .mdc-icon-button__ripple{width:40px;height:40px;margin-top:4px;margin-bottom:4px;margin-right:4px;margin-left:4px}.mdc-icon-button.mdc-icon-button--reduced-size.mdc-ripple-upgraded--background-focused .mdc-icon-button__focus-ring,.mdc-icon-button.mdc-icon-button--reduced-size:not(.mdc-ripple-upgraded):focus .mdc-icon-button__focus-ring{max-height:40px;max-width:40px}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-disabled-on-light, rgba(0, 0, 0, 0.38))}.mdc-icon-button svg,.mdc-icon-button img{width:24px;height:24px}.mdc-icon-button{display:inline-block;position:relative;box-sizing:border-box;border:none;outline:none;background-color:transparent;fill:currentColor;color:inherit;text-decoration:none;cursor:pointer;user-select:none;z-index:0;overflow:visible}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{cursor:default;pointer-events:none}.mdc-icon-button--display-flex{align-items:center;display:inline-flex;justify-content:center}.mdc-icon-button__icon{display:inline-block}.mdc-icon-button__icon.mdc-icon-button__icon--on{display:none}.mdc-icon-button--on .mdc-icon-button__icon{display:none}.mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on{display:inline-block}.mdc-icon-button__link{height:100%;left:0;outline:none;position:absolute;top:0;width:100%}.mdc-icon-button{display:inline-block;position:relative;box-sizing:border-box;border:none;outline:none;background-color:transparent;fill:currentColor;color:inherit;text-decoration:none;cursor:pointer;user-select:none;z-index:0;overflow:visible}.mdc-icon-button .mdc-icon-button__touch{position:absolute;top:50%;height:48px;left:50%;width:48px;transform:translate(-50%, -50%)}.mdc-icon-button:disabled{cursor:default;pointer-events:none}.mdc-icon-button--display-flex{align-items:center;display:inline-flex;justify-content:center}.mdc-icon-button__icon{display:inline-block}.mdc-icon-button__icon.mdc-icon-button__icon--on{display:none}.mdc-icon-button--on .mdc-icon-button__icon{display:none}.mdc-icon-button--on .mdc-icon-button__icon.mdc-icon-button__icon--on{display:inline-block}.mdc-icon-button__link{height:100%;left:0;outline:none;position:absolute;top:0;width:100%}:host{display:inline-block;outline:none}:host([disabled]){pointer-events:none}.mdc-icon-button i,.mdc-icon-button svg,.mdc-icon-button img,.mdc-icon-button ::slotted(*){display:block}:host{--mdc-ripple-color: currentcolor;-webkit-tap-highlight-color:transparent}:host,.mdc-icon-button{vertical-align:top}.mdc-icon-button{width:var(--mdc-icon-button-size, 48px);height:var(--mdc-icon-button-size, 48px);padding:calc( (var(--mdc-icon-button-size, 48px) - var(--mdc-icon-size, 24px)) / 2 )}.mdc-icon-button i,.mdc-icon-button svg,.mdc-icon-button img,.mdc-icon-button ::slotted(*){display:block;width:var(--mdc-icon-size, 24px);height:var(--mdc-icon-size, 24px)}`;
 
 /**
  * @license
@@ -3994,32 +3994,211 @@ const styles$4 = i$5 `.material-icons{font-family:var(--mdc-icon-font, "Material
 /** @soyCompatible */
 let IconButton = class IconButton extends IconButtonBase {
 };
-IconButton.styles = [styles$4];
+IconButton.styles = [styles$7];
 IconButton = __decorate([
     e$6('mwc-icon-button')
 ], IconButton);
 
-function newEditEvent(edit) {
-    return new CustomEvent('oscd-edit', {
-        composed: true,
-        bubbles: true,
-        detail: edit,
+/**
+ * @license
+ * Copyright 2018 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var strings$5 = {
+    NOTCH_ELEMENT_SELECTOR: '.mdc-notched-outline__notch',
+};
+var numbers$5 = {
+    // This should stay in sync with $mdc-notched-outline-padding * 2.
+    NOTCH_ELEMENT_PADDING: 8,
+};
+var cssClasses$7 = {
+    NO_LABEL: 'mdc-notched-outline--no-label',
+    OUTLINE_NOTCHED: 'mdc-notched-outline--notched',
+    OUTLINE_UPGRADED: 'mdc-notched-outline--upgraded',
+};
+
+/**
+ * @license
+ * Copyright 2017 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCNotchedOutlineFoundation = /** @class */ (function (_super) {
+    __extends(MDCNotchedOutlineFoundation, _super);
+    function MDCNotchedOutlineFoundation(adapter) {
+        return _super.call(this, __assign(__assign({}, MDCNotchedOutlineFoundation.defaultAdapter), adapter)) || this;
+    }
+    Object.defineProperty(MDCNotchedOutlineFoundation, "strings", {
+        get: function () {
+            return strings$5;
+        },
+        enumerable: false,
+        configurable: true
     });
+    Object.defineProperty(MDCNotchedOutlineFoundation, "cssClasses", {
+        get: function () {
+            return cssClasses$7;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCNotchedOutlineFoundation, "numbers", {
+        get: function () {
+            return numbers$5;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCNotchedOutlineFoundation, "defaultAdapter", {
+        /**
+         * See {@link MDCNotchedOutlineAdapter} for typing information on parameters and return types.
+         */
+        get: function () {
+            // tslint:disable:object-literal-sort-keys Methods should be in the same order as the adapter interface.
+            return {
+                addClass: function () { return undefined; },
+                removeClass: function () { return undefined; },
+                setNotchWidthProperty: function () { return undefined; },
+                removeNotchWidthProperty: function () { return undefined; },
+            };
+            // tslint:enable:object-literal-sort-keys
+        },
+        enumerable: false,
+        configurable: true
+    });
+    /**
+     * Adds the outline notched selector and updates the notch width calculated based off of notchWidth.
+     */
+    MDCNotchedOutlineFoundation.prototype.notch = function (notchWidth) {
+        var OUTLINE_NOTCHED = MDCNotchedOutlineFoundation.cssClasses.OUTLINE_NOTCHED;
+        if (notchWidth > 0) {
+            notchWidth += numbers$5.NOTCH_ELEMENT_PADDING; // Add padding from left/right.
+        }
+        this.adapter.setNotchWidthProperty(notchWidth);
+        this.adapter.addClass(OUTLINE_NOTCHED);
+    };
+    /**
+     * Removes notched outline selector to close the notch in the outline.
+     */
+    MDCNotchedOutlineFoundation.prototype.closeNotch = function () {
+        var OUTLINE_NOTCHED = MDCNotchedOutlineFoundation.cssClasses.OUTLINE_NOTCHED;
+        this.adapter.removeClass(OUTLINE_NOTCHED);
+        this.adapter.removeNotchWidthProperty();
+    };
+    return MDCNotchedOutlineFoundation;
+}(MDCFoundation));
+
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class NotchedOutlineBase extends BaseElement {
+    constructor() {
+        super(...arguments);
+        this.mdcFoundationClass = MDCNotchedOutlineFoundation;
+        this.width = 0;
+        this.open = false;
+        this.lastOpen = this.open;
+    }
+    createAdapter() {
+        return {
+            addClass: (className) => this.mdcRoot.classList.add(className),
+            removeClass: (className) => this.mdcRoot.classList.remove(className),
+            setNotchWidthProperty: (width) => this.notchElement.style.setProperty('width', `${width}px`),
+            removeNotchWidthProperty: () => this.notchElement.style.removeProperty('width'),
+        };
+    }
+    openOrClose(shouldOpen, width) {
+        if (!this.mdcFoundation) {
+            return;
+        }
+        if (shouldOpen && width !== undefined) {
+            this.mdcFoundation.notch(width);
+        }
+        else {
+            this.mdcFoundation.closeNotch();
+        }
+    }
+    render() {
+        this.openOrClose(this.open, this.width);
+        const classes = o$2({
+            'mdc-notched-outline--notched': this.open,
+        });
+        return x `
+      <span class="mdc-notched-outline ${classes}">
+        <span class="mdc-notched-outline__leading"></span>
+        <span class="mdc-notched-outline__notch">
+          <slot></slot>
+        </span>
+        <span class="mdc-notched-outline__trailing"></span>
+      </span>`;
+    }
 }
+__decorate([
+    i$2('.mdc-notched-outline')
+], NotchedOutlineBase.prototype, "mdcRoot", void 0);
+__decorate([
+    n$4({ type: Number })
+], NotchedOutlineBase.prototype, "width", void 0);
+__decorate([
+    n$4({ type: Boolean, reflect: true })
+], NotchedOutlineBase.prototype, "open", void 0);
+__decorate([
+    i$2('.mdc-notched-outline__notch')
+], NotchedOutlineBase.prototype, "notchElement", void 0);
 
 /**
  * @license
- * Copyright 2020 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const e=o=>void 0===o.strings,s$1={},a=(o,l=s$1)=>o._$AH=l;
+ * Copyright 2021 Google LLC
+ * SPDX-LIcense-Identifier: Apache-2.0
+ */
+const styles$6 = i$5 `.mdc-notched-outline{display:flex;position:absolute;top:0;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] .mdc-notched-outline,.mdc-notched-outline[dir=rtl]{text-align:right}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{box-sizing:border-box;height:100%;border-top:1px solid;border-bottom:1px solid;pointer-events:none}.mdc-notched-outline__leading{border-left:1px solid;border-right:none;width:12px}[dir=rtl] .mdc-notched-outline__leading,.mdc-notched-outline__leading[dir=rtl]{border-left:none;border-right:1px solid}.mdc-notched-outline__trailing{border-left:none;border-right:1px solid;flex-grow:1}[dir=rtl] .mdc-notched-outline__trailing,.mdc-notched-outline__trailing[dir=rtl]{border-left:1px solid;border-right:none}.mdc-notched-outline__notch{flex:0 0 auto;width:auto;max-width:calc(100% - 12px * 2)}.mdc-notched-outline .mdc-floating-label{display:inline-block;position:relative;max-width:100%}.mdc-notched-outline .mdc-floating-label--float-above{text-overflow:clip}.mdc-notched-outline--upgraded .mdc-floating-label--float-above{max-width:calc(100% / 0.75)}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-left:0;padding-right:8px;border-top:none}[dir=rtl] .mdc-notched-outline--notched .mdc-notched-outline__notch,.mdc-notched-outline--notched .mdc-notched-outline__notch[dir=rtl]{padding-left:8px;padding-right:0}.mdc-notched-outline--no-label .mdc-notched-outline__notch{display:none}:host{display:block;position:absolute;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] :host,:host([dir=rtl]){text-align:right}::slotted(.mdc-floating-label){display:inline-block;position:relative;top:17px;bottom:auto;max-width:100%}::slotted(.mdc-floating-label--float-above){text-overflow:clip}.mdc-notched-outline--upgraded ::slotted(.mdc-floating-label--float-above){max-width:calc(100% / 0.75)}.mdc-notched-outline .mdc-notched-outline__leading{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}[dir=rtl] .mdc-notched-outline .mdc-notched-outline__leading,.mdc-notched-outline .mdc-notched-outline__leading[dir=rtl]{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}@supports(top: max(0%)){.mdc-notched-outline .mdc-notched-outline__leading{width:max(12px, var(--mdc-shape-small, 4px))}}@supports(top: max(0%)){.mdc-notched-outline .mdc-notched-outline__notch{max-width:calc(100% - max(12px, var(--mdc-shape-small, 4px)) * 2)}}.mdc-notched-outline .mdc-notched-outline__trailing{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}[dir=rtl] .mdc-notched-outline .mdc-notched-outline__trailing,.mdc-notched-outline .mdc-notched-outline__trailing[dir=rtl]{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{border-color:var(--mdc-notched-outline-border-color, var(--mdc-theme-primary, #6200ee));border-width:1px;border-width:var(--mdc-notched-outline-stroke-width, 1px)}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:0;padding-top:var(--mdc-notched-outline-notch-offset, 0)}`;
 
 /**
  * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: BSD-3-Clause
- */const s=(i,t)=>{var e,o;const r=i._$AN;if(void 0===r)return !1;for(const i of r)null===(o=(e=i)._$AO)||void 0===o||o.call(e,t,!1),s(i,t);return !0},o=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t;}while(0===(null==e?void 0:e.size))},r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),l$1(t);}};function n$1(i){void 0!==this._$AN?(o(this),this._$AM=i,r(this)):this._$AM=i;}function h$1(i,t=!1,e=0){const r=this._$AH,n=this._$AN;if(void 0!==n&&0!==n.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)s(r[i],!1),o(r[i]);else null!=r&&(s(r,!1),o(r));else s(this,i);}const l$1=i=>{var t$1,s,o,r;i.type==t.CHILD&&(null!==(t$1=(o=i)._$AP)&&void 0!==t$1||(o._$AP=h$1),null!==(s=(r=i)._$AQ)&&void 0!==s||(r._$AQ=n$1));};class c extends i$1{constructor(){super(...arguments),this._$AN=void 0;}_$AT(i,t,e){super._$AT(i,t,e),r(this),this.isConnected=i._$AU;}_$AO(i,t=!0){var e,r;i!==this.isConnected&&(this.isConnected=i,i?null===(e=this.reconnected)||void 0===e||e.call(this):null===(r=this.disconnected)||void 0===r||r.call(this)),t&&(s(this,i),o(this));}setValue(t){if(e(this._$Ct))this._$Ct._$AI(t,this);else {const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0);}}disconnected(){}reconnected(){}}
-
-const h=new WeakMap,n=e$1(class extends c{render(t){return A$1}update(t,[s]){var e;const o=s!==this.G;return o&&void 0!==this.G&&this.ot(void 0),(o||this.rt!==this.lt)&&(this.G=s,this.dt=null===(e=t.options)||void 0===e?void 0:e.host,this.ot(this.lt=t.element)),A$1}ot(i){var t;if("function"==typeof this.G){const s=null!==(t=this.dt)&&void 0!==t?t:globalThis;let e=h.get(s);void 0===e&&(e=new WeakMap,h.set(s,e)),void 0!==e.get(this.G)&&this.G.call(this.dt,void 0),e.set(this.G,i),void 0!==i&&this.G.call(this.dt,i);}else this.G.value=i;}get rt(){var i,t,s;return "function"==typeof this.G?null===(t=h.get(null!==(i=this.dt)&&void 0!==i?i:globalThis))||void 0===t?void 0:t.get(this.G):null===(s=this.G)||void 0===s?void 0:s.value}disconnected(){this.rt===this.lt&&this.ot(void 0);}reconnected(){this.ot(this.lt);}});
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+let NotchedOutline = class NotchedOutline extends NotchedOutlineBase {
+};
+NotchedOutline.styles = [styles$6];
+NotchedOutline = __decorate([
+    e$6('mwc-notched-outline')
+], NotchedOutline);
 
 /**
  * @license
@@ -4292,7 +4471,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$3 = i$5 `:host{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;height:48px;display:flex;position:relative;align-items:center;justify-content:flex-start;overflow:hidden;padding:0;padding-left:var(--mdc-list-side-padding, 16px);padding-right:var(--mdc-list-side-padding, 16px);outline:none;height:48px;color:rgba(0,0,0,.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87))}:host:focus{outline:none}:host([activated]){color:#6200ee;color:var(--mdc-theme-primary, #6200ee);--mdc-ripple-color: var( --mdc-theme-primary, #6200ee )}:host([activated]) .mdc-deprecated-list-item__graphic{color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}:host([activated]) .fake-activated-ripple::before{position:absolute;display:block;top:0;bottom:0;left:0;right:0;width:100%;height:100%;pointer-events:none;z-index:1;content:"";opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12);background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-deprecated-list-item__graphic{flex-shrink:0;align-items:center;justify-content:center;fill:currentColor;display:inline-flex}.mdc-deprecated-list-item__graphic ::slotted(*){flex-shrink:0;align-items:center;justify-content:center;fill:currentColor;width:100%;height:100%;text-align:center}.mdc-deprecated-list-item__meta{width:var(--mdc-list-item-meta-size, 24px);height:var(--mdc-list-item-meta-size, 24px);margin-left:auto;margin-right:0;color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38))}.mdc-deprecated-list-item__meta.multi{width:auto}.mdc-deprecated-list-item__meta ::slotted(*){width:var(--mdc-list-item-meta-size, 24px);line-height:var(--mdc-list-item-meta-size, 24px)}.mdc-deprecated-list-item__meta ::slotted(.material-icons),.mdc-deprecated-list-item__meta ::slotted(mwc-icon){line-height:var(--mdc-list-item-meta-size, 24px) !important}.mdc-deprecated-list-item__meta ::slotted(:not(.material-icons):not(mwc-icon)){-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-caption-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.75rem;font-size:var(--mdc-typography-caption-font-size, 0.75rem);line-height:1.25rem;line-height:var(--mdc-typography-caption-line-height, 1.25rem);font-weight:400;font-weight:var(--mdc-typography-caption-font-weight, 400);letter-spacing:0.0333333333em;letter-spacing:var(--mdc-typography-caption-letter-spacing, 0.0333333333em);text-decoration:inherit;text-decoration:var(--mdc-typography-caption-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-caption-text-transform, inherit)}[dir=rtl] .mdc-deprecated-list-item__meta,.mdc-deprecated-list-item__meta[dir=rtl]{margin-left:0;margin-right:auto}.mdc-deprecated-list-item__meta ::slotted(*){width:100%;height:100%}.mdc-deprecated-list-item__text{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.mdc-deprecated-list-item__text ::slotted([for]),.mdc-deprecated-list-item__text[for]{pointer-events:none}.mdc-deprecated-list-item__primary-text{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;margin-top:0;line-height:normal;margin-bottom:-20px;display:block}.mdc-deprecated-list-item__primary-text::before{display:inline-block;width:0;height:32px;content:"";vertical-align:0}.mdc-deprecated-list-item__primary-text::after{display:inline-block;width:0;height:20px;content:"";vertical-align:-20px}.mdc-deprecated-list-item__secondary-text{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-body2-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.875rem;font-size:var(--mdc-typography-body2-font-size, 0.875rem);line-height:1.25rem;line-height:var(--mdc-typography-body2-line-height, 1.25rem);font-weight:400;font-weight:var(--mdc-typography-body2-font-weight, 400);letter-spacing:0.0178571429em;letter-spacing:var(--mdc-typography-body2-letter-spacing, 0.0178571429em);text-decoration:inherit;text-decoration:var(--mdc-typography-body2-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-body2-text-transform, inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;margin-top:0;line-height:normal;display:block}.mdc-deprecated-list-item__secondary-text::before{display:inline-block;width:0;height:20px;content:"";vertical-align:0}.mdc-deprecated-list--dense .mdc-deprecated-list-item__secondary-text{font-size:inherit}* ::slotted(a),a{color:inherit;text-decoration:none}:host([twoline]){height:72px}:host([twoline]) .mdc-deprecated-list-item__text{align-self:flex-start}:host([disabled]),:host([noninteractive]){cursor:default;pointer-events:none}:host([disabled]) .mdc-deprecated-list-item__text ::slotted(*){opacity:.38}:host([disabled]) .mdc-deprecated-list-item__text ::slotted(*),:host([disabled]) .mdc-deprecated-list-item__primary-text ::slotted(*),:host([disabled]) .mdc-deprecated-list-item__secondary-text ::slotted(*){color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-deprecated-list-item__secondary-text ::slotted(*){color:rgba(0, 0, 0, 0.54);color:var(--mdc-theme-text-secondary-on-background, rgba(0, 0, 0, 0.54))}.mdc-deprecated-list-item__graphic ::slotted(*){background-color:transparent;color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-icon-on-background, rgba(0, 0, 0, 0.38))}.mdc-deprecated-list-group__subheader ::slotted(*){color:rgba(0, 0, 0, 0.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87))}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 40px);height:var(--mdc-list-item-graphic-size, 40px)}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 40px);line-height:var(--mdc-list-item-graphic-size, 40px)}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 40px) !important}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(*){border-radius:50%}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic,:host([graphic=medium]) .mdc-deprecated-list-item__graphic,:host([graphic=large]) .mdc-deprecated-list-item__graphic,:host([graphic=control]) .mdc-deprecated-list-item__graphic{margin-left:0;margin-right:var(--mdc-list-item-graphic-margin, 16px)}[dir=rtl] :host([graphic=avatar]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=medium]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=large]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=control]) .mdc-deprecated-list-item__graphic,:host([graphic=avatar]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=medium]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=large]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=control]) .mdc-deprecated-list-item__graphic[dir=rtl]{margin-left:var(--mdc-list-item-graphic-margin, 16px);margin-right:0}:host([graphic=icon]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 24px);height:var(--mdc-list-item-graphic-size, 24px);margin-left:0;margin-right:var(--mdc-list-item-graphic-margin, 32px)}:host([graphic=icon]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 24px);line-height:var(--mdc-list-item-graphic-size, 24px)}:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 24px) !important}[dir=rtl] :host([graphic=icon]) .mdc-deprecated-list-item__graphic,:host([graphic=icon]) .mdc-deprecated-list-item__graphic[dir=rtl]{margin-left:var(--mdc-list-item-graphic-margin, 32px);margin-right:0}:host([graphic=avatar]:not([twoLine])),:host([graphic=icon]:not([twoLine])){height:56px}:host([graphic=medium]:not([twoLine])),:host([graphic=large]:not([twoLine])){height:72px}:host([graphic=medium]) .mdc-deprecated-list-item__graphic,:host([graphic=large]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 56px);height:var(--mdc-list-item-graphic-size, 56px)}:host([graphic=medium]) .mdc-deprecated-list-item__graphic.multi,:host([graphic=large]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(*),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 56px);line-height:var(--mdc-list-item-graphic-size, 56px)}:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 56px) !important}:host([graphic=large]){padding-left:0px}`;
+const styles$5 = i$5 `:host{cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;height:48px;display:flex;position:relative;align-items:center;justify-content:flex-start;overflow:hidden;padding:0;padding-left:var(--mdc-list-side-padding, 16px);padding-right:var(--mdc-list-side-padding, 16px);outline:none;height:48px;color:rgba(0,0,0,.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87))}:host:focus{outline:none}:host([activated]){color:#6200ee;color:var(--mdc-theme-primary, #6200ee);--mdc-ripple-color: var( --mdc-theme-primary, #6200ee )}:host([activated]) .mdc-deprecated-list-item__graphic{color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}:host([activated]) .fake-activated-ripple::before{position:absolute;display:block;top:0;bottom:0;left:0;right:0;width:100%;height:100%;pointer-events:none;z-index:1;content:"";opacity:0.12;opacity:var(--mdc-ripple-activated-opacity, 0.12);background-color:#6200ee;background-color:var(--mdc-ripple-color, var(--mdc-theme-primary, #6200ee))}.mdc-deprecated-list-item__graphic{flex-shrink:0;align-items:center;justify-content:center;fill:currentColor;display:inline-flex}.mdc-deprecated-list-item__graphic ::slotted(*){flex-shrink:0;align-items:center;justify-content:center;fill:currentColor;width:100%;height:100%;text-align:center}.mdc-deprecated-list-item__meta{width:var(--mdc-list-item-meta-size, 24px);height:var(--mdc-list-item-meta-size, 24px);margin-left:auto;margin-right:0;color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.38))}.mdc-deprecated-list-item__meta.multi{width:auto}.mdc-deprecated-list-item__meta ::slotted(*){width:var(--mdc-list-item-meta-size, 24px);line-height:var(--mdc-list-item-meta-size, 24px)}.mdc-deprecated-list-item__meta ::slotted(.material-icons),.mdc-deprecated-list-item__meta ::slotted(mwc-icon){line-height:var(--mdc-list-item-meta-size, 24px) !important}.mdc-deprecated-list-item__meta ::slotted(:not(.material-icons):not(mwc-icon)){-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-caption-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.75rem;font-size:var(--mdc-typography-caption-font-size, 0.75rem);line-height:1.25rem;line-height:var(--mdc-typography-caption-line-height, 1.25rem);font-weight:400;font-weight:var(--mdc-typography-caption-font-weight, 400);letter-spacing:0.0333333333em;letter-spacing:var(--mdc-typography-caption-letter-spacing, 0.0333333333em);text-decoration:inherit;text-decoration:var(--mdc-typography-caption-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-caption-text-transform, inherit)}[dir=rtl] .mdc-deprecated-list-item__meta,.mdc-deprecated-list-item__meta[dir=rtl]{margin-left:0;margin-right:auto}.mdc-deprecated-list-item__meta ::slotted(*){width:100%;height:100%}.mdc-deprecated-list-item__text{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.mdc-deprecated-list-item__text ::slotted([for]),.mdc-deprecated-list-item__text[for]{pointer-events:none}.mdc-deprecated-list-item__primary-text{text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;margin-top:0;line-height:normal;margin-bottom:-20px;display:block}.mdc-deprecated-list-item__primary-text::before{display:inline-block;width:0;height:32px;content:"";vertical-align:0}.mdc-deprecated-list-item__primary-text::after{display:inline-block;width:0;height:20px;content:"";vertical-align:-20px}.mdc-deprecated-list-item__secondary-text{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-body2-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.875rem;font-size:var(--mdc-typography-body2-font-size, 0.875rem);line-height:1.25rem;line-height:var(--mdc-typography-body2-line-height, 1.25rem);font-weight:400;font-weight:var(--mdc-typography-body2-font-weight, 400);letter-spacing:0.0178571429em;letter-spacing:var(--mdc-typography-body2-letter-spacing, 0.0178571429em);text-decoration:inherit;text-decoration:var(--mdc-typography-body2-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-body2-text-transform, inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;margin-top:0;line-height:normal;display:block}.mdc-deprecated-list-item__secondary-text::before{display:inline-block;width:0;height:20px;content:"";vertical-align:0}.mdc-deprecated-list--dense .mdc-deprecated-list-item__secondary-text{font-size:inherit}* ::slotted(a),a{color:inherit;text-decoration:none}:host([twoline]){height:72px}:host([twoline]) .mdc-deprecated-list-item__text{align-self:flex-start}:host([disabled]),:host([noninteractive]){cursor:default;pointer-events:none}:host([disabled]) .mdc-deprecated-list-item__text ::slotted(*){opacity:.38}:host([disabled]) .mdc-deprecated-list-item__text ::slotted(*),:host([disabled]) .mdc-deprecated-list-item__primary-text ::slotted(*),:host([disabled]) .mdc-deprecated-list-item__secondary-text ::slotted(*){color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-deprecated-list-item__secondary-text ::slotted(*){color:rgba(0, 0, 0, 0.54);color:var(--mdc-theme-text-secondary-on-background, rgba(0, 0, 0, 0.54))}.mdc-deprecated-list-item__graphic ::slotted(*){background-color:transparent;color:rgba(0, 0, 0, 0.38);color:var(--mdc-theme-text-icon-on-background, rgba(0, 0, 0, 0.38))}.mdc-deprecated-list-group__subheader ::slotted(*){color:rgba(0, 0, 0, 0.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87))}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 40px);height:var(--mdc-list-item-graphic-size, 40px)}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 40px);line-height:var(--mdc-list-item-graphic-size, 40px)}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 40px) !important}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic ::slotted(*){border-radius:50%}:host([graphic=avatar]) .mdc-deprecated-list-item__graphic,:host([graphic=medium]) .mdc-deprecated-list-item__graphic,:host([graphic=large]) .mdc-deprecated-list-item__graphic,:host([graphic=control]) .mdc-deprecated-list-item__graphic{margin-left:0;margin-right:var(--mdc-list-item-graphic-margin, 16px)}[dir=rtl] :host([graphic=avatar]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=medium]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=large]) .mdc-deprecated-list-item__graphic,[dir=rtl] :host([graphic=control]) .mdc-deprecated-list-item__graphic,:host([graphic=avatar]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=medium]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=large]) .mdc-deprecated-list-item__graphic[dir=rtl],:host([graphic=control]) .mdc-deprecated-list-item__graphic[dir=rtl]{margin-left:var(--mdc-list-item-graphic-margin, 16px);margin-right:0}:host([graphic=icon]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 24px);height:var(--mdc-list-item-graphic-size, 24px);margin-left:0;margin-right:var(--mdc-list-item-graphic-margin, 32px)}:host([graphic=icon]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 24px);line-height:var(--mdc-list-item-graphic-size, 24px)}:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=icon]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 24px) !important}[dir=rtl] :host([graphic=icon]) .mdc-deprecated-list-item__graphic,:host([graphic=icon]) .mdc-deprecated-list-item__graphic[dir=rtl]{margin-left:var(--mdc-list-item-graphic-margin, 32px);margin-right:0}:host([graphic=avatar]:not([twoLine])),:host([graphic=icon]:not([twoLine])){height:56px}:host([graphic=medium]:not([twoLine])),:host([graphic=large]:not([twoLine])){height:72px}:host([graphic=medium]) .mdc-deprecated-list-item__graphic,:host([graphic=large]) .mdc-deprecated-list-item__graphic{width:var(--mdc-list-item-graphic-size, 56px);height:var(--mdc-list-item-graphic-size, 56px)}:host([graphic=medium]) .mdc-deprecated-list-item__graphic.multi,:host([graphic=large]) .mdc-deprecated-list-item__graphic.multi{width:auto}:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(*),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(*){width:var(--mdc-list-item-graphic-size, 56px);line-height:var(--mdc-list-item-graphic-size, 56px)}:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=medium]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(.material-icons),:host([graphic=large]) .mdc-deprecated-list-item__graphic ::slotted(mwc-icon){line-height:var(--mdc-list-item-graphic-size, 56px) !important}:host([graphic=large]){padding-left:0px}`;
 
 /**
  * @license
@@ -4301,7 +4480,7 @@ const styles$3 = i$5 `:host{cursor:pointer;user-select:none;-webkit-tap-highligh
  */
 let ListItem = class ListItem extends ListItemBase {
 };
-ListItem.styles = [styles$3];
+ListItem.styles = [styles$5];
 ListItem = __decorate([
     e$6('mwc-list-item')
 ], ListItem);
@@ -4449,7 +4628,7 @@ function normalizeKey(evt) {
  * THE SOFTWARE.
  */
 var _a$1, _b$1;
-var cssClasses$4 = {
+var cssClasses$6 = {
     LIST_ITEM_ACTIVATED_CLASS: 'mdc-list-item--activated',
     LIST_ITEM_CLASS: 'mdc-list-item',
     LIST_ITEM_DISABLED_CLASS: 'mdc-list-item--disabled',
@@ -4459,23 +4638,23 @@ var cssClasses$4 = {
     ROOT: 'mdc-list',
 };
 (_a$1 = {},
-    _a$1["" + cssClasses$4.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-list-item--activated',
-    _a$1["" + cssClasses$4.LIST_ITEM_CLASS] = 'mdc-list-item',
-    _a$1["" + cssClasses$4.LIST_ITEM_DISABLED_CLASS] = 'mdc-list-item--disabled',
-    _a$1["" + cssClasses$4.LIST_ITEM_SELECTED_CLASS] = 'mdc-list-item--selected',
-    _a$1["" + cssClasses$4.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-list-item__primary-text',
-    _a$1["" + cssClasses$4.ROOT] = 'mdc-list',
+    _a$1["" + cssClasses$6.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-list-item--activated',
+    _a$1["" + cssClasses$6.LIST_ITEM_CLASS] = 'mdc-list-item',
+    _a$1["" + cssClasses$6.LIST_ITEM_DISABLED_CLASS] = 'mdc-list-item--disabled',
+    _a$1["" + cssClasses$6.LIST_ITEM_SELECTED_CLASS] = 'mdc-list-item--selected',
+    _a$1["" + cssClasses$6.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-list-item__primary-text',
+    _a$1["" + cssClasses$6.ROOT] = 'mdc-list',
     _a$1);
 var deprecatedClassNameMap = (_b$1 = {},
-    _b$1["" + cssClasses$4.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-deprecated-list-item--activated',
-    _b$1["" + cssClasses$4.LIST_ITEM_CLASS] = 'mdc-deprecated-list-item',
-    _b$1["" + cssClasses$4.LIST_ITEM_DISABLED_CLASS] = 'mdc-deprecated-list-item--disabled',
-    _b$1["" + cssClasses$4.LIST_ITEM_SELECTED_CLASS] = 'mdc-deprecated-list-item--selected',
-    _b$1["" + cssClasses$4.LIST_ITEM_TEXT_CLASS] = 'mdc-deprecated-list-item__text',
-    _b$1["" + cssClasses$4.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-deprecated-list-item__primary-text',
-    _b$1["" + cssClasses$4.ROOT] = 'mdc-deprecated-list',
+    _b$1["" + cssClasses$6.LIST_ITEM_ACTIVATED_CLASS] = 'mdc-deprecated-list-item--activated',
+    _b$1["" + cssClasses$6.LIST_ITEM_CLASS] = 'mdc-deprecated-list-item',
+    _b$1["" + cssClasses$6.LIST_ITEM_DISABLED_CLASS] = 'mdc-deprecated-list-item--disabled',
+    _b$1["" + cssClasses$6.LIST_ITEM_SELECTED_CLASS] = 'mdc-deprecated-list-item--selected',
+    _b$1["" + cssClasses$6.LIST_ITEM_TEXT_CLASS] = 'mdc-deprecated-list-item__text',
+    _b$1["" + cssClasses$6.LIST_ITEM_PRIMARY_TEXT_CLASS] = 'mdc-deprecated-list-item__primary-text',
+    _b$1["" + cssClasses$6.ROOT] = 'mdc-deprecated-list',
     _b$1);
-var strings$2 = {
+var strings$4 = {
     ACTION_EVENT: 'MDCList:action',
     SELECTION_CHANGE_EVENT: 'MDCList:selectionChange',
     ARIA_CHECKED: 'aria-checked',
@@ -4491,13 +4670,13 @@ var strings$2 = {
     ARIA_MULTI_SELECTABLE_SELECTOR: '[aria-multiselectable="true"]',
     CHECKBOX_RADIO_SELECTOR: 'input[type="checkbox"], input[type="radio"]',
     CHECKBOX_SELECTOR: 'input[type="checkbox"]',
-    CHILD_ELEMENTS_TO_TOGGLE_TABINDEX: "\n    ." + cssClasses$4.LIST_ITEM_CLASS + " button:not(:disabled),\n    ." + cssClasses$4.LIST_ITEM_CLASS + " a,\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " button:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " a\n  ",
+    CHILD_ELEMENTS_TO_TOGGLE_TABINDEX: "\n    ." + cssClasses$6.LIST_ITEM_CLASS + " button:not(:disabled),\n    ." + cssClasses$6.LIST_ITEM_CLASS + " a,\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " button:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " a\n  ",
     DEPRECATED_SELECTOR: '.mdc-deprecated-list',
-    FOCUSABLE_CHILD_ELEMENTS: "\n    ." + cssClasses$4.LIST_ITEM_CLASS + " button:not(:disabled),\n    ." + cssClasses$4.LIST_ITEM_CLASS + " a,\n    ." + cssClasses$4.LIST_ITEM_CLASS + " input[type=\"radio\"]:not(:disabled),\n    ." + cssClasses$4.LIST_ITEM_CLASS + " input[type=\"checkbox\"]:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " button:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " a,\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " input[type=\"radio\"]:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$4.LIST_ITEM_CLASS] + " input[type=\"checkbox\"]:not(:disabled)\n  ",
+    FOCUSABLE_CHILD_ELEMENTS: "\n    ." + cssClasses$6.LIST_ITEM_CLASS + " button:not(:disabled),\n    ." + cssClasses$6.LIST_ITEM_CLASS + " a,\n    ." + cssClasses$6.LIST_ITEM_CLASS + " input[type=\"radio\"]:not(:disabled),\n    ." + cssClasses$6.LIST_ITEM_CLASS + " input[type=\"checkbox\"]:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " button:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " a,\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " input[type=\"radio\"]:not(:disabled),\n    ." + deprecatedClassNameMap[cssClasses$6.LIST_ITEM_CLASS] + " input[type=\"checkbox\"]:not(:disabled)\n  ",
     RADIO_SELECTOR: 'input[type="radio"]',
     SELECTED_ITEM_SELECTOR: '[aria-selected="true"], [aria-current="true"]',
 };
-var numbers$2 = {
+var numbers$4 = {
     UNSET_INDEX: -1,
     TYPEAHEAD_BUFFER_CLEAR_TIMEOUT_MS: 300
 };
@@ -4539,12 +4718,12 @@ const findIndexDiff = (oldSet, newSet) => {
     }
     return diff;
 };
-const ELEMENTS_KEY_ALLOWED_IN = ['input', 'button', 'textarea', 'select'];
+const ELEMENTS_KEY_ALLOWED_IN$1 = ['input', 'button', 'textarea', 'select'];
 function isIndexSet(selectedIndex) {
     return selectedIndex instanceof Set;
 }
 const createSetFromIndex = (index) => {
-    const entry = index === numbers$2.UNSET_INDEX ? new Set() : index;
+    const entry = index === numbers$4.UNSET_INDEX ? new Set() : index;
     return isIndexSet(entry) ? new Set(entry) : new Set([entry]);
 };
 class MDCListFoundation extends MDCFoundation {
@@ -4553,16 +4732,16 @@ class MDCListFoundation extends MDCFoundation {
         this.isMulti_ = false;
         this.wrapFocus_ = false;
         this.isVertical_ = true;
-        this.selectedIndex_ = numbers$2.UNSET_INDEX;
-        this.focusedItemIndex_ = numbers$2.UNSET_INDEX;
+        this.selectedIndex_ = numbers$4.UNSET_INDEX;
+        this.focusedItemIndex_ = numbers$4.UNSET_INDEX;
         this.useActivatedClass_ = false;
         this.ariaCurrentAttrValue_ = null;
     }
     static get strings() {
-        return strings$2;
+        return strings$4;
     }
     static get numbers() {
-        return numbers$2;
+        return numbers$4;
     }
     static get defaultAdapter() {
         return {
@@ -4598,7 +4777,7 @@ class MDCListFoundation extends MDCFoundation {
         if (value) {
             // number to set
             if (!isIndexSet(currentIndex)) {
-                const isUnset = currentIndex === numbers$2.UNSET_INDEX;
+                const isUnset = currentIndex === numbers$4.UNSET_INDEX;
                 this.selectedIndex_ = isUnset ? new Set() : new Set([currentIndex]);
             }
         }
@@ -4610,7 +4789,7 @@ class MDCListFoundation extends MDCFoundation {
                     this.selectedIndex_ = vals[0];
                 }
                 else {
-                    this.selectedIndex_ = numbers$2.UNSET_INDEX;
+                    this.selectedIndex_ = numbers$4.UNSET_INDEX;
                 }
             }
         }
@@ -4738,7 +4917,7 @@ class MDCListFoundation extends MDCFoundation {
      * Click handler for the list.
      */
     handleSingleSelection(index, isInteraction, force) {
-        if (index === numbers$2.UNSET_INDEX) {
+        if (index === numbers$4.UNSET_INDEX) {
             return;
         }
         this.setSelectedIndexOnAction_(index, isInteraction, force);
@@ -4806,7 +4985,7 @@ class MDCListFoundation extends MDCFoundation {
     preventDefaultEvent(evt) {
         const target = evt.target;
         const tagName = `${target.tagName}`.toLowerCase();
-        if (ELEMENTS_KEY_ALLOWED_IN.indexOf(tagName) === -1) {
+        if (ELEMENTS_KEY_ALLOWED_IN$1.indexOf(tagName) === -1) {
             evt.preventDefault();
         }
     }
@@ -4815,7 +4994,7 @@ class MDCListFoundation extends MDCFoundation {
             return;
         }
         // unset previous
-        if (this.selectedIndex_ !== numbers$2.UNSET_INDEX) {
+        if (this.selectedIndex_ !== numbers$4.UNSET_INDEX) {
             this.adapter.setSelectedStateForElementIndex(this.selectedIndex_, false);
             if (this.useActivatedClass_) {
                 this.adapter.setActivatedStateForElementIndex(this.selectedIndex_, false);
@@ -4863,20 +5042,20 @@ class MDCListFoundation extends MDCFoundation {
     setAriaForSingleSelectionAtIndex_(index) {
         // Detect the presence of aria-current and get the value only during list
         // initialization when it is in unset state.
-        if (this.selectedIndex_ === numbers$2.UNSET_INDEX) {
+        if (this.selectedIndex_ === numbers$4.UNSET_INDEX) {
             this.ariaCurrentAttrValue_ =
-                this.adapter.getAttributeForElementIndex(index, strings$2.ARIA_CURRENT);
+                this.adapter.getAttributeForElementIndex(index, strings$4.ARIA_CURRENT);
         }
         const isAriaCurrent = this.ariaCurrentAttrValue_ !== null;
-        const ariaAttribute = isAriaCurrent ? strings$2.ARIA_CURRENT : strings$2.ARIA_SELECTED;
-        if (this.selectedIndex_ !== numbers$2.UNSET_INDEX) {
+        const ariaAttribute = isAriaCurrent ? strings$4.ARIA_CURRENT : strings$4.ARIA_SELECTED;
+        if (this.selectedIndex_ !== numbers$4.UNSET_INDEX) {
             this.adapter.setAttributeForElementIndex(this.selectedIndex_, ariaAttribute, 'false');
         }
         const ariaAttributeValue = isAriaCurrent ? this.ariaCurrentAttrValue_ : 'true';
         this.adapter.setAttributeForElementIndex(index, ariaAttribute, ariaAttributeValue);
     }
     setTabindexAtIndex_(index) {
-        if (this.focusedItemIndex_ === numbers$2.UNSET_INDEX && index !== 0) {
+        if (this.focusedItemIndex_ === numbers$4.UNSET_INDEX && index !== 0) {
             // If no list item was selected set first list item's tabindex to -1.
             // Generally, tabindex is set to 0 on first list item of list that has no
             // preselected items.
@@ -4890,7 +5069,7 @@ class MDCListFoundation extends MDCFoundation {
     setTabindexToFirstSelectedItem_() {
         let targetIndex = 0;
         if (typeof this.selectedIndex_ === 'number' &&
-            this.selectedIndex_ !== numbers$2.UNSET_INDEX) {
+            this.selectedIndex_ !== numbers$4.UNSET_INDEX) {
             targetIndex = this.selectedIndex_;
         }
         else if (isIndexSet(this.selectedIndex_) && this.selectedIndex_.size > 0) {
@@ -4922,7 +5101,7 @@ class MDCListFoundation extends MDCFoundation {
                 throw new Error('MDCListFoundation: Expected array of index for checkbox based list but got number: ' +
                     index);
             }
-            return index === numbers$2.UNSET_INDEX || this.isIndexInRange_(index);
+            return index === numbers$4.UNSET_INDEX || this.isIndexInRange_(index);
         }
         else {
             return false;
@@ -4958,7 +5137,7 @@ class MDCListFoundation extends MDCFoundation {
             else {
                 const isDeselection = this.selectedIndex_ === index;
                 if (isDeselection) {
-                    this.setSingleSelectionAtIndex_(numbers$2.UNSET_INDEX);
+                    this.setSingleSelectionAtIndex_(numbers$4.UNSET_INDEX);
                 }
             }
         }
@@ -5472,7 +5651,7 @@ __decorate([
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$2 = i$5 `@keyframes mdc-ripple-fg-radius-in{from{animation-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transform:translate(var(--mdc-ripple-fg-translate-start, 0)) scale(1)}to{transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}}@keyframes mdc-ripple-fg-opacity-in{from{animation-timing-function:linear;opacity:0}to{opacity:var(--mdc-ripple-fg-opacity, 0)}}@keyframes mdc-ripple-fg-opacity-out{from{animation-timing-function:linear;opacity:var(--mdc-ripple-fg-opacity, 0)}to{opacity:0}}:host{display:block}.mdc-deprecated-list{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-subtitle1-font-size, 1rem);line-height:1.75rem;line-height:var(--mdc-typography-subtitle1-line-height, 1.75rem);font-weight:400;font-weight:var(--mdc-typography-subtitle1-font-weight, 400);letter-spacing:0.009375em;letter-spacing:var(--mdc-typography-subtitle1-letter-spacing, 0.009375em);text-decoration:inherit;text-decoration:var(--mdc-typography-subtitle1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-subtitle1-text-transform, inherit);line-height:1.5rem;margin:0;padding:8px 0;list-style-type:none;color:rgba(0, 0, 0, 0.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));padding:var(--mdc-list-vertical-padding, 8px) 0}.mdc-deprecated-list:focus{outline:none}.mdc-deprecated-list-item{height:48px}.mdc-deprecated-list--dense{padding-top:4px;padding-bottom:4px;font-size:.812rem}.mdc-deprecated-list ::slotted([divider]){height:0;margin:0;border:none;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:rgba(0, 0, 0, 0.12)}.mdc-deprecated-list ::slotted([divider][padded]){margin:0 var(--mdc-list-side-padding, 16px)}.mdc-deprecated-list ::slotted([divider][inset]){margin-left:var(--mdc-list-inset-margin, 72px);margin-right:0;width:calc( 100% - var(--mdc-list-inset-margin, 72px) )}[dir=rtl] .mdc-deprecated-list ::slotted([divider][inset]),.mdc-deprecated-list ::slotted([divider][inset][dir=rtl]){margin-left:0;margin-right:var(--mdc-list-inset-margin, 72px)}.mdc-deprecated-list ::slotted([divider][inset][padded]){width:calc( 100% - var(--mdc-list-inset-margin, 72px) - var(--mdc-list-side-padding, 16px) )}.mdc-deprecated-list--dense ::slotted([mwc-list-item]){height:40px}.mdc-deprecated-list--dense ::slotted([mwc-list]){--mdc-list-item-graphic-size: 20px}.mdc-deprecated-list--two-line.mdc-deprecated-list--dense ::slotted([mwc-list-item]),.mdc-deprecated-list--avatar-list.mdc-deprecated-list--dense ::slotted([mwc-list-item]){height:60px}.mdc-deprecated-list--avatar-list.mdc-deprecated-list--dense ::slotted([mwc-list]){--mdc-list-item-graphic-size: 36px}:host([noninteractive]){pointer-events:none;cursor:default}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text){display:block;margin-top:0;line-height:normal;margin-bottom:-20px}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text)::before{display:inline-block;width:0;height:24px;content:"";vertical-align:0}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text)::after{display:inline-block;width:0;height:20px;content:"";vertical-align:-20px}`;
+const styles$4 = i$5 `@keyframes mdc-ripple-fg-radius-in{from{animation-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transform:translate(var(--mdc-ripple-fg-translate-start, 0)) scale(1)}to{transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}}@keyframes mdc-ripple-fg-opacity-in{from{animation-timing-function:linear;opacity:0}to{opacity:var(--mdc-ripple-fg-opacity, 0)}}@keyframes mdc-ripple-fg-opacity-out{from{animation-timing-function:linear;opacity:var(--mdc-ripple-fg-opacity, 0)}to{opacity:0}}:host{display:block}.mdc-deprecated-list{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-subtitle1-font-size, 1rem);line-height:1.75rem;line-height:var(--mdc-typography-subtitle1-line-height, 1.75rem);font-weight:400;font-weight:var(--mdc-typography-subtitle1-font-weight, 400);letter-spacing:0.009375em;letter-spacing:var(--mdc-typography-subtitle1-letter-spacing, 0.009375em);text-decoration:inherit;text-decoration:var(--mdc-typography-subtitle1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-subtitle1-text-transform, inherit);line-height:1.5rem;margin:0;padding:8px 0;list-style-type:none;color:rgba(0, 0, 0, 0.87);color:var(--mdc-theme-text-primary-on-background, rgba(0, 0, 0, 0.87));padding:var(--mdc-list-vertical-padding, 8px) 0}.mdc-deprecated-list:focus{outline:none}.mdc-deprecated-list-item{height:48px}.mdc-deprecated-list--dense{padding-top:4px;padding-bottom:4px;font-size:.812rem}.mdc-deprecated-list ::slotted([divider]){height:0;margin:0;border:none;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:rgba(0, 0, 0, 0.12)}.mdc-deprecated-list ::slotted([divider][padded]){margin:0 var(--mdc-list-side-padding, 16px)}.mdc-deprecated-list ::slotted([divider][inset]){margin-left:var(--mdc-list-inset-margin, 72px);margin-right:0;width:calc( 100% - var(--mdc-list-inset-margin, 72px) )}[dir=rtl] .mdc-deprecated-list ::slotted([divider][inset]),.mdc-deprecated-list ::slotted([divider][inset][dir=rtl]){margin-left:0;margin-right:var(--mdc-list-inset-margin, 72px)}.mdc-deprecated-list ::slotted([divider][inset][padded]){width:calc( 100% - var(--mdc-list-inset-margin, 72px) - var(--mdc-list-side-padding, 16px) )}.mdc-deprecated-list--dense ::slotted([mwc-list-item]){height:40px}.mdc-deprecated-list--dense ::slotted([mwc-list]){--mdc-list-item-graphic-size: 20px}.mdc-deprecated-list--two-line.mdc-deprecated-list--dense ::slotted([mwc-list-item]),.mdc-deprecated-list--avatar-list.mdc-deprecated-list--dense ::slotted([mwc-list-item]){height:60px}.mdc-deprecated-list--avatar-list.mdc-deprecated-list--dense ::slotted([mwc-list]){--mdc-list-item-graphic-size: 36px}:host([noninteractive]){pointer-events:none;cursor:default}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text){display:block;margin-top:0;line-height:normal;margin-bottom:-20px}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text)::before{display:inline-block;width:0;height:24px;content:"";vertical-align:0}.mdc-deprecated-list--dense ::slotted(.mdc-deprecated-list-item__primary-text)::after{display:inline-block;width:0;height:20px;content:"";vertical-align:-20px}`;
 
 /**
  * @license
@@ -5481,7 +5660,7 @@ const styles$2 = i$5 `@keyframes mdc-ripple-fg-radius-in{from{animation-timing-f
  */
 let List = class List extends ListBase {
 };
-List.styles = [styles$2];
+List.styles = [styles$4];
 List = __decorate([
     e$6('mwc-list')
 ], List);
@@ -5508,22 +5687,86 @@ List = __decorate([
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var strings$1 = {
-    NOTCH_ELEMENT_SELECTOR: '.mdc-notched-outline__notch',
+var cssClasses$5 = {
+    ANCHOR: 'mdc-menu-surface--anchor',
+    ANIMATING_CLOSED: 'mdc-menu-surface--animating-closed',
+    ANIMATING_OPEN: 'mdc-menu-surface--animating-open',
+    FIXED: 'mdc-menu-surface--fixed',
+    IS_OPEN_BELOW: 'mdc-menu-surface--is-open-below',
+    OPEN: 'mdc-menu-surface--open',
+    ROOT: 'mdc-menu-surface',
 };
-var numbers$1 = {
-    // This should stay in sync with $mdc-notched-outline-padding * 2.
-    NOTCH_ELEMENT_PADDING: 8,
+// tslint:disable:object-literal-sort-keys
+var strings$3 = {
+    CLOSED_EVENT: 'MDCMenuSurface:closed',
+    CLOSING_EVENT: 'MDCMenuSurface:closing',
+    OPENED_EVENT: 'MDCMenuSurface:opened',
+    OPENING_EVENT: 'MDCMenuSurface:opening',
+    FOCUSABLE_ELEMENTS: [
+        'button:not(:disabled)',
+        '[href]:not([aria-disabled="true"])',
+        'input:not(:disabled)',
+        'select:not(:disabled)',
+        'textarea:not(:disabled)',
+        '[tabindex]:not([tabindex="-1"]):not([aria-disabled="true"])',
+    ].join(', '),
 };
-var cssClasses$3 = {
-    NO_LABEL: 'mdc-notched-outline--no-label',
-    OUTLINE_NOTCHED: 'mdc-notched-outline--notched',
-    OUTLINE_UPGRADED: 'mdc-notched-outline--upgraded',
+// tslint:enable:object-literal-sort-keys
+var numbers$3 = {
+    /** Total duration of menu-surface open animation. */
+    TRANSITION_OPEN_DURATION: 120,
+    /** Total duration of menu-surface close animation. */
+    TRANSITION_CLOSE_DURATION: 75,
+    /**
+     * Margin left to the edge of the viewport when menu-surface is at maximum
+     * possible height. Also used as a viewport margin.
+     */
+    MARGIN_TO_EDGE: 32,
+    /**
+     * Ratio of anchor width to menu-surface width for switching from corner
+     * positioning to center positioning.
+     */
+    ANCHOR_TO_MENU_SURFACE_WIDTH_RATIO: 0.67,
+    /**
+     * Amount of time to wait before restoring focus when closing the menu
+     * surface. This is important because if a touch event triggered the menu
+     * close, and the subsequent mouse event occurs after focus is restored, then
+     * the restored focus would be lost.
+     */
+    TOUCH_EVENT_WAIT_MS: 30,
 };
+/**
+ * Enum for bits in the {@see Corner) bitmap.
+ */
+var CornerBit;
+(function (CornerBit) {
+    CornerBit[CornerBit["BOTTOM"] = 1] = "BOTTOM";
+    CornerBit[CornerBit["CENTER"] = 2] = "CENTER";
+    CornerBit[CornerBit["RIGHT"] = 4] = "RIGHT";
+    CornerBit[CornerBit["FLIP_RTL"] = 8] = "FLIP_RTL";
+})(CornerBit || (CornerBit = {}));
+/**
+ * Enum for representing an element corner for positioning the menu-surface.
+ *
+ * The START constants map to LEFT if element directionality is left
+ * to right and RIGHT if the directionality is right to left.
+ * Likewise END maps to RIGHT or LEFT depending on the directionality.
+ */
+var Corner;
+(function (Corner) {
+    Corner[Corner["TOP_LEFT"] = 0] = "TOP_LEFT";
+    Corner[Corner["TOP_RIGHT"] = 4] = "TOP_RIGHT";
+    Corner[Corner["BOTTOM_LEFT"] = 1] = "BOTTOM_LEFT";
+    Corner[Corner["BOTTOM_RIGHT"] = 5] = "BOTTOM_RIGHT";
+    Corner[Corner["TOP_START"] = 8] = "TOP_START";
+    Corner[Corner["TOP_END"] = 12] = "TOP_END";
+    Corner[Corner["BOTTOM_START"] = 9] = "BOTTOM_START";
+    Corner[Corner["BOTTOM_END"] = 13] = "BOTTOM_END";
+})(Corner || (Corner = {}));
 
 /**
  * @license
- * Copyright 2017 Google Inc.
+ * Copyright 2018 Google Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -5543,149 +5786,1909 @@ var cssClasses$3 = {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var MDCNotchedOutlineFoundation = /** @class */ (function (_super) {
-    __extends(MDCNotchedOutlineFoundation, _super);
-    function MDCNotchedOutlineFoundation(adapter) {
-        return _super.call(this, __assign(__assign({}, MDCNotchedOutlineFoundation.defaultAdapter), adapter)) || this;
-    }
-    Object.defineProperty(MDCNotchedOutlineFoundation, "strings", {
-        get: function () {
-            return strings$1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MDCNotchedOutlineFoundation, "cssClasses", {
-        get: function () {
-            return cssClasses$3;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MDCNotchedOutlineFoundation, "numbers", {
-        get: function () {
-            return numbers$1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(MDCNotchedOutlineFoundation, "defaultAdapter", {
+var MDCMenuSurfaceFoundation = /** @class */ (function (_super) {
+    __extends(MDCMenuSurfaceFoundation, _super);
+    function MDCMenuSurfaceFoundation(adapter) {
+        var _this = _super.call(this, __assign(__assign({}, MDCMenuSurfaceFoundation.defaultAdapter), adapter)) || this;
+        _this.isSurfaceOpen = false;
+        _this.isQuickOpen = false;
+        _this.isHoistedElement = false;
+        _this.isFixedPosition = false;
+        _this.isHorizontallyCenteredOnViewport = false;
+        _this.maxHeight = 0;
+        _this.openBottomBias = 0;
+        _this.openAnimationEndTimerId = 0;
+        _this.closeAnimationEndTimerId = 0;
+        _this.animationRequestId = 0;
+        _this.anchorCorner = Corner.TOP_START;
         /**
-         * See {@link MDCNotchedOutlineAdapter} for typing information on parameters and return types.
+         * Corner of the menu surface to which menu surface is attached to anchor.
+         *
+         *  Anchor corner --->+----------+
+         *                    |  ANCHOR  |
+         *                    +----------+
+         *  Origin corner --->+--------------+
+         *                    |              |
+         *                    |              |
+         *                    | MENU SURFACE |
+         *                    |              |
+         *                    |              |
+         *                    +--------------+
+         */
+        _this.originCorner = Corner.TOP_START;
+        _this.anchorMargin = { top: 0, right: 0, bottom: 0, left: 0 };
+        _this.position = { x: 0, y: 0 };
+        return _this;
+    }
+    Object.defineProperty(MDCMenuSurfaceFoundation, "cssClasses", {
+        get: function () {
+            return cssClasses$5;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuSurfaceFoundation, "strings", {
+        get: function () {
+            return strings$3;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuSurfaceFoundation, "numbers", {
+        get: function () {
+            return numbers$3;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuSurfaceFoundation, "Corner", {
+        get: function () {
+            return Corner;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuSurfaceFoundation, "defaultAdapter", {
+        /**
+         * @see {@link MDCMenuSurfaceAdapter} for typing information on parameters and return types.
          */
         get: function () {
             // tslint:disable:object-literal-sort-keys Methods should be in the same order as the adapter interface.
             return {
                 addClass: function () { return undefined; },
                 removeClass: function () { return undefined; },
-                setNotchWidthProperty: function () { return undefined; },
-                removeNotchWidthProperty: function () { return undefined; },
+                hasClass: function () { return false; },
+                hasAnchor: function () { return false; },
+                isElementInContainer: function () { return false; },
+                isFocused: function () { return false; },
+                isRtl: function () { return false; },
+                getInnerDimensions: function () { return ({ height: 0, width: 0 }); },
+                getAnchorDimensions: function () { return null; },
+                getWindowDimensions: function () { return ({ height: 0, width: 0 }); },
+                getBodyDimensions: function () { return ({ height: 0, width: 0 }); },
+                getWindowScroll: function () { return ({ x: 0, y: 0 }); },
+                setPosition: function () { return undefined; },
+                setMaxHeight: function () { return undefined; },
+                setTransformOrigin: function () { return undefined; },
+                saveFocus: function () { return undefined; },
+                restoreFocus: function () { return undefined; },
+                notifyClose: function () { return undefined; },
+                notifyClosing: function () { return undefined; },
+                notifyOpen: function () { return undefined; },
+                notifyOpening: function () { return undefined; },
             };
             // tslint:enable:object-literal-sort-keys
         },
         enumerable: false,
         configurable: true
     });
-    /**
-     * Adds the outline notched selector and updates the notch width calculated based off of notchWidth.
-     */
-    MDCNotchedOutlineFoundation.prototype.notch = function (notchWidth) {
-        var OUTLINE_NOTCHED = MDCNotchedOutlineFoundation.cssClasses.OUTLINE_NOTCHED;
-        if (notchWidth > 0) {
-            notchWidth += numbers$1.NOTCH_ELEMENT_PADDING; // Add padding from left/right.
+    MDCMenuSurfaceFoundation.prototype.init = function () {
+        var _a = MDCMenuSurfaceFoundation.cssClasses, ROOT = _a.ROOT, OPEN = _a.OPEN;
+        if (!this.adapter.hasClass(ROOT)) {
+            throw new Error(ROOT + " class required in root element.");
         }
-        this.adapter.setNotchWidthProperty(notchWidth);
-        this.adapter.addClass(OUTLINE_NOTCHED);
+        if (this.adapter.hasClass(OPEN)) {
+            this.isSurfaceOpen = true;
+        }
+    };
+    MDCMenuSurfaceFoundation.prototype.destroy = function () {
+        clearTimeout(this.openAnimationEndTimerId);
+        clearTimeout(this.closeAnimationEndTimerId);
+        // Cancel any currently running animations.
+        cancelAnimationFrame(this.animationRequestId);
     };
     /**
-     * Removes notched outline selector to close the notch in the outline.
+     * @param corner Default anchor corner alignment of top-left menu surface
+     *     corner.
      */
-    MDCNotchedOutlineFoundation.prototype.closeNotch = function () {
-        var OUTLINE_NOTCHED = MDCNotchedOutlineFoundation.cssClasses.OUTLINE_NOTCHED;
-        this.adapter.removeClass(OUTLINE_NOTCHED);
-        this.adapter.removeNotchWidthProperty();
+    MDCMenuSurfaceFoundation.prototype.setAnchorCorner = function (corner) {
+        this.anchorCorner = corner;
     };
-    return MDCNotchedOutlineFoundation;
+    /**
+     * Flip menu corner horizontally.
+     */
+    MDCMenuSurfaceFoundation.prototype.flipCornerHorizontally = function () {
+        this.originCorner = this.originCorner ^ CornerBit.RIGHT;
+    };
+    /**
+     * @param margin Set of margin values from anchor.
+     */
+    MDCMenuSurfaceFoundation.prototype.setAnchorMargin = function (margin) {
+        this.anchorMargin.top = margin.top || 0;
+        this.anchorMargin.right = margin.right || 0;
+        this.anchorMargin.bottom = margin.bottom || 0;
+        this.anchorMargin.left = margin.left || 0;
+    };
+    /** Used to indicate if the menu-surface is hoisted to the body. */
+    MDCMenuSurfaceFoundation.prototype.setIsHoisted = function (isHoisted) {
+        this.isHoistedElement = isHoisted;
+    };
+    /**
+     * Used to set the menu-surface calculations based on a fixed position menu.
+     */
+    MDCMenuSurfaceFoundation.prototype.setFixedPosition = function (isFixedPosition) {
+        this.isFixedPosition = isFixedPosition;
+    };
+    /**
+     * @return Returns true if menu is in fixed (`position: fixed`) position.
+     */
+    MDCMenuSurfaceFoundation.prototype.isFixed = function () {
+        return this.isFixedPosition;
+    };
+    /** Sets the menu-surface position on the page. */
+    MDCMenuSurfaceFoundation.prototype.setAbsolutePosition = function (x, y) {
+        this.position.x = this.isFinite(x) ? x : 0;
+        this.position.y = this.isFinite(y) ? y : 0;
+    };
+    /** Sets whether menu-surface should be horizontally centered to viewport. */
+    MDCMenuSurfaceFoundation.prototype.setIsHorizontallyCenteredOnViewport = function (isCentered) {
+        this.isHorizontallyCenteredOnViewport = isCentered;
+    };
+    MDCMenuSurfaceFoundation.prototype.setQuickOpen = function (quickOpen) {
+        this.isQuickOpen = quickOpen;
+    };
+    /**
+     * Sets maximum menu-surface height on open.
+     * @param maxHeight The desired max-height. Set to 0 (default) to
+     *     automatically calculate max height based on available viewport space.
+     */
+    MDCMenuSurfaceFoundation.prototype.setMaxHeight = function (maxHeight) {
+        this.maxHeight = maxHeight;
+    };
+    /**
+     * Set to a positive integer to influence the menu to preferentially open
+     * below the anchor instead of above.
+     * @param bias A value of `x` simulates an extra `x` pixels of available space
+     *     below the menu during positioning calculations.
+     */
+    MDCMenuSurfaceFoundation.prototype.setOpenBottomBias = function (bias) {
+        this.openBottomBias = bias;
+    };
+    MDCMenuSurfaceFoundation.prototype.isOpen = function () {
+        return this.isSurfaceOpen;
+    };
+    /**
+     * Open the menu surface.
+     */
+    MDCMenuSurfaceFoundation.prototype.open = function () {
+        var _this = this;
+        if (this.isSurfaceOpen) {
+            return;
+        }
+        this.adapter.notifyOpening();
+        this.adapter.saveFocus();
+        if (this.isQuickOpen) {
+            this.isSurfaceOpen = true;
+            this.adapter.addClass(MDCMenuSurfaceFoundation.cssClasses.OPEN);
+            this.dimensions = this.adapter.getInnerDimensions();
+            this.autoposition();
+            this.adapter.notifyOpen();
+        }
+        else {
+            this.adapter.addClass(MDCMenuSurfaceFoundation.cssClasses.ANIMATING_OPEN);
+            this.animationRequestId = requestAnimationFrame(function () {
+                _this.dimensions = _this.adapter.getInnerDimensions();
+                _this.autoposition();
+                _this.adapter.addClass(MDCMenuSurfaceFoundation.cssClasses.OPEN);
+                _this.openAnimationEndTimerId = setTimeout(function () {
+                    _this.openAnimationEndTimerId = 0;
+                    _this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.ANIMATING_OPEN);
+                    _this.adapter.notifyOpen();
+                }, numbers$3.TRANSITION_OPEN_DURATION);
+            });
+            this.isSurfaceOpen = true;
+        }
+    };
+    /**
+     * Closes the menu surface.
+     */
+    MDCMenuSurfaceFoundation.prototype.close = function (skipRestoreFocus) {
+        var _this = this;
+        if (skipRestoreFocus === void 0) { skipRestoreFocus = false; }
+        if (!this.isSurfaceOpen) {
+            return;
+        }
+        this.adapter.notifyClosing();
+        if (this.isQuickOpen) {
+            this.isSurfaceOpen = false;
+            if (!skipRestoreFocus) {
+                this.maybeRestoreFocus();
+            }
+            this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.OPEN);
+            this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.IS_OPEN_BELOW);
+            this.adapter.notifyClose();
+            return;
+        }
+        this.adapter.addClass(MDCMenuSurfaceFoundation.cssClasses.ANIMATING_CLOSED);
+        requestAnimationFrame(function () {
+            _this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.OPEN);
+            _this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.IS_OPEN_BELOW);
+            _this.closeAnimationEndTimerId = setTimeout(function () {
+                _this.closeAnimationEndTimerId = 0;
+                _this.adapter.removeClass(MDCMenuSurfaceFoundation.cssClasses.ANIMATING_CLOSED);
+                _this.adapter.notifyClose();
+            }, numbers$3.TRANSITION_CLOSE_DURATION);
+        });
+        this.isSurfaceOpen = false;
+        if (!skipRestoreFocus) {
+            this.maybeRestoreFocus();
+        }
+    };
+    /** Handle clicks and close if not within menu-surface element. */
+    MDCMenuSurfaceFoundation.prototype.handleBodyClick = function (evt) {
+        var el = evt.target;
+        if (this.adapter.isElementInContainer(el)) {
+            return;
+        }
+        this.close();
+    };
+    /** Handle keys that close the surface. */
+    MDCMenuSurfaceFoundation.prototype.handleKeydown = function (evt) {
+        var keyCode = evt.keyCode, key = evt.key;
+        var isEscape = key === 'Escape' || keyCode === 27;
+        if (isEscape) {
+            this.close();
+        }
+    };
+    MDCMenuSurfaceFoundation.prototype.autoposition = function () {
+        var _a;
+        // Compute measurements for autoposition methods reuse.
+        this.measurements = this.getAutoLayoutmeasurements();
+        var corner = this.getoriginCorner();
+        var maxMenuSurfaceHeight = this.getMenuSurfaceMaxHeight(corner);
+        var verticalAlignment = this.hasBit(corner, CornerBit.BOTTOM) ? 'bottom' : 'top';
+        var horizontalAlignment = this.hasBit(corner, CornerBit.RIGHT) ? 'right' : 'left';
+        var horizontalOffset = this.getHorizontalOriginOffset(corner);
+        var verticalOffset = this.getVerticalOriginOffset(corner);
+        var _b = this.measurements, anchorSize = _b.anchorSize, surfaceSize = _b.surfaceSize;
+        var position = (_a = {},
+            _a[horizontalAlignment] = horizontalOffset,
+            _a[verticalAlignment] = verticalOffset,
+            _a);
+        // Center align when anchor width is comparable or greater than menu
+        // surface, otherwise keep corner.
+        if (anchorSize.width / surfaceSize.width >
+            numbers$3.ANCHOR_TO_MENU_SURFACE_WIDTH_RATIO) {
+            horizontalAlignment = 'center';
+        }
+        // If the menu-surface has been hoisted to the body, it's no longer relative
+        // to the anchor element
+        if (this.isHoistedElement || this.isFixedPosition) {
+            this.adjustPositionForHoistedElement(position);
+        }
+        this.adapter.setTransformOrigin(horizontalAlignment + " " + verticalAlignment);
+        this.adapter.setPosition(position);
+        this.adapter.setMaxHeight(maxMenuSurfaceHeight ? maxMenuSurfaceHeight + 'px' : '');
+        // If it is opened from the top then add is-open-below class
+        if (!this.hasBit(corner, CornerBit.BOTTOM)) {
+            this.adapter.addClass(MDCMenuSurfaceFoundation.cssClasses.IS_OPEN_BELOW);
+        }
+    };
+    /**
+     * @return Measurements used to position menu surface popup.
+     */
+    MDCMenuSurfaceFoundation.prototype.getAutoLayoutmeasurements = function () {
+        var anchorRect = this.adapter.getAnchorDimensions();
+        var bodySize = this.adapter.getBodyDimensions();
+        var viewportSize = this.adapter.getWindowDimensions();
+        var windowScroll = this.adapter.getWindowScroll();
+        if (!anchorRect) {
+            // tslint:disable:object-literal-sort-keys Positional properties are more readable when they're grouped together
+            anchorRect = {
+                top: this.position.y,
+                right: this.position.x,
+                bottom: this.position.y,
+                left: this.position.x,
+                width: 0,
+                height: 0,
+            };
+            // tslint:enable:object-literal-sort-keys
+        }
+        return {
+            anchorSize: anchorRect,
+            bodySize: bodySize,
+            surfaceSize: this.dimensions,
+            viewportDistance: {
+                // tslint:disable:object-literal-sort-keys Positional properties are more readable when they're grouped together
+                top: anchorRect.top,
+                right: viewportSize.width - anchorRect.right,
+                bottom: viewportSize.height - anchorRect.bottom,
+                left: anchorRect.left,
+                // tslint:enable:object-literal-sort-keys
+            },
+            viewportSize: viewportSize,
+            windowScroll: windowScroll,
+        };
+    };
+    /**
+     * Computes the corner of the anchor from which to animate and position the
+     * menu surface.
+     *
+     * Only LEFT or RIGHT bit is used to position the menu surface ignoring RTL
+     * context. E.g., menu surface will be positioned from right side on TOP_END.
+     */
+    MDCMenuSurfaceFoundation.prototype.getoriginCorner = function () {
+        var corner = this.originCorner;
+        var _a = this.measurements, viewportDistance = _a.viewportDistance, anchorSize = _a.anchorSize, surfaceSize = _a.surfaceSize;
+        var MARGIN_TO_EDGE = MDCMenuSurfaceFoundation.numbers.MARGIN_TO_EDGE;
+        var isAnchoredToBottom = this.hasBit(this.anchorCorner, CornerBit.BOTTOM);
+        var availableTop;
+        var availableBottom;
+        if (isAnchoredToBottom) {
+            availableTop =
+                viewportDistance.top - MARGIN_TO_EDGE + this.anchorMargin.bottom;
+            availableBottom =
+                viewportDistance.bottom - MARGIN_TO_EDGE - this.anchorMargin.bottom;
+        }
+        else {
+            availableTop =
+                viewportDistance.top - MARGIN_TO_EDGE + this.anchorMargin.top;
+            availableBottom = viewportDistance.bottom - MARGIN_TO_EDGE +
+                anchorSize.height - this.anchorMargin.top;
+        }
+        var isAvailableBottom = availableBottom - surfaceSize.height > 0;
+        if (!isAvailableBottom &&
+            availableTop > availableBottom + this.openBottomBias) {
+            // Attach bottom side of surface to the anchor.
+            corner = this.setBit(corner, CornerBit.BOTTOM);
+        }
+        var isRtl = this.adapter.isRtl();
+        var isFlipRtl = this.hasBit(this.anchorCorner, CornerBit.FLIP_RTL);
+        var hasRightBit = this.hasBit(this.anchorCorner, CornerBit.RIGHT) ||
+            this.hasBit(corner, CornerBit.RIGHT);
+        // Whether surface attached to right side of anchor element.
+        var isAnchoredToRight = false;
+        // Anchored to start
+        if (isRtl && isFlipRtl) {
+            isAnchoredToRight = !hasRightBit;
+        }
+        else {
+            // Anchored to right
+            isAnchoredToRight = hasRightBit;
+        }
+        var availableLeft;
+        var availableRight;
+        if (isAnchoredToRight) {
+            availableLeft =
+                viewportDistance.left + anchorSize.width + this.anchorMargin.right;
+            availableRight = viewportDistance.right - this.anchorMargin.right;
+        }
+        else {
+            availableLeft = viewportDistance.left + this.anchorMargin.left;
+            availableRight =
+                viewportDistance.right + anchorSize.width - this.anchorMargin.left;
+        }
+        var isAvailableLeft = availableLeft - surfaceSize.width > 0;
+        var isAvailableRight = availableRight - surfaceSize.width > 0;
+        var isOriginCornerAlignedToEnd = this.hasBit(corner, CornerBit.FLIP_RTL) &&
+            this.hasBit(corner, CornerBit.RIGHT);
+        if (isAvailableRight && isOriginCornerAlignedToEnd && isRtl ||
+            !isAvailableLeft && isOriginCornerAlignedToEnd) {
+            // Attach left side of surface to the anchor.
+            corner = this.unsetBit(corner, CornerBit.RIGHT);
+        }
+        else if (isAvailableLeft && isAnchoredToRight && isRtl ||
+            (isAvailableLeft && !isAnchoredToRight && hasRightBit) ||
+            (!isAvailableRight && availableLeft >= availableRight)) {
+            // Attach right side of surface to the anchor.
+            corner = this.setBit(corner, CornerBit.RIGHT);
+        }
+        return corner;
+    };
+    /**
+     * @param corner Origin corner of the menu surface.
+     * @return Maximum height of the menu surface, based on available space. 0
+     *     indicates should not be set.
+     */
+    MDCMenuSurfaceFoundation.prototype.getMenuSurfaceMaxHeight = function (corner) {
+        if (this.maxHeight > 0) {
+            return this.maxHeight;
+        }
+        var viewportDistance = this.measurements.viewportDistance;
+        var maxHeight = 0;
+        var isBottomAligned = this.hasBit(corner, CornerBit.BOTTOM);
+        var isBottomAnchored = this.hasBit(this.anchorCorner, CornerBit.BOTTOM);
+        var MARGIN_TO_EDGE = MDCMenuSurfaceFoundation.numbers.MARGIN_TO_EDGE;
+        // When maximum height is not specified, it is handled from CSS.
+        if (isBottomAligned) {
+            maxHeight = viewportDistance.top + this.anchorMargin.top - MARGIN_TO_EDGE;
+            if (!isBottomAnchored) {
+                maxHeight += this.measurements.anchorSize.height;
+            }
+        }
+        else {
+            maxHeight = viewportDistance.bottom - this.anchorMargin.bottom +
+                this.measurements.anchorSize.height - MARGIN_TO_EDGE;
+            if (isBottomAnchored) {
+                maxHeight -= this.measurements.anchorSize.height;
+            }
+        }
+        return maxHeight;
+    };
+    /**
+     * @param corner Origin corner of the menu surface.
+     * @return Horizontal offset of menu surface origin corner from corresponding
+     *     anchor corner.
+     */
+    MDCMenuSurfaceFoundation.prototype.getHorizontalOriginOffset = function (corner) {
+        var anchorSize = this.measurements.anchorSize;
+        // isRightAligned corresponds to using the 'right' property on the surface.
+        var isRightAligned = this.hasBit(corner, CornerBit.RIGHT);
+        var avoidHorizontalOverlap = this.hasBit(this.anchorCorner, CornerBit.RIGHT);
+        if (isRightAligned) {
+            var rightOffset = avoidHorizontalOverlap ?
+                anchorSize.width - this.anchorMargin.left :
+                this.anchorMargin.right;
+            // For hoisted or fixed elements, adjust the offset by the difference
+            // between viewport width and body width so when we calculate the right
+            // value (`adjustPositionForHoistedElement`) based on the element
+            // position, the right property is correct.
+            if (this.isHoistedElement || this.isFixedPosition) {
+                return rightOffset -
+                    (this.measurements.viewportSize.width -
+                        this.measurements.bodySize.width);
+            }
+            return rightOffset;
+        }
+        return avoidHorizontalOverlap ? anchorSize.width - this.anchorMargin.right :
+            this.anchorMargin.left;
+    };
+    /**
+     * @param corner Origin corner of the menu surface.
+     * @return Vertical offset of menu surface origin corner from corresponding
+     *     anchor corner.
+     */
+    MDCMenuSurfaceFoundation.prototype.getVerticalOriginOffset = function (corner) {
+        var anchorSize = this.measurements.anchorSize;
+        var isBottomAligned = this.hasBit(corner, CornerBit.BOTTOM);
+        var avoidVerticalOverlap = this.hasBit(this.anchorCorner, CornerBit.BOTTOM);
+        var y = 0;
+        if (isBottomAligned) {
+            y = avoidVerticalOverlap ? anchorSize.height - this.anchorMargin.top :
+                -this.anchorMargin.bottom;
+        }
+        else {
+            y = avoidVerticalOverlap ?
+                (anchorSize.height + this.anchorMargin.bottom) :
+                this.anchorMargin.top;
+        }
+        return y;
+    };
+    /**
+     * Calculates the offsets for positioning the menu-surface when the
+     * menu-surface has been hoisted to the body.
+     */
+    MDCMenuSurfaceFoundation.prototype.adjustPositionForHoistedElement = function (position) {
+        var e_1, _a;
+        var _b = this.measurements, windowScroll = _b.windowScroll, viewportDistance = _b.viewportDistance, surfaceSize = _b.surfaceSize, viewportSize = _b.viewportSize;
+        var props = Object.keys(position);
+        try {
+            for (var props_1 = __values(props), props_1_1 = props_1.next(); !props_1_1.done; props_1_1 = props_1.next()) {
+                var prop = props_1_1.value;
+                var value = position[prop] || 0;
+                if (this.isHorizontallyCenteredOnViewport &&
+                    (prop === 'left' || prop === 'right')) {
+                    position[prop] = (viewportSize.width - surfaceSize.width) / 2;
+                    continue;
+                }
+                // Hoisted surfaces need to have the anchor elements location on the page
+                // added to the position properties for proper alignment on the body.
+                value += viewportDistance[prop];
+                // Surfaces that are absolutely positioned need to have additional
+                // calculations for scroll and bottom positioning.
+                if (!this.isFixedPosition) {
+                    if (prop === 'top') {
+                        value += windowScroll.y;
+                    }
+                    else if (prop === 'bottom') {
+                        value -= windowScroll.y;
+                    }
+                    else if (prop === 'left') {
+                        value += windowScroll.x;
+                    }
+                    else { // prop === 'right'
+                        value -= windowScroll.x;
+                    }
+                }
+                position[prop] = value;
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (props_1_1 && !props_1_1.done && (_a = props_1.return)) _a.call(props_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+    };
+    /**
+     * The last focused element when the menu surface was opened should regain
+     * focus, if the user is focused on or within the menu surface when it is
+     * closed.
+     */
+    MDCMenuSurfaceFoundation.prototype.maybeRestoreFocus = function () {
+        var _this = this;
+        var isRootFocused = this.adapter.isFocused();
+        var ownerDocument = this.adapter.getOwnerDocument ?
+            this.adapter.getOwnerDocument() :
+            document;
+        var childHasFocus = ownerDocument.activeElement &&
+            this.adapter.isElementInContainer(ownerDocument.activeElement);
+        if (isRootFocused || childHasFocus) {
+            // Wait before restoring focus when closing the menu surface. This is
+            // important because if a touch event triggered the menu close, and the
+            // subsequent mouse event occurs after focus is restored, then the
+            // restored focus would be lost.
+            setTimeout(function () {
+                _this.adapter.restoreFocus();
+            }, numbers$3.TOUCH_EVENT_WAIT_MS);
+        }
+    };
+    MDCMenuSurfaceFoundation.prototype.hasBit = function (corner, bit) {
+        return Boolean(corner & bit); // tslint:disable-line:no-bitwise
+    };
+    MDCMenuSurfaceFoundation.prototype.setBit = function (corner, bit) {
+        return corner | bit; // tslint:disable-line:no-bitwise
+    };
+    MDCMenuSurfaceFoundation.prototype.unsetBit = function (corner, bit) {
+        return corner ^ bit;
+    };
+    /**
+     * isFinite that doesn't force conversion to number type.
+     * Equivalent to Number.isFinite in ES2015, which is not supported in IE.
+     */
+    MDCMenuSurfaceFoundation.prototype.isFinite = function (num) {
+        return typeof num === 'number' && isFinite(num);
+    };
+    return MDCMenuSurfaceFoundation;
 }(MDCFoundation));
+// tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
+var MDCMenuSurfaceFoundation$1 = MDCMenuSurfaceFoundation;
 
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-class NotchedOutlineBase extends BaseElement {
+// tslint:disable:no-bitwise
+// required for closure compiler
+const stringToCorner = {
+    'TOP_LEFT': Corner.TOP_LEFT,
+    'TOP_RIGHT': Corner.TOP_RIGHT,
+    'BOTTOM_LEFT': Corner.BOTTOM_LEFT,
+    'BOTTOM_RIGHT': Corner.BOTTOM_RIGHT,
+    'TOP_START': Corner.TOP_START,
+    'TOP_END': Corner.TOP_END,
+    'BOTTOM_START': Corner.BOTTOM_START,
+    'BOTTOM_END': Corner.BOTTOM_END,
+};
+/**
+ * @fires opened
+ * @fires closed
+ */
+class MenuSurfaceBase extends BaseElement {
     constructor() {
         super(...arguments);
-        this.mdcFoundationClass = MDCNotchedOutlineFoundation;
-        this.width = 0;
+        this.mdcFoundationClass = MDCMenuSurfaceFoundation$1;
+        this.absolute = false;
+        this.fullwidth = false;
+        this.fixed = false;
+        this.x = null;
+        this.y = null;
+        // must be defined before open or else race condition in foundation occurs.
+        this.quick = false;
         this.open = false;
-        this.lastOpen = this.open;
-    }
-    createAdapter() {
-        return {
-            addClass: (className) => this.mdcRoot.classList.add(className),
-            removeClass: (className) => this.mdcRoot.classList.remove(className),
-            setNotchWidthProperty: (width) => this.notchElement.style.setProperty('width', `${width}px`),
-            removeNotchWidthProperty: () => this.notchElement.style.removeProperty('width'),
-        };
-    }
-    openOrClose(shouldOpen, width) {
-        if (!this.mdcFoundation) {
-            return;
-        }
-        if (shouldOpen && width !== undefined) {
-            this.mdcFoundation.notch(width);
-        }
-        else {
-            this.mdcFoundation.closeNotch();
-        }
+        this.stayOpenOnBodyClick = false;
+        this.bitwiseCorner = Corner.TOP_START;
+        this.previousMenuCorner = null;
+        // must be defined before observer of anchor corner for initialization
+        this.menuCorner = 'START';
+        this.corner = 'TOP_START';
+        this.styleTop = '';
+        this.styleLeft = '';
+        this.styleRight = '';
+        this.styleBottom = '';
+        this.styleMaxHeight = '';
+        this.styleTransformOrigin = '';
+        this.anchor = null;
+        this.previouslyFocused = null;
+        this.previousAnchor = null;
+        this.onBodyClickBound = () => undefined;
     }
     render() {
-        this.openOrClose(this.open, this.width);
-        const classes = o$2({
-            'mdc-notched-outline--notched': this.open,
-        });
+        return this.renderSurface();
+    }
+    renderSurface() {
+        const classes = this.getRootClasses();
+        const styles = this.getRootStyles();
         return x `
-      <span class="mdc-notched-outline ${classes}">
-        <span class="mdc-notched-outline__leading"></span>
-        <span class="mdc-notched-outline__notch">
-          <slot></slot>
-        </span>
-        <span class="mdc-notched-outline__trailing"></span>
-      </span>`;
+      <div
+          class=${o$2(classes)}
+          style="${o$1(styles)}"
+          @keydown=${this.onKeydown}
+          @opened=${this.registerBodyClick}
+          @closed=${this.deregisterBodyClick}>
+        ${this.renderContent()}
+      </div>`;
+    }
+    getRootClasses() {
+        return {
+            'mdc-menu-surface': true,
+            'mdc-menu-surface--fixed': this.fixed,
+            'mdc-menu-surface--fullwidth': this.fullwidth,
+        };
+    }
+    getRootStyles() {
+        return {
+            'top': this.styleTop,
+            'left': this.styleLeft,
+            'right': this.styleRight,
+            'bottom': this.styleBottom,
+            'max-height': this.styleMaxHeight,
+            'transform-origin': this.styleTransformOrigin,
+        };
+    }
+    renderContent() {
+        return x `<slot></slot>`;
+    }
+    createAdapter() {
+        return Object.assign(Object.assign({}, addHasRemoveClass(this.mdcRoot)), { hasAnchor: () => {
+                return !!this.anchor;
+            }, notifyClose: () => {
+                const init = { bubbles: true, composed: true };
+                const ev = new CustomEvent('closed', init);
+                this.open = false;
+                this.mdcRoot.dispatchEvent(ev);
+            }, notifyClosing: () => {
+                const init = { bubbles: true, composed: true };
+                const ev = new CustomEvent('closing', init);
+                this.mdcRoot.dispatchEvent(ev);
+            }, notifyOpen: () => {
+                const init = { bubbles: true, composed: true };
+                const ev = new CustomEvent('opened', init);
+                this.open = true;
+                this.mdcRoot.dispatchEvent(ev);
+            }, notifyOpening: () => {
+                const init = { bubbles: true, composed: true };
+                const ev = new CustomEvent('opening', init);
+                this.mdcRoot.dispatchEvent(ev);
+            }, isElementInContainer: () => false, isRtl: () => {
+                if (this.mdcRoot) {
+                    return getComputedStyle(this.mdcRoot).direction === 'rtl';
+                }
+                return false;
+            }, setTransformOrigin: (origin) => {
+                const root = this.mdcRoot;
+                if (!root) {
+                    return;
+                }
+                this.styleTransformOrigin = origin;
+            }, isFocused: () => {
+                return doesElementContainFocus(this);
+            }, saveFocus: () => {
+                const activeElementPath = deepActiveElementPath();
+                const pathLength = activeElementPath.length;
+                if (!pathLength) {
+                    this.previouslyFocused = null;
+                }
+                this.previouslyFocused = activeElementPath[pathLength - 1];
+            }, restoreFocus: () => {
+                if (!this.previouslyFocused) {
+                    return;
+                }
+                if ('focus' in this.previouslyFocused) {
+                    this.previouslyFocused.focus();
+                }
+            }, getInnerDimensions: () => {
+                const mdcRoot = this.mdcRoot;
+                if (!mdcRoot) {
+                    return { width: 0, height: 0 };
+                }
+                return { width: mdcRoot.offsetWidth, height: mdcRoot.offsetHeight };
+            }, getAnchorDimensions: () => {
+                const anchorElement = this.anchor;
+                return anchorElement ? anchorElement.getBoundingClientRect() : null;
+            }, getBodyDimensions: () => {
+                return {
+                    width: document.body.clientWidth,
+                    height: document.body.clientHeight,
+                };
+            }, getWindowDimensions: () => {
+                return {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                };
+            }, getWindowScroll: () => {
+                return {
+                    x: window.pageXOffset,
+                    y: window.pageYOffset,
+                };
+            }, setPosition: (position) => {
+                const mdcRoot = this.mdcRoot;
+                if (!mdcRoot) {
+                    return;
+                }
+                this.styleLeft = 'left' in position ? `${position.left}px` : '';
+                this.styleRight = 'right' in position ? `${position.right}px` : '';
+                this.styleTop = 'top' in position ? `${position.top}px` : '';
+                this.styleBottom = 'bottom' in position ? `${position.bottom}px` : '';
+            }, setMaxHeight: async (height) => {
+                const mdcRoot = this.mdcRoot;
+                if (!mdcRoot) {
+                    return;
+                }
+                // must set both for IE support as IE will not set a var
+                this.styleMaxHeight = height;
+                await this.updateComplete;
+                this.styleMaxHeight = `var(--mdc-menu-max-height, ${height})`;
+            } });
+    }
+    onKeydown(evt) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.handleKeydown(evt);
+        }
+    }
+    onBodyClick(evt) {
+        if (this.stayOpenOnBodyClick) {
+            return;
+        }
+        const path = evt.composedPath();
+        if (path.indexOf(this) === -1) {
+            this.close();
+        }
+    }
+    registerBodyClick() {
+        this.onBodyClickBound = this.onBodyClick.bind(this);
+        // capture otherwise listener closes menu after quick menu opens
+        document.body.addEventListener('click', this.onBodyClickBound, { passive: true, capture: true });
+    }
+    deregisterBodyClick() {
+        document.body.removeEventListener('click', this.onBodyClickBound, { capture: true });
+    }
+    onOpenChanged(isOpen, wasOpen) {
+        if (this.mdcFoundation) {
+            if (isOpen) {
+                this.mdcFoundation.open();
+                // wasOpen helps with first render (when it is `undefined`) perf
+            }
+            else if (wasOpen !== undefined) {
+                this.mdcFoundation.close();
+            }
+        }
+    }
+    close() {
+        this.open = false;
+    }
+    show() {
+        this.open = true;
     }
 }
 __decorate([
-    i$2('.mdc-notched-outline')
-], NotchedOutlineBase.prototype, "mdcRoot", void 0);
+    i$2('.mdc-menu-surface')
+], MenuSurfaceBase.prototype, "mdcRoot", void 0);
 __decorate([
-    n$4({ type: Number })
-], NotchedOutlineBase.prototype, "width", void 0);
+    i$2('slot')
+], MenuSurfaceBase.prototype, "slotElement", void 0);
 __decorate([
-    n$4({ type: Boolean, reflect: true })
-], NotchedOutlineBase.prototype, "open", void 0);
+    n$4({ type: Boolean }),
+    observer(function (isAbsolute) {
+        if (this.mdcFoundation && !this.fixed) {
+            this.mdcFoundation.setIsHoisted(isAbsolute);
+        }
+    })
+], MenuSurfaceBase.prototype, "absolute", void 0);
 __decorate([
-    i$2('.mdc-notched-outline__notch')
-], NotchedOutlineBase.prototype, "notchElement", void 0);
+    n$4({ type: Boolean })
+], MenuSurfaceBase.prototype, "fullwidth", void 0);
+__decorate([
+    n$4({ type: Boolean }),
+    observer(function (isFixed) {
+        if (this.mdcFoundation && !this.absolute) {
+            this.mdcFoundation.setFixedPosition(isFixed);
+        }
+    })
+], MenuSurfaceBase.prototype, "fixed", void 0);
+__decorate([
+    n$4({ type: Number }),
+    observer(function (value) {
+        if (this.mdcFoundation && this.y !== null && value !== null) {
+            this.mdcFoundation.setAbsolutePosition(value, this.y);
+            this.mdcFoundation.setAnchorMargin({ left: value, top: this.y, right: -value, bottom: this.y });
+        }
+    })
+], MenuSurfaceBase.prototype, "x", void 0);
+__decorate([
+    n$4({ type: Number }),
+    observer(function (value) {
+        if (this.mdcFoundation && this.x !== null && value !== null) {
+            this.mdcFoundation.setAbsolutePosition(this.x, value);
+            this.mdcFoundation.setAnchorMargin({ left: this.x, top: value, right: -this.x, bottom: value });
+        }
+    })
+], MenuSurfaceBase.prototype, "y", void 0);
+__decorate([
+    n$4({ type: Boolean }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.setQuickOpen(value);
+        }
+    })
+], MenuSurfaceBase.prototype, "quick", void 0);
+__decorate([
+    n$4({ type: Boolean, reflect: true }),
+    observer(function (isOpen, wasOpen) {
+        this.onOpenChanged(isOpen, wasOpen);
+    })
+], MenuSurfaceBase.prototype, "open", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuSurfaceBase.prototype, "stayOpenOnBodyClick", void 0);
+__decorate([
+    t$1(),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            if (value) {
+                this.mdcFoundation.setAnchorCorner(value);
+            }
+            else {
+                this.mdcFoundation.setAnchorCorner(value);
+            }
+        }
+    })
+], MenuSurfaceBase.prototype, "bitwiseCorner", void 0);
+__decorate([
+    n$4({ type: String }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            const isValidValue = value === 'START' || value === 'END';
+            const isFirstTimeSet = this.previousMenuCorner === null;
+            const cornerChanged = !isFirstTimeSet && value !== this.previousMenuCorner;
+            const initiallySetToEnd = isFirstTimeSet && value === 'END';
+            if (isValidValue && (cornerChanged || initiallySetToEnd)) {
+                this.bitwiseCorner = this.bitwiseCorner ^ CornerBit.RIGHT;
+                this.mdcFoundation.flipCornerHorizontally();
+                this.previousMenuCorner = value;
+            }
+        }
+    })
+], MenuSurfaceBase.prototype, "menuCorner", void 0);
+__decorate([
+    n$4({ type: String }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            if (value) {
+                let newCorner = stringToCorner[value];
+                if (this.menuCorner === 'END') {
+                    newCorner = newCorner ^ CornerBit.RIGHT;
+                }
+                this.bitwiseCorner = newCorner;
+            }
+        }
+    })
+], MenuSurfaceBase.prototype, "corner", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleTop", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleLeft", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleRight", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleBottom", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleMaxHeight", void 0);
+__decorate([
+    t$1()
+], MenuSurfaceBase.prototype, "styleTransformOrigin", void 0);
 
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-LIcense-Identifier: Apache-2.0
  */
-const styles$1 = i$5 `.mdc-notched-outline{display:flex;position:absolute;top:0;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] .mdc-notched-outline,.mdc-notched-outline[dir=rtl]{text-align:right}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{box-sizing:border-box;height:100%;border-top:1px solid;border-bottom:1px solid;pointer-events:none}.mdc-notched-outline__leading{border-left:1px solid;border-right:none;width:12px}[dir=rtl] .mdc-notched-outline__leading,.mdc-notched-outline__leading[dir=rtl]{border-left:none;border-right:1px solid}.mdc-notched-outline__trailing{border-left:none;border-right:1px solid;flex-grow:1}[dir=rtl] .mdc-notched-outline__trailing,.mdc-notched-outline__trailing[dir=rtl]{border-left:1px solid;border-right:none}.mdc-notched-outline__notch{flex:0 0 auto;width:auto;max-width:calc(100% - 12px * 2)}.mdc-notched-outline .mdc-floating-label{display:inline-block;position:relative;max-width:100%}.mdc-notched-outline .mdc-floating-label--float-above{text-overflow:clip}.mdc-notched-outline--upgraded .mdc-floating-label--float-above{max-width:calc(100% / 0.75)}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-left:0;padding-right:8px;border-top:none}[dir=rtl] .mdc-notched-outline--notched .mdc-notched-outline__notch,.mdc-notched-outline--notched .mdc-notched-outline__notch[dir=rtl]{padding-left:8px;padding-right:0}.mdc-notched-outline--no-label .mdc-notched-outline__notch{display:none}:host{display:block;position:absolute;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] :host,:host([dir=rtl]){text-align:right}::slotted(.mdc-floating-label){display:inline-block;position:relative;top:17px;bottom:auto;max-width:100%}::slotted(.mdc-floating-label--float-above){text-overflow:clip}.mdc-notched-outline--upgraded ::slotted(.mdc-floating-label--float-above){max-width:calc(100% / 0.75)}.mdc-notched-outline .mdc-notched-outline__leading{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}[dir=rtl] .mdc-notched-outline .mdc-notched-outline__leading,.mdc-notched-outline .mdc-notched-outline__leading[dir=rtl]{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}@supports(top: max(0%)){.mdc-notched-outline .mdc-notched-outline__leading{width:max(12px, var(--mdc-shape-small, 4px))}}@supports(top: max(0%)){.mdc-notched-outline .mdc-notched-outline__notch{max-width:calc(100% - max(12px, var(--mdc-shape-small, 4px)) * 2)}}.mdc-notched-outline .mdc-notched-outline__trailing{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}[dir=rtl] .mdc-notched-outline .mdc-notched-outline__trailing,.mdc-notched-outline .mdc-notched-outline__trailing[dir=rtl]{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{border-color:var(--mdc-notched-outline-border-color, var(--mdc-theme-primary, #6200ee));border-width:1px;border-width:var(--mdc-notched-outline-stroke-width, 1px)}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:0;padding-top:var(--mdc-notched-outline-notch-offset, 0)}`;
+const styles$3 = i$5 `.mdc-menu-surface{display:none;position:absolute;box-sizing:border-box;max-width:calc(100vw - 32px);max-width:var(--mdc-menu-max-width, calc(100vw - 32px));max-height:calc(100vh - 32px);max-height:var(--mdc-menu-max-height, calc(100vh - 32px));margin:0;padding:0;transform:scale(1);transform-origin:top left;opacity:0;overflow:auto;will-change:transform,opacity;z-index:8;transition:opacity .03s linear,transform .12s cubic-bezier(0, 0, 0.2, 1),height 250ms cubic-bezier(0, 0, 0.2, 1);box-shadow:0px 5px 5px -3px rgba(0, 0, 0, 0.2),0px 8px 10px 1px rgba(0, 0, 0, 0.14),0px 3px 14px 2px rgba(0,0,0,.12);background-color:#fff;background-color:var(--mdc-theme-surface, #fff);color:#000;color:var(--mdc-theme-on-surface, #000);border-radius:4px;border-radius:var(--mdc-shape-medium, 4px);transform-origin-left:top left;transform-origin-right:top right}.mdc-menu-surface:focus{outline:none}.mdc-menu-surface--animating-open{display:inline-block;transform:scale(0.8);opacity:0}.mdc-menu-surface--open{display:inline-block;transform:scale(1);opacity:1}.mdc-menu-surface--animating-closed{display:inline-block;opacity:0;transition:opacity .075s linear}[dir=rtl] .mdc-menu-surface,.mdc-menu-surface[dir=rtl]{transform-origin-left:top right;transform-origin-right:top left}.mdc-menu-surface--anchor{position:relative;overflow:visible}.mdc-menu-surface--fixed{position:fixed}.mdc-menu-surface--fullwidth{width:100%}:host(:not([open])){display:none}.mdc-menu-surface{z-index:8;z-index:var(--mdc-menu-z-index, 8);min-width:112px;min-width:var(--mdc-menu-min-width, 112px)}`;
 
 /**
  * @license
- * Copyright 2019 Google LLC
+ * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-let NotchedOutline = class NotchedOutline extends NotchedOutlineBase {
+let MenuSurface = class MenuSurface extends MenuSurfaceBase {
 };
-NotchedOutline.styles = [styles$1];
-NotchedOutline = __decorate([
-    e$6('mwc-notched-outline')
-], NotchedOutline);
+MenuSurface.styles = [styles$3];
+MenuSurface = __decorate([
+    e$6('mwc-menu-surface')
+], MenuSurface);
+
+/**
+ * @license
+ * Copyright 2018 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var cssClasses$4 = {
+    MENU_SELECTED_LIST_ITEM: 'mdc-menu-item--selected',
+    MENU_SELECTION_GROUP: 'mdc-menu__selection-group',
+    ROOT: 'mdc-menu',
+};
+var strings$2 = {
+    ARIA_CHECKED_ATTR: 'aria-checked',
+    ARIA_DISABLED_ATTR: 'aria-disabled',
+    CHECKBOX_SELECTOR: 'input[type="checkbox"]',
+    LIST_SELECTOR: '.mdc-list,.mdc-deprecated-list',
+    SELECTED_EVENT: 'MDCMenu:selected',
+    SKIP_RESTORE_FOCUS: 'data-menu-item-skip-restore-focus',
+};
+var numbers$2 = {
+    FOCUS_ROOT_INDEX: -1,
+};
+var DefaultFocusState;
+(function (DefaultFocusState) {
+    DefaultFocusState[DefaultFocusState["NONE"] = 0] = "NONE";
+    DefaultFocusState[DefaultFocusState["LIST_ROOT"] = 1] = "LIST_ROOT";
+    DefaultFocusState[DefaultFocusState["FIRST_ITEM"] = 2] = "FIRST_ITEM";
+    DefaultFocusState[DefaultFocusState["LAST_ITEM"] = 3] = "LAST_ITEM";
+})(DefaultFocusState || (DefaultFocusState = {}));
+
+/**
+ * @license
+ * Copyright 2018 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCMenuFoundation = /** @class */ (function (_super) {
+    __extends(MDCMenuFoundation, _super);
+    function MDCMenuFoundation(adapter) {
+        var _this = _super.call(this, __assign(__assign({}, MDCMenuFoundation.defaultAdapter), adapter)) || this;
+        _this.closeAnimationEndTimerId = 0;
+        _this.defaultFocusState = DefaultFocusState.LIST_ROOT;
+        _this.selectedIndex = -1;
+        return _this;
+    }
+    Object.defineProperty(MDCMenuFoundation, "cssClasses", {
+        get: function () {
+            return cssClasses$4;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuFoundation, "strings", {
+        get: function () {
+            return strings$2;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuFoundation, "numbers", {
+        get: function () {
+            return numbers$2;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCMenuFoundation, "defaultAdapter", {
+        /**
+         * @see {@link MDCMenuAdapter} for typing information on parameters and return types.
+         */
+        get: function () {
+            // tslint:disable:object-literal-sort-keys Methods should be in the same order as the adapter interface.
+            return {
+                addClassToElementAtIndex: function () { return undefined; },
+                removeClassFromElementAtIndex: function () { return undefined; },
+                addAttributeToElementAtIndex: function () { return undefined; },
+                removeAttributeFromElementAtIndex: function () { return undefined; },
+                getAttributeFromElementAtIndex: function () { return null; },
+                elementContainsClass: function () { return false; },
+                closeSurface: function () { return undefined; },
+                getElementIndex: function () { return -1; },
+                notifySelected: function () { return undefined; },
+                getMenuItemCount: function () { return 0; },
+                focusItemAtIndex: function () { return undefined; },
+                focusListRoot: function () { return undefined; },
+                getSelectedSiblingOfItemAtIndex: function () { return -1; },
+                isSelectableItemAtIndex: function () { return false; },
+            };
+            // tslint:enable:object-literal-sort-keys
+        },
+        enumerable: false,
+        configurable: true
+    });
+    MDCMenuFoundation.prototype.destroy = function () {
+        if (this.closeAnimationEndTimerId) {
+            clearTimeout(this.closeAnimationEndTimerId);
+        }
+        this.adapter.closeSurface();
+    };
+    MDCMenuFoundation.prototype.handleKeydown = function (evt) {
+        var key = evt.key, keyCode = evt.keyCode;
+        var isTab = key === 'Tab' || keyCode === 9;
+        if (isTab) {
+            this.adapter.closeSurface(/** skipRestoreFocus */ true);
+        }
+    };
+    MDCMenuFoundation.prototype.handleItemAction = function (listItem) {
+        var _this = this;
+        var index = this.adapter.getElementIndex(listItem);
+        if (index < 0) {
+            return;
+        }
+        this.adapter.notifySelected({ index: index });
+        var skipRestoreFocus = this.adapter.getAttributeFromElementAtIndex(index, strings$2.SKIP_RESTORE_FOCUS) === 'true';
+        this.adapter.closeSurface(skipRestoreFocus);
+        // Wait for the menu to close before adding/removing classes that affect styles.
+        this.closeAnimationEndTimerId = setTimeout(function () {
+            // Recompute the index in case the menu contents have changed.
+            var recomputedIndex = _this.adapter.getElementIndex(listItem);
+            if (recomputedIndex >= 0 &&
+                _this.adapter.isSelectableItemAtIndex(recomputedIndex)) {
+                _this.setSelectedIndex(recomputedIndex);
+            }
+        }, MDCMenuSurfaceFoundation.numbers.TRANSITION_CLOSE_DURATION);
+    };
+    MDCMenuFoundation.prototype.handleMenuSurfaceOpened = function () {
+        switch (this.defaultFocusState) {
+            case DefaultFocusState.FIRST_ITEM:
+                this.adapter.focusItemAtIndex(0);
+                break;
+            case DefaultFocusState.LAST_ITEM:
+                this.adapter.focusItemAtIndex(this.adapter.getMenuItemCount() - 1);
+                break;
+            case DefaultFocusState.NONE:
+                // Do nothing.
+                break;
+            default:
+                this.adapter.focusListRoot();
+                break;
+        }
+    };
+    /**
+     * Sets default focus state where the menu should focus every time when menu
+     * is opened. Focuses the list root (`DefaultFocusState.LIST_ROOT`) element by
+     * default.
+     */
+    MDCMenuFoundation.prototype.setDefaultFocusState = function (focusState) {
+        this.defaultFocusState = focusState;
+    };
+    /** @return Index of the currently selected list item within the menu. */
+    MDCMenuFoundation.prototype.getSelectedIndex = function () {
+        return this.selectedIndex;
+    };
+    /**
+     * Selects the list item at `index` within the menu.
+     * @param index Index of list item within the menu.
+     */
+    MDCMenuFoundation.prototype.setSelectedIndex = function (index) {
+        this.validatedIndex(index);
+        if (!this.adapter.isSelectableItemAtIndex(index)) {
+            throw new Error('MDCMenuFoundation: No selection group at specified index.');
+        }
+        var prevSelectedIndex = this.adapter.getSelectedSiblingOfItemAtIndex(index);
+        if (prevSelectedIndex >= 0) {
+            this.adapter.removeAttributeFromElementAtIndex(prevSelectedIndex, strings$2.ARIA_CHECKED_ATTR);
+            this.adapter.removeClassFromElementAtIndex(prevSelectedIndex, cssClasses$4.MENU_SELECTED_LIST_ITEM);
+        }
+        this.adapter.addClassToElementAtIndex(index, cssClasses$4.MENU_SELECTED_LIST_ITEM);
+        this.adapter.addAttributeToElementAtIndex(index, strings$2.ARIA_CHECKED_ATTR, 'true');
+        this.selectedIndex = index;
+    };
+    /**
+     * Sets the enabled state to isEnabled for the menu item at the given index.
+     * @param index Index of the menu item
+     * @param isEnabled The desired enabled state of the menu item.
+     */
+    MDCMenuFoundation.prototype.setEnabled = function (index, isEnabled) {
+        this.validatedIndex(index);
+        if (isEnabled) {
+            this.adapter.removeClassFromElementAtIndex(index, cssClasses$6.LIST_ITEM_DISABLED_CLASS);
+            this.adapter.addAttributeToElementAtIndex(index, strings$2.ARIA_DISABLED_ATTR, 'false');
+        }
+        else {
+            this.adapter.addClassToElementAtIndex(index, cssClasses$6.LIST_ITEM_DISABLED_CLASS);
+            this.adapter.addAttributeToElementAtIndex(index, strings$2.ARIA_DISABLED_ATTR, 'true');
+        }
+    };
+    MDCMenuFoundation.prototype.validatedIndex = function (index) {
+        var menuSize = this.adapter.getMenuItemCount();
+        var isIndexInRange = index >= 0 && index < menuSize;
+        if (!isIndexInRange) {
+            throw new Error('MDCMenuFoundation: No list item at specified index.');
+        }
+    };
+    return MDCMenuFoundation;
+}(MDCFoundation));
+// tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
+var MDCMenuFoundation$1 = MDCMenuFoundation;
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * @fires selected {SelectedDetail}
+ * @fires action {ActionDetail}
+ * @fires items-updated
+ * @fires opened
+ * @fires closed
+ */
+class MenuBase extends BaseElement {
+    constructor() {
+        super(...arguments);
+        this.mdcFoundationClass = MDCMenuFoundation$1;
+        this.listElement_ = null;
+        this.anchor = null;
+        this.open = false;
+        this.quick = false;
+        this.wrapFocus = false;
+        this.innerRole = 'menu';
+        this.innerAriaLabel = null;
+        this.corner = 'TOP_START';
+        this.x = null;
+        this.y = null;
+        this.absolute = false;
+        this.multi = false;
+        this.activatable = false;
+        this.fixed = false;
+        this.forceGroupSelection = false;
+        this.fullwidth = false;
+        this.menuCorner = 'START';
+        this.stayOpenOnBodyClick = false;
+        this.defaultFocus = 'LIST_ROOT';
+        this._listUpdateComplete = null;
+    }
+    get listElement() {
+        if (!this.listElement_) {
+            this.listElement_ = this.renderRoot.querySelector('mwc-list');
+            return this.listElement_;
+        }
+        return this.listElement_;
+    }
+    get items() {
+        const listElement = this.listElement;
+        if (listElement) {
+            return listElement.items;
+        }
+        return [];
+    }
+    get index() {
+        const listElement = this.listElement;
+        if (listElement) {
+            return listElement.index;
+        }
+        return -1;
+    }
+    get selected() {
+        const listElement = this.listElement;
+        if (listElement) {
+            return listElement.selected;
+        }
+        return null;
+    }
+    render() {
+        return this.renderSurface();
+    }
+    renderSurface() {
+        const classes = this.getSurfaceClasses();
+        return x `
+      <mwc-menu-surface
+        ?hidden=${!this.open}
+        .anchor=${this.anchor}
+        .open=${this.open}
+        .quick=${this.quick}
+        .corner=${this.corner}
+        .x=${this.x}
+        .y=${this.y}
+        .absolute=${this.absolute}
+        .fixed=${this.fixed}
+        .fullwidth=${this.fullwidth}
+        .menuCorner=${this.menuCorner}
+        ?stayOpenOnBodyClick=${this.stayOpenOnBodyClick}
+        class=${o$2(classes)}
+        @closed=${this.onClosed}
+        @opened=${this.onOpened}
+        @keydown=${this.onKeydown}>
+      ${this.renderList()}
+    </mwc-menu-surface>`;
+    }
+    getSurfaceClasses() {
+        return {
+            'mdc-menu': true,
+            'mdc-menu-surface': true,
+        };
+    }
+    renderList() {
+        const itemRoles = this.innerRole === 'menu' ? 'menuitem' : 'option';
+        const classes = this.renderListClasses();
+        return x `
+      <mwc-list
+          rootTabbable
+          .innerAriaLabel=${this.innerAriaLabel}
+          .innerRole=${this.innerRole}
+          .multi=${this.multi}
+          class=${o$2(classes)}
+          .itemRoles=${itemRoles}
+          .wrapFocus=${this.wrapFocus}
+          .activatable=${this.activatable}
+          @action=${this.onAction}>
+        <slot></slot>
+      </mwc-list>`;
+    }
+    renderListClasses() {
+        return {
+            'mdc-deprecated-list': true,
+        };
+    }
+    createAdapter() {
+        return {
+            addClassToElementAtIndex: (index, className) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return;
+                }
+                const element = listElement.items[index];
+                if (!element) {
+                    return;
+                }
+                if (className === 'mdc-menu-item--selected') {
+                    if (this.forceGroupSelection && !element.selected) {
+                        listElement.toggle(index, true);
+                    }
+                }
+                else {
+                    element.classList.add(className);
+                }
+            },
+            removeClassFromElementAtIndex: (index, className) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return;
+                }
+                const element = listElement.items[index];
+                if (!element) {
+                    return;
+                }
+                if (className === 'mdc-menu-item--selected') {
+                    if (element.selected) {
+                        listElement.toggle(index, false);
+                    }
+                }
+                else {
+                    element.classList.remove(className);
+                }
+            },
+            addAttributeToElementAtIndex: (index, attr, value) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return;
+                }
+                const element = listElement.items[index];
+                if (!element) {
+                    return;
+                }
+                element.setAttribute(attr, value);
+            },
+            removeAttributeFromElementAtIndex: (index, attr) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return;
+                }
+                const element = listElement.items[index];
+                if (!element) {
+                    return;
+                }
+                element.removeAttribute(attr);
+            },
+            getAttributeFromElementAtIndex: (index, attr) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return null;
+                }
+                const element = listElement.items[index];
+                if (!element) {
+                    return null;
+                }
+                return element.getAttribute(attr);
+            },
+            elementContainsClass: (element, className) => element.classList.contains(className),
+            closeSurface: () => {
+                this.open = false;
+            },
+            getElementIndex: (element) => {
+                const listElement = this.listElement;
+                if (listElement) {
+                    return listElement.items.indexOf(element);
+                }
+                return -1;
+            },
+            notifySelected: () => { },
+            getMenuItemCount: () => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return 0;
+                }
+                return listElement.items.length;
+            },
+            focusItemAtIndex: (index) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return;
+                }
+                const element = listElement.items[index];
+                if (element) {
+                    element.focus();
+                }
+            },
+            focusListRoot: () => {
+                if (this.listElement) {
+                    this.listElement.focus();
+                }
+            },
+            getSelectedSiblingOfItemAtIndex: (index) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return -1;
+                }
+                const elementAtIndex = listElement.items[index];
+                if (!elementAtIndex || !elementAtIndex.group) {
+                    return -1;
+                }
+                for (let i = 0; i < listElement.items.length; i++) {
+                    if (i === index) {
+                        continue;
+                    }
+                    const current = listElement.items[i];
+                    if (current.selected && current.group === elementAtIndex.group) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+            isSelectableItemAtIndex: (index) => {
+                const listElement = this.listElement;
+                if (!listElement) {
+                    return false;
+                }
+                const elementAtIndex = listElement.items[index];
+                if (!elementAtIndex) {
+                    return false;
+                }
+                return elementAtIndex.hasAttribute('group');
+            },
+        };
+    }
+    onKeydown(evt) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.handleKeydown(evt);
+        }
+    }
+    onAction(evt) {
+        const listElement = this.listElement;
+        if (this.mdcFoundation && listElement) {
+            const index = evt.detail.index;
+            const el = listElement.items[index];
+            if (el) {
+                this.mdcFoundation.handleItemAction(el);
+            }
+        }
+    }
+    onOpened() {
+        this.open = true;
+        if (this.mdcFoundation) {
+            this.mdcFoundation.handleMenuSurfaceOpened();
+        }
+    }
+    onClosed() {
+        this.open = false;
+    }
+    // tslint:disable:ban-ts-ignore
+    async getUpdateComplete() {
+        await this._listUpdateComplete;
+        // @ts-ignore
+        const result = await super.getUpdateComplete();
+        return result;
+    }
+    // tslint:enable:ban-ts-ignore
+    async firstUpdated() {
+        super.firstUpdated();
+        const listElement = this.listElement;
+        if (listElement) {
+            this._listUpdateComplete = listElement.updateComplete;
+            await this._listUpdateComplete;
+        }
+    }
+    select(index) {
+        const listElement = this.listElement;
+        if (listElement) {
+            listElement.select(index);
+        }
+    }
+    close() {
+        this.open = false;
+    }
+    show() {
+        this.open = true;
+    }
+    getFocusedItemIndex() {
+        const listElement = this.listElement;
+        if (listElement) {
+            return listElement.getFocusedItemIndex();
+        }
+        return -1;
+    }
+    focusItemAtIndex(index) {
+        const listElement = this.listElement;
+        if (listElement) {
+            listElement.focusItemAtIndex(index);
+        }
+    }
+    layout(updateItems = true) {
+        const listElement = this.listElement;
+        if (listElement) {
+            listElement.layout(updateItems);
+        }
+    }
+}
+__decorate([
+    i$2('.mdc-menu')
+], MenuBase.prototype, "mdcRoot", void 0);
+__decorate([
+    i$2('slot')
+], MenuBase.prototype, "slotElement", void 0);
+__decorate([
+    n$4({ type: Object })
+], MenuBase.prototype, "anchor", void 0);
+__decorate([
+    n$4({ type: Boolean, reflect: true })
+], MenuBase.prototype, "open", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "quick", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "wrapFocus", void 0);
+__decorate([
+    n$4({ type: String })
+], MenuBase.prototype, "innerRole", void 0);
+__decorate([
+    n$4({ type: String })
+], MenuBase.prototype, "innerAriaLabel", void 0);
+__decorate([
+    n$4({ type: String })
+], MenuBase.prototype, "corner", void 0);
+__decorate([
+    n$4({ type: Number })
+], MenuBase.prototype, "x", void 0);
+__decorate([
+    n$4({ type: Number })
+], MenuBase.prototype, "y", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "absolute", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "multi", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "activatable", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "fixed", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "forceGroupSelection", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "fullwidth", void 0);
+__decorate([
+    n$4({ type: String })
+], MenuBase.prototype, "menuCorner", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], MenuBase.prototype, "stayOpenOnBodyClick", void 0);
+__decorate([
+    n$4({ type: String }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.setDefaultFocusState(DefaultFocusState[value]);
+        }
+    })
+], MenuBase.prototype, "defaultFocus", void 0);
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-LIcense-Identifier: Apache-2.0
+ */
+const styles$2 = i$5 `mwc-list ::slotted([mwc-list-item]:not([twoline])),mwc-list ::slotted([noninteractive]:not([twoline])){height:var(--mdc-menu-item-height, 48px)}`;
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+let Menu = class Menu extends MenuBase {
+};
+Menu.styles = [styles$2];
+Menu = __decorate([
+    e$6('mwc-menu')
+], Menu);
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var ELEMENTS_KEY_ALLOWED_IN = ['input', 'button', 'textarea', 'select'];
+/**
+ * Ensures that preventDefault is only called if the containing element
+ * doesn't consume the event, and it will cause an unintended scroll.
+ *
+ * @param evt keyboard event to be prevented.
+ */
+var preventDefaultEvent = function (evt) {
+    var target = evt.target;
+    if (!target) {
+        return;
+    }
+    var tagName = ("" + target.tagName).toLowerCase();
+    if (ELEMENTS_KEY_ALLOWED_IN.indexOf(tagName) === -1) {
+        evt.preventDefault();
+    }
+};
+
+/**
+ * @license
+ * Copyright 2020 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+/**
+ * Initializes a state object for typeahead. Use the same reference for calls to
+ * typeahead functions.
+ *
+ * @return The current state of the typeahead process. Each state reference
+ *     represents a typeahead instance as the reference is typically mutated
+ *     in-place.
+ */
+function initState() {
+    var state = {
+        bufferClearTimeout: 0,
+        currentFirstChar: '',
+        sortedIndexCursor: 0,
+        typeaheadBuffer: '',
+    };
+    return state;
+}
+/**
+ * Initializes typeahead state by indexing the current list items by primary
+ * text into the sortedIndexByFirstChar data structure.
+ *
+ * @param listItemCount numer of items in the list
+ * @param getPrimaryTextByItemIndex function that returns the primary text at a
+ *     given index
+ *
+ * @return Map that maps the first character of the primary text to the full
+ *     list text and it's index
+ */
+function initSortedIndex(listItemCount, getPrimaryTextByItemIndex) {
+    var sortedIndexByFirstChar = new Map();
+    // Aggregate item text to index mapping
+    for (var i = 0; i < listItemCount; i++) {
+        var primaryText = getPrimaryTextByItemIndex(i).trim();
+        if (!primaryText) {
+            continue;
+        }
+        var firstChar = primaryText[0].toLowerCase();
+        if (!sortedIndexByFirstChar.has(firstChar)) {
+            sortedIndexByFirstChar.set(firstChar, []);
+        }
+        sortedIndexByFirstChar.get(firstChar).push({ text: primaryText.toLowerCase(), index: i });
+    }
+    // Sort the mapping
+    // TODO(b/157162694): Investigate replacing forEach with Map.values()
+    sortedIndexByFirstChar.forEach(function (values) {
+        values.sort(function (first, second) {
+            return first.index - second.index;
+        });
+    });
+    return sortedIndexByFirstChar;
+}
+/**
+ * Given the next desired character from the user, it attempts to find the next
+ * list option matching the buffer. Wraps around if at the end of options.
+ *
+ * @param opts Options and accessors
+ *   - nextChar - the next character to match against items
+ *   - sortedIndexByFirstChar - output of `initSortedIndex(...)`
+ *   - focusedItemIndex - the index of the currently focused item
+ *   - focusItemAtIndex - function that focuses a list item at given index
+ *   - skipFocus - whether or not to focus the matched item
+ *   - isItemAtIndexDisabled - function that determines whether an item at a
+ *        given index is disabled
+ * @param state The typeahead state instance. See `initState`.
+ *
+ * @return The index of the matched item, or -1 if no match.
+ */
+function matchItem(opts, state) {
+    var nextChar = opts.nextChar, focusItemAtIndex = opts.focusItemAtIndex, sortedIndexByFirstChar = opts.sortedIndexByFirstChar, focusedItemIndex = opts.focusedItemIndex, skipFocus = opts.skipFocus, isItemAtIndexDisabled = opts.isItemAtIndexDisabled;
+    clearTimeout(state.bufferClearTimeout);
+    state.bufferClearTimeout = setTimeout(function () {
+        clearBuffer(state);
+    }, numbers$4.TYPEAHEAD_BUFFER_CLEAR_TIMEOUT_MS);
+    state.typeaheadBuffer = state.typeaheadBuffer + nextChar;
+    var index;
+    if (state.typeaheadBuffer.length === 1) {
+        index = matchFirstChar(sortedIndexByFirstChar, focusedItemIndex, isItemAtIndexDisabled, state);
+    }
+    else {
+        index = matchAllChars(sortedIndexByFirstChar, isItemAtIndexDisabled, state);
+    }
+    if (index !== -1 && !skipFocus) {
+        focusItemAtIndex(index);
+    }
+    return index;
+}
+/**
+ * Matches the user's single input character in the buffer to the
+ * next option that begins with such character. Wraps around if at
+ * end of options. Returns -1 if no match is found.
+ */
+function matchFirstChar(sortedIndexByFirstChar, focusedItemIndex, isItemAtIndexDisabled, state) {
+    var firstChar = state.typeaheadBuffer[0];
+    var itemsMatchingFirstChar = sortedIndexByFirstChar.get(firstChar);
+    if (!itemsMatchingFirstChar) {
+        return -1;
+    }
+    // Has the same firstChar been recently matched?
+    // Also, did starting index remain the same between key presses?
+    // If both hold true, simply increment index.
+    if (firstChar === state.currentFirstChar &&
+        itemsMatchingFirstChar[state.sortedIndexCursor].index ===
+            focusedItemIndex) {
+        state.sortedIndexCursor =
+            (state.sortedIndexCursor + 1) % itemsMatchingFirstChar.length;
+        var newIndex = itemsMatchingFirstChar[state.sortedIndexCursor].index;
+        if (!isItemAtIndexDisabled(newIndex)) {
+            return newIndex;
+        }
+    }
+    // If we're here, it means one of the following happened:
+    // - either firstChar or startingIndex has changed, invalidating the
+    // cursor.
+    // - The next item of typeahead is disabled, so we have to look further.
+    state.currentFirstChar = firstChar;
+    var newCursorPosition = -1;
+    var cursorPosition;
+    // Find the first non-disabled item as a fallback.
+    for (cursorPosition = 0; cursorPosition < itemsMatchingFirstChar.length; cursorPosition++) {
+        if (!isItemAtIndexDisabled(itemsMatchingFirstChar[cursorPosition].index)) {
+            newCursorPosition = cursorPosition;
+            break;
+        }
+    }
+    // Advance cursor to first item matching the firstChar that is positioned
+    // after starting item. Cursor is unchanged from fallback if there's no
+    // such item.
+    for (; cursorPosition < itemsMatchingFirstChar.length; cursorPosition++) {
+        if (itemsMatchingFirstChar[cursorPosition].index > focusedItemIndex &&
+            !isItemAtIndexDisabled(itemsMatchingFirstChar[cursorPosition].index)) {
+            newCursorPosition = cursorPosition;
+            break;
+        }
+    }
+    if (newCursorPosition !== -1) {
+        state.sortedIndexCursor = newCursorPosition;
+        return itemsMatchingFirstChar[state.sortedIndexCursor].index;
+    }
+    return -1;
+}
+/**
+ * Attempts to find the next item that matches all of the typeahead buffer.
+ * Wraps around if at end of options. Returns -1 if no match is found.
+ */
+function matchAllChars(sortedIndexByFirstChar, isItemAtIndexDisabled, state) {
+    var firstChar = state.typeaheadBuffer[0];
+    var itemsMatchingFirstChar = sortedIndexByFirstChar.get(firstChar);
+    if (!itemsMatchingFirstChar) {
+        return -1;
+    }
+    // Do nothing if text already matches
+    var startingItem = itemsMatchingFirstChar[state.sortedIndexCursor];
+    if (startingItem.text.lastIndexOf(state.typeaheadBuffer, 0) === 0 &&
+        !isItemAtIndexDisabled(startingItem.index)) {
+        return startingItem.index;
+    }
+    // Find next item that matches completely; if no match, we'll eventually
+    // loop around to same position
+    var cursorPosition = (state.sortedIndexCursor + 1) % itemsMatchingFirstChar.length;
+    var nextCursorPosition = -1;
+    while (cursorPosition !== state.sortedIndexCursor) {
+        var currentItem = itemsMatchingFirstChar[cursorPosition];
+        var matches = currentItem.text.lastIndexOf(state.typeaheadBuffer, 0) === 0;
+        var isEnabled = !isItemAtIndexDisabled(currentItem.index);
+        if (matches && isEnabled) {
+            nextCursorPosition = cursorPosition;
+            break;
+        }
+        cursorPosition = (cursorPosition + 1) % itemsMatchingFirstChar.length;
+    }
+    if (nextCursorPosition !== -1) {
+        state.sortedIndexCursor = nextCursorPosition;
+        return itemsMatchingFirstChar[state.sortedIndexCursor].index;
+    }
+    return -1;
+}
+/**
+ * Whether or not the given typeahead instaance state is currently typing.
+ *
+ * @param state The typeahead state instance. See `initState`.
+ */
+function isTypingInProgress(state) {
+    return state.typeaheadBuffer.length > 0;
+}
+/**
+ * Clears the typeahaed buffer so that it resets item matching to the first
+ * character.
+ *
+ * @param state The typeahead state instance. See `initState`.
+ */
+function clearBuffer(state) {
+    state.typeaheadBuffer = '';
+}
+/**
+ * Given a keydown event, it calculates whether or not to automatically focus a
+ * list item depending on what was typed mimicing the typeahead functionality of
+ * a standard <select> element that is open.
+ *
+ * @param opts Options and accessors
+ *   - event - the KeyboardEvent to handle and parse
+ *   - sortedIndexByFirstChar - output of `initSortedIndex(...)`
+ *   - focusedItemIndex - the index of the currently focused item
+ *   - focusItemAtIndex - function that focuses a list item at given index
+ *   - isItemAtFocusedIndexDisabled - whether or not the currently focused item
+ *      is disabled
+ *   - isTargetListItem - whether or not the event target is a list item
+ * @param state The typeahead state instance. See `initState`.
+ *
+ * @returns index of the item matched by the keydown. -1 if not matched.
+ */
+function handleKeydown(opts, state) {
+    var event = opts.event, isTargetListItem = opts.isTargetListItem, focusedItemIndex = opts.focusedItemIndex, focusItemAtIndex = opts.focusItemAtIndex, sortedIndexByFirstChar = opts.sortedIndexByFirstChar, isItemAtIndexDisabled = opts.isItemAtIndexDisabled;
+    var isArrowLeft = normalizeKey(event) === 'ArrowLeft';
+    var isArrowUp = normalizeKey(event) === 'ArrowUp';
+    var isArrowRight = normalizeKey(event) === 'ArrowRight';
+    var isArrowDown = normalizeKey(event) === 'ArrowDown';
+    var isHome = normalizeKey(event) === 'Home';
+    var isEnd = normalizeKey(event) === 'End';
+    var isEnter = normalizeKey(event) === 'Enter';
+    var isSpace = normalizeKey(event) === 'Spacebar';
+    if (event.altKey || event.ctrlKey || event.metaKey || isArrowLeft ||
+        isArrowUp || isArrowRight || isArrowDown || isHome || isEnd || isEnter) {
+        return -1;
+    }
+    var isCharacterKey = !isSpace && event.key.length === 1;
+    if (isCharacterKey) {
+        preventDefaultEvent(event);
+        var matchItemOpts = {
+            focusItemAtIndex: focusItemAtIndex,
+            focusedItemIndex: focusedItemIndex,
+            nextChar: event.key.toLowerCase(),
+            sortedIndexByFirstChar: sortedIndexByFirstChar,
+            skipFocus: false,
+            isItemAtIndexDisabled: isItemAtIndexDisabled,
+        };
+        return matchItem(matchItemOpts, state);
+    }
+    if (!isSpace) {
+        return -1;
+    }
+    if (isTargetListItem) {
+        preventDefaultEvent(event);
+    }
+    var typeaheadOnListItem = isTargetListItem && isTypingInProgress(state);
+    if (typeaheadOnListItem) {
+        var matchItemOpts = {
+            focusItemAtIndex: focusItemAtIndex,
+            focusedItemIndex: focusedItemIndex,
+            nextChar: ' ',
+            sortedIndexByFirstChar: sortedIndexByFirstChar,
+            skipFocus: false,
+            isItemAtIndexDisabled: isItemAtIndexDisabled,
+        };
+        // space participates in typeahead matching if in rapid typing mode
+        return matchItem(matchItemOpts, state);
+    }
+    return -1;
+}
 
 /**
  * @license
@@ -5784,7 +7787,7 @@ __decorate([
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var cssClasses$2 = {
+var cssClasses$3 = {
     LABEL_FLOAT_ABOVE: 'mdc-floating-label--float-above',
     LABEL_REQUIRED: 'mdc-floating-label--required',
     LABEL_SHAKE: 'mdc-floating-label--shake',
@@ -5824,7 +7827,7 @@ var MDCFloatingLabelFoundation = /** @class */ (function (_super) {
     }
     Object.defineProperty(MDCFloatingLabelFoundation, "cssClasses", {
         get: function () {
-            return cssClasses$2;
+            return cssClasses$3;
         },
         enumerable: false,
         configurable: true
@@ -5984,7 +7987,7 @@ const floatingLabel = e$1(FloatingLabelDirective);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var cssClasses$1 = {
+var cssClasses$2 = {
     LINE_RIPPLE_ACTIVE: 'mdc-line-ripple--active',
     LINE_RIPPLE_DEACTIVATING: 'mdc-line-ripple--deactivating',
 };
@@ -6022,7 +8025,7 @@ var MDCLineRippleFoundation = /** @class */ (function (_super) {
     }
     Object.defineProperty(MDCLineRippleFoundation, "cssClasses", {
         get: function () {
-            return cssClasses$1;
+            return cssClasses$2;
         },
         enumerable: false,
         configurable: true
@@ -6053,23 +8056,23 @@ var MDCLineRippleFoundation = /** @class */ (function (_super) {
         this.adapter.deregisterEventHandler('transitionend', this.transitionEndHandler);
     };
     MDCLineRippleFoundation.prototype.activate = function () {
-        this.adapter.removeClass(cssClasses$1.LINE_RIPPLE_DEACTIVATING);
-        this.adapter.addClass(cssClasses$1.LINE_RIPPLE_ACTIVE);
+        this.adapter.removeClass(cssClasses$2.LINE_RIPPLE_DEACTIVATING);
+        this.adapter.addClass(cssClasses$2.LINE_RIPPLE_ACTIVE);
     };
     MDCLineRippleFoundation.prototype.setRippleCenter = function (xCoordinate) {
         this.adapter.setStyle('transform-origin', xCoordinate + "px center");
     };
     MDCLineRippleFoundation.prototype.deactivate = function () {
-        this.adapter.addClass(cssClasses$1.LINE_RIPPLE_DEACTIVATING);
+        this.adapter.addClass(cssClasses$2.LINE_RIPPLE_DEACTIVATING);
     };
     MDCLineRippleFoundation.prototype.handleTransitionEnd = function (evt) {
         // Wait for the line ripple to be either transparent or opaque
         // before emitting the animation end event
-        var isDeactivating = this.adapter.hasClass(cssClasses$1.LINE_RIPPLE_DEACTIVATING);
+        var isDeactivating = this.adapter.hasClass(cssClasses$2.LINE_RIPPLE_DEACTIVATING);
         if (evt.propertyName === 'opacity') {
             if (isDeactivating) {
-                this.adapter.removeClass(cssClasses$1.LINE_RIPPLE_ACTIVE);
-                this.adapter.removeClass(cssClasses$1.LINE_RIPPLE_DEACTIVATING);
+                this.adapter.removeClass(cssClasses$2.LINE_RIPPLE_ACTIVE);
+                this.adapter.removeClass(cssClasses$2.LINE_RIPPLE_DEACTIVATING);
             }
         }
     };
@@ -6131,6 +8134,1274 @@ class LineRippleDirective extends i$1 {
     }
 }
 const lineRipple = e$1(LineRippleDirective);
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var cssClasses$1 = {
+    ACTIVATED: 'mdc-select--activated',
+    DISABLED: 'mdc-select--disabled',
+    FOCUSED: 'mdc-select--focused',
+    INVALID: 'mdc-select--invalid',
+    MENU_INVALID: 'mdc-select__menu--invalid',
+    OUTLINED: 'mdc-select--outlined',
+    REQUIRED: 'mdc-select--required',
+    ROOT: 'mdc-select',
+    WITH_LEADING_ICON: 'mdc-select--with-leading-icon',
+};
+var strings$1 = {
+    ARIA_CONTROLS: 'aria-controls',
+    ARIA_DESCRIBEDBY: 'aria-describedby',
+    ARIA_SELECTED_ATTR: 'aria-selected',
+    CHANGE_EVENT: 'MDCSelect:change',
+    HIDDEN_INPUT_SELECTOR: 'input[type="hidden"]',
+    LABEL_SELECTOR: '.mdc-floating-label',
+    LEADING_ICON_SELECTOR: '.mdc-select__icon',
+    LINE_RIPPLE_SELECTOR: '.mdc-line-ripple',
+    MENU_SELECTOR: '.mdc-select__menu',
+    OUTLINE_SELECTOR: '.mdc-notched-outline',
+    SELECTED_TEXT_SELECTOR: '.mdc-select__selected-text',
+    SELECT_ANCHOR_SELECTOR: '.mdc-select__anchor',
+    VALUE_ATTR: 'data-value',
+};
+var numbers$1 = {
+    LABEL_SCALE: 0.75,
+    UNSET_INDEX: -1,
+    CLICK_DEBOUNCE_TIMEOUT_MS: 330,
+};
+
+/**
+ * @license
+ * Copyright 2016 Google Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+var MDCSelectFoundation = /** @class */ (function (_super) {
+    __extends(MDCSelectFoundation, _super);
+    /* istanbul ignore next: optional argument is not a branch statement */
+    /**
+     * @param adapter
+     * @param foundationMap Map from subcomponent names to their subfoundations.
+     */
+    function MDCSelectFoundation(adapter, foundationMap) {
+        if (foundationMap === void 0) { foundationMap = {}; }
+        var _this = _super.call(this, __assign(__assign({}, MDCSelectFoundation.defaultAdapter), adapter)) || this;
+        // Disabled state
+        _this.disabled = false;
+        // isMenuOpen is used to track the state of the menu by listening to the
+        // MDCMenuSurface:closed event For reference, menu.open will return false if
+        // the menu is still closing, but isMenuOpen returns false only after the menu
+        // has closed
+        _this.isMenuOpen = false;
+        // By default, select is invalid if it is required but no value is selected.
+        _this.useDefaultValidation = true;
+        _this.customValidity = true;
+        _this.lastSelectedIndex = numbers$1.UNSET_INDEX;
+        _this.clickDebounceTimeout = 0;
+        _this.recentlyClicked = false;
+        _this.leadingIcon = foundationMap.leadingIcon;
+        _this.helperText = foundationMap.helperText;
+        return _this;
+    }
+    Object.defineProperty(MDCSelectFoundation, "cssClasses", {
+        get: function () {
+            return cssClasses$1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCSelectFoundation, "numbers", {
+        get: function () {
+            return numbers$1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCSelectFoundation, "strings", {
+        get: function () {
+            return strings$1;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(MDCSelectFoundation, "defaultAdapter", {
+        /**
+         * See {@link MDCSelectAdapter} for typing information on parameters and return types.
+         */
+        get: function () {
+            // tslint:disable:object-literal-sort-keys Methods should be in the same order as the adapter interface.
+            return {
+                addClass: function () { return undefined; },
+                removeClass: function () { return undefined; },
+                hasClass: function () { return false; },
+                activateBottomLine: function () { return undefined; },
+                deactivateBottomLine: function () { return undefined; },
+                getSelectedIndex: function () { return -1; },
+                setSelectedIndex: function () { return undefined; },
+                hasLabel: function () { return false; },
+                floatLabel: function () { return undefined; },
+                getLabelWidth: function () { return 0; },
+                setLabelRequired: function () { return undefined; },
+                hasOutline: function () { return false; },
+                notchOutline: function () { return undefined; },
+                closeOutline: function () { return undefined; },
+                setRippleCenter: function () { return undefined; },
+                notifyChange: function () { return undefined; },
+                setSelectedText: function () { return undefined; },
+                isSelectAnchorFocused: function () { return false; },
+                getSelectAnchorAttr: function () { return ''; },
+                setSelectAnchorAttr: function () { return undefined; },
+                removeSelectAnchorAttr: function () { return undefined; },
+                addMenuClass: function () { return undefined; },
+                removeMenuClass: function () { return undefined; },
+                openMenu: function () { return undefined; },
+                closeMenu: function () { return undefined; },
+                getAnchorElement: function () { return null; },
+                setMenuAnchorElement: function () { return undefined; },
+                setMenuAnchorCorner: function () { return undefined; },
+                setMenuWrapFocus: function () { return undefined; },
+                focusMenuItemAtIndex: function () { return undefined; },
+                getMenuItemCount: function () { return 0; },
+                getMenuItemValues: function () { return []; },
+                getMenuItemTextAtIndex: function () { return ''; },
+                isTypeaheadInProgress: function () { return false; },
+                typeaheadMatchItem: function () { return -1; },
+            };
+            // tslint:enable:object-literal-sort-keys
+        },
+        enumerable: false,
+        configurable: true
+    });
+    /** Returns the index of the currently selected menu item, or -1 if none. */
+    MDCSelectFoundation.prototype.getSelectedIndex = function () {
+        return this.adapter.getSelectedIndex();
+    };
+    MDCSelectFoundation.prototype.setSelectedIndex = function (index, closeMenu, skipNotify) {
+        if (closeMenu === void 0) { closeMenu = false; }
+        if (skipNotify === void 0) { skipNotify = false; }
+        if (index >= this.adapter.getMenuItemCount()) {
+            return;
+        }
+        if (index === numbers$1.UNSET_INDEX) {
+            this.adapter.setSelectedText('');
+        }
+        else {
+            this.adapter.setSelectedText(this.adapter.getMenuItemTextAtIndex(index).trim());
+        }
+        this.adapter.setSelectedIndex(index);
+        if (closeMenu) {
+            this.adapter.closeMenu();
+        }
+        if (!skipNotify && this.lastSelectedIndex !== index) {
+            this.handleChange();
+        }
+        this.lastSelectedIndex = index;
+    };
+    MDCSelectFoundation.prototype.setValue = function (value, skipNotify) {
+        if (skipNotify === void 0) { skipNotify = false; }
+        var index = this.adapter.getMenuItemValues().indexOf(value);
+        this.setSelectedIndex(index, /** closeMenu */ false, skipNotify);
+    };
+    MDCSelectFoundation.prototype.getValue = function () {
+        var index = this.adapter.getSelectedIndex();
+        var menuItemValues = this.adapter.getMenuItemValues();
+        return index !== numbers$1.UNSET_INDEX ? menuItemValues[index] : '';
+    };
+    MDCSelectFoundation.prototype.getDisabled = function () {
+        return this.disabled;
+    };
+    MDCSelectFoundation.prototype.setDisabled = function (isDisabled) {
+        this.disabled = isDisabled;
+        if (this.disabled) {
+            this.adapter.addClass(cssClasses$1.DISABLED);
+            this.adapter.closeMenu();
+        }
+        else {
+            this.adapter.removeClass(cssClasses$1.DISABLED);
+        }
+        if (this.leadingIcon) {
+            this.leadingIcon.setDisabled(this.disabled);
+        }
+        if (this.disabled) {
+            // Prevent click events from focusing select. Simply pointer-events: none
+            // is not enough since screenreader clicks may bypass this.
+            this.adapter.removeSelectAnchorAttr('tabindex');
+        }
+        else {
+            this.adapter.setSelectAnchorAttr('tabindex', '0');
+        }
+        this.adapter.setSelectAnchorAttr('aria-disabled', this.disabled.toString());
+    };
+    /** Opens the menu. */
+    MDCSelectFoundation.prototype.openMenu = function () {
+        this.adapter.addClass(cssClasses$1.ACTIVATED);
+        this.adapter.openMenu();
+        this.isMenuOpen = true;
+        this.adapter.setSelectAnchorAttr('aria-expanded', 'true');
+    };
+    /**
+     * @param content Sets the content of the helper text.
+     */
+    MDCSelectFoundation.prototype.setHelperTextContent = function (content) {
+        if (this.helperText) {
+            this.helperText.setContent(content);
+        }
+    };
+    /**
+     * Re-calculates if the notched outline should be notched and if the label
+     * should float.
+     */
+    MDCSelectFoundation.prototype.layout = function () {
+        if (this.adapter.hasLabel()) {
+            var optionHasValue = this.getValue().length > 0;
+            var isFocused = this.adapter.hasClass(cssClasses$1.FOCUSED);
+            var shouldFloatAndNotch = optionHasValue || isFocused;
+            var isRequired = this.adapter.hasClass(cssClasses$1.REQUIRED);
+            this.notchOutline(shouldFloatAndNotch);
+            this.adapter.floatLabel(shouldFloatAndNotch);
+            this.adapter.setLabelRequired(isRequired);
+        }
+    };
+    /**
+     * Synchronizes the list of options with the state of the foundation. Call
+     * this whenever menu options are dynamically updated.
+     */
+    MDCSelectFoundation.prototype.layoutOptions = function () {
+        var menuItemValues = this.adapter.getMenuItemValues();
+        var selectedIndex = menuItemValues.indexOf(this.getValue());
+        this.setSelectedIndex(selectedIndex, /** closeMenu */ false, /** skipNotify */ true);
+    };
+    MDCSelectFoundation.prototype.handleMenuOpened = function () {
+        if (this.adapter.getMenuItemValues().length === 0) {
+            return;
+        }
+        // Menu should open to the last selected element, should open to first menu item otherwise.
+        var selectedIndex = this.getSelectedIndex();
+        var focusItemIndex = selectedIndex >= 0 ? selectedIndex : 0;
+        this.adapter.focusMenuItemAtIndex(focusItemIndex);
+    };
+    MDCSelectFoundation.prototype.handleMenuClosing = function () {
+        this.adapter.setSelectAnchorAttr('aria-expanded', 'false');
+    };
+    MDCSelectFoundation.prototype.handleMenuClosed = function () {
+        this.adapter.removeClass(cssClasses$1.ACTIVATED);
+        this.isMenuOpen = false;
+        // Unfocus the select if menu is closed without a selection
+        if (!this.adapter.isSelectAnchorFocused()) {
+            this.blur();
+        }
+    };
+    /**
+     * Handles value changes, via change event or programmatic updates.
+     */
+    MDCSelectFoundation.prototype.handleChange = function () {
+        this.layout();
+        this.adapter.notifyChange(this.getValue());
+        var isRequired = this.adapter.hasClass(cssClasses$1.REQUIRED);
+        if (isRequired && this.useDefaultValidation) {
+            this.setValid(this.isValid());
+        }
+    };
+    MDCSelectFoundation.prototype.handleMenuItemAction = function (index) {
+        this.setSelectedIndex(index, /** closeMenu */ true);
+    };
+    /**
+     * Handles focus events from select element.
+     */
+    MDCSelectFoundation.prototype.handleFocus = function () {
+        this.adapter.addClass(cssClasses$1.FOCUSED);
+        this.layout();
+        this.adapter.activateBottomLine();
+    };
+    /**
+     * Handles blur events from select element.
+     */
+    MDCSelectFoundation.prototype.handleBlur = function () {
+        if (this.isMenuOpen) {
+            return;
+        }
+        this.blur();
+    };
+    MDCSelectFoundation.prototype.handleClick = function (normalizedX) {
+        if (this.disabled || this.recentlyClicked) {
+            return;
+        }
+        this.setClickDebounceTimeout();
+        if (this.isMenuOpen) {
+            this.adapter.closeMenu();
+            return;
+        }
+        this.adapter.setRippleCenter(normalizedX);
+        this.openMenu();
+    };
+    /**
+     * Handles keydown events on select element. Depending on the type of
+     * character typed, does typeahead matching or opens menu.
+     */
+    MDCSelectFoundation.prototype.handleKeydown = function (event) {
+        if (this.isMenuOpen || !this.adapter.hasClass(cssClasses$1.FOCUSED)) {
+            return;
+        }
+        var isEnter = normalizeKey(event) === KEY.ENTER;
+        var isSpace = normalizeKey(event) === KEY.SPACEBAR;
+        var arrowUp = normalizeKey(event) === KEY.ARROW_UP;
+        var arrowDown = normalizeKey(event) === KEY.ARROW_DOWN;
+        var isModifier = event.ctrlKey || event.metaKey;
+        // Typeahead
+        if (!isModifier &&
+            (!isSpace && event.key && event.key.length === 1 ||
+                isSpace && this.adapter.isTypeaheadInProgress())) {
+            var key = isSpace ? ' ' : event.key;
+            var typeaheadNextIndex = this.adapter.typeaheadMatchItem(key, this.getSelectedIndex());
+            if (typeaheadNextIndex >= 0) {
+                this.setSelectedIndex(typeaheadNextIndex);
+            }
+            event.preventDefault();
+            return;
+        }
+        if (!isEnter && !isSpace && !arrowUp && !arrowDown) {
+            return;
+        }
+        this.openMenu();
+        event.preventDefault();
+    };
+    /**
+     * Opens/closes the notched outline.
+     */
+    MDCSelectFoundation.prototype.notchOutline = function (openNotch) {
+        if (!this.adapter.hasOutline()) {
+            return;
+        }
+        var isFocused = this.adapter.hasClass(cssClasses$1.FOCUSED);
+        if (openNotch) {
+            var labelScale = numbers$1.LABEL_SCALE;
+            var labelWidth = this.adapter.getLabelWidth() * labelScale;
+            this.adapter.notchOutline(labelWidth);
+        }
+        else if (!isFocused) {
+            this.adapter.closeOutline();
+        }
+    };
+    /**
+     * Sets the aria label of the leading icon.
+     */
+    MDCSelectFoundation.prototype.setLeadingIconAriaLabel = function (label) {
+        if (this.leadingIcon) {
+            this.leadingIcon.setAriaLabel(label);
+        }
+    };
+    /**
+     * Sets the text content of the leading icon.
+     */
+    MDCSelectFoundation.prototype.setLeadingIconContent = function (content) {
+        if (this.leadingIcon) {
+            this.leadingIcon.setContent(content);
+        }
+    };
+    MDCSelectFoundation.prototype.getUseDefaultValidation = function () {
+        return this.useDefaultValidation;
+    };
+    MDCSelectFoundation.prototype.setUseDefaultValidation = function (useDefaultValidation) {
+        this.useDefaultValidation = useDefaultValidation;
+    };
+    MDCSelectFoundation.prototype.setValid = function (isValid) {
+        if (!this.useDefaultValidation) {
+            this.customValidity = isValid;
+        }
+        this.adapter.setSelectAnchorAttr('aria-invalid', (!isValid).toString());
+        if (isValid) {
+            this.adapter.removeClass(cssClasses$1.INVALID);
+            this.adapter.removeMenuClass(cssClasses$1.MENU_INVALID);
+        }
+        else {
+            this.adapter.addClass(cssClasses$1.INVALID);
+            this.adapter.addMenuClass(cssClasses$1.MENU_INVALID);
+        }
+        this.syncHelperTextValidity(isValid);
+    };
+    MDCSelectFoundation.prototype.isValid = function () {
+        if (this.useDefaultValidation &&
+            this.adapter.hasClass(cssClasses$1.REQUIRED) &&
+            !this.adapter.hasClass(cssClasses$1.DISABLED)) {
+            // See notes for required attribute under https://www.w3.org/TR/html52/sec-forms.html#the-select-element
+            // TL;DR: Invalid if no index is selected, or if the first index is selected and has an empty value.
+            return this.getSelectedIndex() !== numbers$1.UNSET_INDEX &&
+                (this.getSelectedIndex() !== 0 || Boolean(this.getValue()));
+        }
+        return this.customValidity;
+    };
+    MDCSelectFoundation.prototype.setRequired = function (isRequired) {
+        if (isRequired) {
+            this.adapter.addClass(cssClasses$1.REQUIRED);
+        }
+        else {
+            this.adapter.removeClass(cssClasses$1.REQUIRED);
+        }
+        this.adapter.setSelectAnchorAttr('aria-required', isRequired.toString());
+        this.adapter.setLabelRequired(isRequired);
+    };
+    MDCSelectFoundation.prototype.getRequired = function () {
+        return this.adapter.getSelectAnchorAttr('aria-required') === 'true';
+    };
+    MDCSelectFoundation.prototype.init = function () {
+        var anchorEl = this.adapter.getAnchorElement();
+        if (anchorEl) {
+            this.adapter.setMenuAnchorElement(anchorEl);
+            this.adapter.setMenuAnchorCorner(Corner.BOTTOM_START);
+        }
+        this.adapter.setMenuWrapFocus(false);
+        this.setDisabled(this.adapter.hasClass(cssClasses$1.DISABLED));
+        this.syncHelperTextValidity(!this.adapter.hasClass(cssClasses$1.INVALID));
+        this.layout();
+        this.layoutOptions();
+    };
+    /**
+     * Unfocuses the select component.
+     */
+    MDCSelectFoundation.prototype.blur = function () {
+        this.adapter.removeClass(cssClasses$1.FOCUSED);
+        this.layout();
+        this.adapter.deactivateBottomLine();
+        var isRequired = this.adapter.hasClass(cssClasses$1.REQUIRED);
+        if (isRequired && this.useDefaultValidation) {
+            this.setValid(this.isValid());
+        }
+    };
+    MDCSelectFoundation.prototype.syncHelperTextValidity = function (isValid) {
+        if (!this.helperText) {
+            return;
+        }
+        this.helperText.setValidity(isValid);
+        var helperTextVisible = this.helperText.isVisible();
+        var helperTextId = this.helperText.getId();
+        if (helperTextVisible && helperTextId) {
+            this.adapter.setSelectAnchorAttr(strings$1.ARIA_DESCRIBEDBY, helperTextId);
+        }
+        else {
+            // Needed because screenreaders will read labels pointed to by
+            // `aria-describedby` even if they are `aria-hidden`.
+            this.adapter.removeSelectAnchorAttr(strings$1.ARIA_DESCRIBEDBY);
+        }
+    };
+    MDCSelectFoundation.prototype.setClickDebounceTimeout = function () {
+        var _this = this;
+        clearTimeout(this.clickDebounceTimeout);
+        this.clickDebounceTimeout = setTimeout(function () {
+            _this.recentlyClicked = false;
+        }, numbers$1.CLICK_DEBOUNCE_TIMEOUT_MS);
+        this.recentlyClicked = true;
+    };
+    return MDCSelectFoundation;
+}(MDCFoundation));
+// tslint:disable-next-line:no-default-export Needed for backward compatibility with MDC Web v0.44.0 and earlier.
+var MDCSelectFoundation$1 = MDCSelectFoundation;
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const createValidityObj$1 = (customValidity = {}) => {
+    /*
+     * We need to make ValidityState an object because it is readonly and
+     * we cannot use the spread operator. Also, we don't export
+     * `CustomValidityState` because it is a leaky implementation and the user
+     * already has access to `ValidityState` in lib.dom.ts. Also an interface
+     * {a: Type} can be casted to {readonly a: Type} so passing any object
+     * should be fine.
+     */
+    const objectifiedCustomValidity = {};
+    // eslint-disable-next-line guard-for-in
+    for (const propName in customValidity) {
+        /*
+         * Casting is needed because ValidityState's props are all readonly and
+         * thus cannot be set on `onjectifiedCustomValidity`. In the end, the
+         * interface is the same as ValidityState (but not readonly), but the
+         * function signature casts the output to ValidityState (thus readonly).
+         */
+        objectifiedCustomValidity[propName] =
+            customValidity[propName];
+    }
+    return Object.assign({ badInput: false, customError: false, patternMismatch: false, rangeOverflow: false, rangeUnderflow: false, stepMismatch: false, tooLong: false, tooShort: false, typeMismatch: false, valid: true, valueMissing: false }, objectifiedCustomValidity);
+};
+/**
+ * @fires selected {SelectedDetail}
+ * @fires action {ActionDetail}
+ * @fires opened
+ * @fires closed
+ * @fires change
+ * @fires invalid
+ */
+class SelectBase extends FormElement {
+    constructor() {
+        super(...arguments);
+        this.mdcFoundationClass = MDCSelectFoundation$1;
+        this.disabled = false;
+        this.outlined = false;
+        this.label = '';
+        this.outlineOpen = false;
+        this.outlineWidth = 0;
+        this.value = '';
+        this.name = '';
+        this.selectedText = '';
+        this.icon = '';
+        this.menuOpen = false;
+        this.helper = '';
+        this.validateOnInitialRender = false;
+        this.validationMessage = '';
+        this.required = false;
+        this.naturalMenuWidth = false;
+        this.isUiValid = true;
+        this.fixedMenuPosition = false;
+        // Transiently holds current typeahead prefix from user.
+        this.typeaheadState = initState();
+        this.sortedIndexByFirstChar = new Map();
+        this.menuElement_ = null;
+        this.listeners = [];
+        this.onBodyClickBound = () => undefined;
+        this._menuUpdateComplete = null;
+        this.valueSetDirectly = false;
+        this.validityTransform = null;
+        this._validity = createValidityObj$1();
+    }
+    get items() {
+        // memoize menuElement to prevent unnecessary querySelector calls.
+        if (!this.menuElement_) {
+            this.menuElement_ = this.menuElement;
+        }
+        if (this.menuElement_) {
+            return this.menuElement_.items;
+        }
+        return [];
+    }
+    get selected() {
+        const menuElement = this.menuElement;
+        if (menuElement) {
+            return menuElement.selected;
+        }
+        return null;
+    }
+    get index() {
+        const menuElement = this.menuElement;
+        if (menuElement) {
+            return menuElement.index;
+        }
+        return -1;
+    }
+    get shouldRenderHelperText() {
+        return !!this.helper || !!this.validationMessage;
+    }
+    get validity() {
+        this._checkValidity(this.value);
+        return this._validity;
+    }
+    render() {
+        const classes = {
+            'mdc-select--disabled': this.disabled,
+            'mdc-select--no-label': !this.label,
+            'mdc-select--filled': !this.outlined,
+            'mdc-select--outlined': this.outlined,
+            'mdc-select--with-leading-icon': !!this.icon,
+            'mdc-select--required': this.required,
+            'mdc-select--invalid': !this.isUiValid,
+        };
+        const labelledby = !!this.label ? 'label' : undefined;
+        const describedby = this.shouldRenderHelperText ? 'helper-text' : undefined;
+        return x `
+      <div
+          class="mdc-select ${o$2(classes)}">
+        <input
+            class="formElement"
+            name="${this.name}"
+            .value="${this.value}"
+            hidden
+            ?disabled="${this.disabled}"
+            ?required=${this.required}>
+        <!-- @ts-ignore -->
+        <div class="mdc-select__anchor"
+            aria-autocomplete="none"
+            role="combobox"
+            aria-expanded=${this.menuOpen}
+            aria-invalid=${!this.isUiValid}
+            aria-haspopup="listbox"
+            aria-labelledby=${l$2(labelledby)}
+            aria-required=${this.required}
+            aria-describedby=${l$2(describedby)}
+            @click=${this.onClick}
+            @focus=${this.onFocus}
+            @blur=${this.onBlur}
+            @keydown=${this.onKeydown}>
+          ${this.renderRipple()}
+          ${this.outlined ? this.renderOutline() : this.renderLabel()}
+          ${this.renderLeadingIcon()}
+          <span class="mdc-select__selected-text-container">
+            <span class="mdc-select__selected-text">${this.selectedText}</span>
+          </span>
+          <span class="mdc-select__dropdown-icon">
+            <svg
+                class="mdc-select__dropdown-icon-graphic"
+                viewBox="7 10 10 5"
+                focusable="false">
+              <polygon
+                  class="mdc-select__dropdown-icon-inactive"
+                  stroke="none"
+                  fill-rule="evenodd"
+                  points="7 10 12 15 17 10">
+              </polygon>
+              <polygon
+                  class="mdc-select__dropdown-icon-active"
+                  stroke="none"
+                  fill-rule="evenodd"
+                  points="7 15 12 10 17 15">
+              </polygon>
+            </svg>
+          </span>
+          ${this.renderLineRipple()}
+        </div>
+        ${this.renderMenu()}
+      </div>
+      ${this.renderHelperText()}`;
+    }
+    renderMenu() {
+        const classes = this.getMenuClasses();
+        return x `
+      <mwc-menu
+        innerRole="listbox"
+        wrapFocus
+        class=" ${o$2(classes)}"
+        activatable
+        .fullwidth=${this.fixedMenuPosition ? false : !this.naturalMenuWidth}
+        .open=${this.menuOpen}
+        .anchor=${this.anchorElement}
+        .fixed=${this.fixedMenuPosition}
+        @selected=${this.onSelected}
+        @opened=${this.onOpened}
+        @closed=${this.onClosed}
+        @items-updated=${this.onItemsUpdated}
+        @keydown=${this.handleTypeahead}>
+      ${this.renderMenuContent()}
+    </mwc-menu>`;
+    }
+    getMenuClasses() {
+        return {
+            'mdc-select__menu': true,
+            'mdc-menu': true,
+            'mdc-menu-surface': true,
+            'mdc-select__menu--invalid': !this.isUiValid,
+        };
+    }
+    renderMenuContent() {
+        return x `<slot></slot>`;
+    }
+    renderRipple() {
+        if (this.outlined) {
+            return A;
+        }
+        return x `
+      <span class="mdc-select__ripple"></span>
+    `;
+    }
+    renderOutline() {
+        if (!this.outlined) {
+            return A;
+        }
+        return x `
+      <mwc-notched-outline
+          .width=${this.outlineWidth}
+          .open=${this.outlineOpen}
+          class="mdc-notched-outline">
+        ${this.renderLabel()}
+      </mwc-notched-outline>`;
+    }
+    renderLabel() {
+        if (!this.label) {
+            return A;
+        }
+        return x `
+      <span
+          .floatingLabelFoundation=${floatingLabel(this.label)}
+          id="label">${this.label}</span>
+    `;
+    }
+    renderLeadingIcon() {
+        if (!this.icon) {
+            return A;
+        }
+        return x `<mwc-icon class="mdc-select__icon"><div>${this.icon}</div></mwc-icon>`;
+    }
+    renderLineRipple() {
+        if (this.outlined) {
+            return A;
+        }
+        return x `
+      <span .lineRippleFoundation=${lineRipple()}></span>
+    `;
+    }
+    renderHelperText() {
+        if (!this.shouldRenderHelperText) {
+            return A;
+        }
+        const showValidationMessage = this.validationMessage && !this.isUiValid;
+        const classes = {
+            'mdc-select-helper-text--validation-msg': showValidationMessage,
+        };
+        return x `
+        <p
+          class="mdc-select-helper-text ${o$2(classes)}"
+          id="helper-text">${showValidationMessage ? this.validationMessage : this.helper}</p>`;
+    }
+    createAdapter() {
+        return Object.assign(Object.assign({}, addHasRemoveClass(this.mdcRoot)), { activateBottomLine: () => {
+                if (this.lineRippleElement) {
+                    this.lineRippleElement.lineRippleFoundation.activate();
+                }
+            }, deactivateBottomLine: () => {
+                if (this.lineRippleElement) {
+                    this.lineRippleElement.lineRippleFoundation.deactivate();
+                }
+            }, hasLabel: () => {
+                return !!this.label;
+            }, floatLabel: (shouldFloat) => {
+                if (this.labelElement) {
+                    this.labelElement.floatingLabelFoundation.float(shouldFloat);
+                }
+            }, getLabelWidth: () => {
+                if (this.labelElement) {
+                    return this.labelElement.floatingLabelFoundation.getWidth();
+                }
+                return 0;
+            }, setLabelRequired: (isRequired) => {
+                if (this.labelElement) {
+                    this.labelElement.floatingLabelFoundation.setRequired(isRequired);
+                }
+            }, hasOutline: () => this.outlined, notchOutline: (labelWidth) => {
+                const outlineElement = this.outlineElement;
+                if (outlineElement && !this.outlineOpen) {
+                    this.outlineWidth = labelWidth;
+                    this.outlineOpen = true;
+                }
+            }, closeOutline: () => {
+                if (this.outlineElement) {
+                    this.outlineOpen = false;
+                }
+            }, setRippleCenter: (normalizedX) => {
+                if (this.lineRippleElement) {
+                    const foundation = this.lineRippleElement.lineRippleFoundation;
+                    foundation.setRippleCenter(normalizedX);
+                }
+            }, notifyChange: async (value) => {
+                if (!this.valueSetDirectly && value === this.value) {
+                    return;
+                }
+                this.valueSetDirectly = false;
+                this.value = value;
+                await this.updateComplete;
+                const ev = new Event('change', { bubbles: true });
+                this.dispatchEvent(ev);
+            }, setSelectedText: (value) => this.selectedText = value, isSelectAnchorFocused: () => {
+                const selectAnchorElement = this.anchorElement;
+                if (!selectAnchorElement) {
+                    return false;
+                }
+                const rootNode = selectAnchorElement.getRootNode();
+                return rootNode.activeElement === selectAnchorElement;
+            }, getSelectAnchorAttr: (attr) => {
+                const selectAnchorElement = this.anchorElement;
+                if (!selectAnchorElement) {
+                    return null;
+                }
+                return selectAnchorElement.getAttribute(attr);
+            }, setSelectAnchorAttr: (attr, value) => {
+                const selectAnchorElement = this.anchorElement;
+                if (!selectAnchorElement) {
+                    return;
+                }
+                selectAnchorElement.setAttribute(attr, value);
+            }, removeSelectAnchorAttr: (attr) => {
+                const selectAnchorElement = this.anchorElement;
+                if (!selectAnchorElement) {
+                    return;
+                }
+                selectAnchorElement.removeAttribute(attr);
+            }, openMenu: () => {
+                this.menuOpen = true;
+            }, closeMenu: () => {
+                this.menuOpen = false;
+            }, addMenuClass: () => undefined, removeMenuClass: () => undefined, getAnchorElement: () => this.anchorElement, setMenuAnchorElement: () => {
+                /* Handled by anchor directive */
+            }, setMenuAnchorCorner: () => {
+                const menuElement = this.menuElement;
+                if (menuElement) {
+                    menuElement.corner = 'BOTTOM_START';
+                }
+            }, setMenuWrapFocus: (wrapFocus) => {
+                const menuElement = this.menuElement;
+                if (menuElement) {
+                    menuElement.wrapFocus = wrapFocus;
+                }
+            }, focusMenuItemAtIndex: (index) => {
+                const menuElement = this.menuElement;
+                if (!menuElement) {
+                    return;
+                }
+                const element = menuElement.items[index];
+                if (!element) {
+                    return;
+                }
+                element.focus();
+            }, getMenuItemCount: () => {
+                const menuElement = this.menuElement;
+                if (menuElement) {
+                    return menuElement.items.length;
+                }
+                return 0;
+            }, getMenuItemValues: () => {
+                const menuElement = this.menuElement;
+                if (!menuElement) {
+                    return [];
+                }
+                const items = menuElement.items;
+                return items.map((item) => item.value);
+            }, getMenuItemTextAtIndex: (index) => {
+                const menuElement = this.menuElement;
+                if (!menuElement) {
+                    return '';
+                }
+                const element = menuElement.items[index];
+                if (!element) {
+                    return '';
+                }
+                return element.text;
+            }, getSelectedIndex: () => this.index, setSelectedIndex: () => undefined, isTypeaheadInProgress: () => isTypingInProgress(this.typeaheadState), typeaheadMatchItem: (nextChar, startingIndex) => {
+                if (!this.menuElement) {
+                    return -1;
+                }
+                const opts = {
+                    focusItemAtIndex: (index) => {
+                        this.menuElement.focusItemAtIndex(index);
+                    },
+                    focusedItemIndex: startingIndex ?
+                        startingIndex :
+                        this.menuElement.getFocusedItemIndex(),
+                    nextChar,
+                    sortedIndexByFirstChar: this.sortedIndexByFirstChar,
+                    skipFocus: false,
+                    isItemAtIndexDisabled: (index) => this.items[index].disabled,
+                };
+                const index = matchItem(opts, this.typeaheadState);
+                if (index !== -1) {
+                    this.select(index);
+                }
+                return index;
+            } });
+    }
+    checkValidity() {
+        const isValid = this._checkValidity(this.value);
+        if (!isValid) {
+            const invalidEvent = new Event('invalid', { bubbles: false, cancelable: true });
+            this.dispatchEvent(invalidEvent);
+        }
+        return isValid;
+    }
+    reportValidity() {
+        const isValid = this.checkValidity();
+        this.isUiValid = isValid;
+        return isValid;
+    }
+    _checkValidity(value) {
+        const nativeValidity = this.formElement.validity;
+        let validity = createValidityObj$1(nativeValidity);
+        if (this.validityTransform) {
+            const customValidity = this.validityTransform(value, validity);
+            validity = Object.assign(Object.assign({}, validity), customValidity);
+        }
+        this._validity = validity;
+        return this._validity.valid;
+    }
+    setCustomValidity(message) {
+        this.validationMessage = message;
+        this.formElement.setCustomValidity(message);
+    }
+    // tslint:disable:ban-ts-ignore
+    async getUpdateComplete() {
+        await this._menuUpdateComplete;
+        // @ts-ignore
+        const result = await super.getUpdateComplete();
+        return result;
+    }
+    // tslint:enable:ban-ts-ignore
+    async firstUpdated() {
+        const menuElement = this.menuElement;
+        if (menuElement) {
+            this._menuUpdateComplete = menuElement.updateComplete;
+            await this._menuUpdateComplete;
+        }
+        super.firstUpdated();
+        this.mdcFoundation.isValid = () => true;
+        this.mdcFoundation.setValid = () => undefined;
+        this.mdcFoundation.setDisabled(this.disabled);
+        if (this.validateOnInitialRender) {
+            this.reportValidity();
+        }
+        // Select an option based on init value
+        if (!this.selected) {
+            if (!this.items.length && this.slotElement &&
+                this.slotElement.assignedNodes({ flatten: true }).length) {
+                // Shady DOM initial render fix
+                await new Promise((res) => requestAnimationFrame(res));
+                await this.layout();
+            }
+            const hasEmptyFirstOption = this.items.length && this.items[0].value === '';
+            if (!this.value && hasEmptyFirstOption) {
+                this.select(0);
+                return;
+            }
+            this.selectByValue(this.value);
+        }
+        this.sortedIndexByFirstChar = initSortedIndex(this.items.length, (index) => this.items[index].text);
+    }
+    onItemsUpdated() {
+        this.sortedIndexByFirstChar = initSortedIndex(this.items.length, (index) => this.items[index].text);
+    }
+    select(index) {
+        const menuElement = this.menuElement;
+        if (menuElement) {
+            menuElement.select(index);
+        }
+    }
+    selectByValue(value) {
+        let indexToSelect = -1;
+        for (let i = 0; i < this.items.length; i++) {
+            const item = this.items[i];
+            if (item.value === value) {
+                indexToSelect = i;
+                break;
+            }
+        }
+        this.valueSetDirectly = true;
+        this.select(indexToSelect);
+        this.mdcFoundation.handleChange();
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        for (const listener of this.listeners) {
+            listener.target.removeEventListener(listener.name, listener.cb);
+        }
+    }
+    focus() {
+        const focusEvt = new CustomEvent('focus');
+        const selectAnchorElement = this.anchorElement;
+        if (selectAnchorElement) {
+            selectAnchorElement.dispatchEvent(focusEvt);
+            selectAnchorElement.focus();
+        }
+    }
+    blur() {
+        const focusEvt = new CustomEvent('blur');
+        const selectAnchorElement = this.anchorElement;
+        if (selectAnchorElement) {
+            selectAnchorElement.dispatchEvent(focusEvt);
+            selectAnchorElement.blur();
+        }
+    }
+    onFocus() {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.handleFocus();
+        }
+    }
+    onBlur() {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.handleBlur();
+        }
+        const menuElement = this.menuElement;
+        if (menuElement && !menuElement.open) {
+            this.reportValidity();
+        }
+    }
+    onClick(evt) {
+        if (this.mdcFoundation) {
+            this.focus();
+            const targetClientRect = evt.target.getBoundingClientRect();
+            let xCoord = 0;
+            if ('touches' in evt) {
+                xCoord = evt.touches[0].clientX;
+            }
+            else {
+                xCoord = evt.clientX;
+            }
+            const normalizedX = xCoord - targetClientRect.left;
+            this.mdcFoundation.handleClick(normalizedX);
+        }
+    }
+    onKeydown(evt) {
+        const arrowUp = normalizeKey(evt) === KEY.ARROW_UP;
+        const arrowDown = normalizeKey(evt) === KEY.ARROW_DOWN;
+        if (arrowDown || arrowUp) {
+            const shouldSelectNextItem = arrowUp && this.index > 0;
+            const shouldSelectPrevItem = arrowDown && this.index < this.items.length - 1;
+            if (shouldSelectNextItem) {
+                this.select(this.index - 1);
+            }
+            else if (shouldSelectPrevItem) {
+                this.select(this.index + 1);
+            }
+            evt.preventDefault();
+            this.mdcFoundation.openMenu();
+            return;
+        }
+        this.mdcFoundation.handleKeydown(evt);
+    }
+    // must capture to run before list foundation captures event
+    handleTypeahead(event) {
+        if (!this.menuElement) {
+            return;
+        }
+        const focusedItemIndex = this.menuElement.getFocusedItemIndex();
+        const target = isNodeElement(event.target) ?
+            event.target :
+            null;
+        const isTargetListItem = target ? target.hasAttribute('mwc-list-item') : false;
+        const opts = {
+            event,
+            focusItemAtIndex: (index) => {
+                this.menuElement.focusItemAtIndex(index);
+            },
+            focusedItemIndex,
+            isTargetListItem,
+            sortedIndexByFirstChar: this.sortedIndexByFirstChar,
+            isItemAtIndexDisabled: (index) => this.items[index].disabled,
+        };
+        handleKeydown(opts, this.typeaheadState);
+    }
+    async onSelected(event) {
+        if (!this.mdcFoundation) {
+            await this.updateComplete;
+        }
+        this.mdcFoundation.handleMenuItemAction(event.detail.index);
+        const item = this.items[event.detail.index];
+        if (item) {
+            this.value = item.value;
+        }
+    }
+    onOpened() {
+        if (this.mdcFoundation) {
+            this.menuOpen = true;
+            this.mdcFoundation.handleMenuOpened();
+        }
+    }
+    onClosed() {
+        if (this.mdcFoundation) {
+            this.menuOpen = false;
+            this.mdcFoundation.handleMenuClosed();
+        }
+    }
+    setFormData(formData) {
+        if (this.name && this.selected !== null) {
+            formData.append(this.name, this.value);
+        }
+    }
+    async layout(updateItems = true) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.layout();
+        }
+        await this.updateComplete;
+        const menuElement = this.menuElement;
+        if (menuElement) {
+            menuElement.layout(updateItems);
+        }
+        const labelElement = this.labelElement;
+        if (!labelElement) {
+            this.outlineOpen = false;
+            return;
+        }
+        const shouldFloat = !!this.label && !!this.value;
+        labelElement.floatingLabelFoundation.float(shouldFloat);
+        if (!this.outlined) {
+            return;
+        }
+        this.outlineOpen = shouldFloat;
+        await this.updateComplete;
+        /* When the textfield automatically notches due to a value and label
+         * being defined, the textfield may be set to `display: none` by the user.
+         * this means that the notch is of size 0px. We provide this function so
+         * that the user may manually resize the notch to the floated label's
+         * width.
+         */
+        const labelWidth = labelElement.floatingLabelFoundation.getWidth();
+        if (this.outlineOpen) {
+            this.outlineWidth = labelWidth;
+        }
+    }
+    async layoutOptions() {
+        if (!this.mdcFoundation) {
+            return;
+        }
+        this.mdcFoundation.layoutOptions();
+    }
+}
+__decorate([
+    i$2('.mdc-select')
+], SelectBase.prototype, "mdcRoot", void 0);
+__decorate([
+    i$2('.formElement')
+], SelectBase.prototype, "formElement", void 0);
+__decorate([
+    i$2('slot')
+], SelectBase.prototype, "slotElement", void 0);
+__decorate([
+    i$2('select')
+], SelectBase.prototype, "nativeSelectElement", void 0);
+__decorate([
+    i$2('input')
+], SelectBase.prototype, "nativeInputElement", void 0);
+__decorate([
+    i$2('.mdc-line-ripple')
+], SelectBase.prototype, "lineRippleElement", void 0);
+__decorate([
+    i$2('.mdc-floating-label')
+], SelectBase.prototype, "labelElement", void 0);
+__decorate([
+    i$2('mwc-notched-outline')
+], SelectBase.prototype, "outlineElement", void 0);
+__decorate([
+    i$2('.mdc-menu')
+], SelectBase.prototype, "menuElement", void 0);
+__decorate([
+    i$2('.mdc-select__anchor')
+], SelectBase.prototype, "anchorElement", void 0);
+__decorate([
+    n$4({ type: Boolean, attribute: 'disabled', reflect: true }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            this.mdcFoundation.setDisabled(value);
+        }
+    })
+], SelectBase.prototype, "disabled", void 0);
+__decorate([
+    n$4({ type: Boolean }),
+    observer(function (_newVal, oldVal) {
+        if (oldVal !== undefined && this.outlined !== oldVal) {
+            this.layout(false);
+        }
+    })
+], SelectBase.prototype, "outlined", void 0);
+__decorate([
+    n$4({ type: String }),
+    observer(function (_newVal, oldVal) {
+        if (oldVal !== undefined && this.label !== oldVal) {
+            this.layout(false);
+        }
+    })
+], SelectBase.prototype, "label", void 0);
+__decorate([
+    t$1()
+], SelectBase.prototype, "outlineOpen", void 0);
+__decorate([
+    t$1()
+], SelectBase.prototype, "outlineWidth", void 0);
+__decorate([
+    n$4({ type: String }),
+    observer(function (value) {
+        if (this.mdcFoundation) {
+            const initialization = this.selected === null && !!value;
+            const valueSetByUser = this.selected && this.selected.value !== value;
+            if (initialization || valueSetByUser) {
+                this.selectByValue(value);
+            }
+            this.reportValidity();
+        }
+    })
+], SelectBase.prototype, "value", void 0);
+__decorate([
+    n$4()
+], SelectBase.prototype, "name", void 0);
+__decorate([
+    t$1()
+], SelectBase.prototype, "selectedText", void 0);
+__decorate([
+    n$4({ type: String })
+], SelectBase.prototype, "icon", void 0);
+__decorate([
+    t$1()
+], SelectBase.prototype, "menuOpen", void 0);
+__decorate([
+    n$4({ type: String })
+], SelectBase.prototype, "helper", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], SelectBase.prototype, "validateOnInitialRender", void 0);
+__decorate([
+    n$4({ type: String })
+], SelectBase.prototype, "validationMessage", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], SelectBase.prototype, "required", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], SelectBase.prototype, "naturalMenuWidth", void 0);
+__decorate([
+    t$1()
+], SelectBase.prototype, "isUiValid", void 0);
+__decorate([
+    n$4({ type: Boolean })
+], SelectBase.prototype, "fixedMenuPosition", void 0);
+__decorate([
+    e$4({ capture: true })
+], SelectBase.prototype, "handleTypeahead", null);
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-LIcense-Identifier: Apache-2.0
+ */
+const styles$1 = i$5 `.mdc-floating-label{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-subtitle1-font-size, 1rem);font-weight:400;font-weight:var(--mdc-typography-subtitle1-font-weight, 400);letter-spacing:0.009375em;letter-spacing:var(--mdc-typography-subtitle1-letter-spacing, 0.009375em);text-decoration:inherit;text-decoration:var(--mdc-typography-subtitle1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-subtitle1-text-transform, inherit);position:absolute;left:0;-webkit-transform-origin:left top;transform-origin:left top;line-height:1.15rem;text-align:left;text-overflow:ellipsis;white-space:nowrap;cursor:text;overflow:hidden;will-change:transform;transition:transform 150ms cubic-bezier(0.4, 0, 0.2, 1),color 150ms cubic-bezier(0.4, 0, 0.2, 1)}[dir=rtl] .mdc-floating-label,.mdc-floating-label[dir=rtl]{right:0;left:auto;-webkit-transform-origin:right top;transform-origin:right top;text-align:right}.mdc-floating-label--float-above{cursor:auto}.mdc-floating-label--required::after{margin-left:1px;margin-right:0px;content:"*"}[dir=rtl] .mdc-floating-label--required::after,.mdc-floating-label--required[dir=rtl]::after{margin-left:0;margin-right:1px}.mdc-floating-label--float-above{transform:translateY(-106%) scale(0.75)}.mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-standard 250ms 1}@keyframes mdc-floating-label-shake-float-above-standard{0%{transform:translateX(calc(0 - 0%)) translateY(-106%) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(-106%) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(-106%) scale(0.75)}100%{transform:translateX(calc(0 - 0%)) translateY(-106%) scale(0.75)}}@keyframes mdc-ripple-fg-radius-in{from{animation-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transform:translate(var(--mdc-ripple-fg-translate-start, 0)) scale(1)}to{transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}}@keyframes mdc-ripple-fg-opacity-in{from{animation-timing-function:linear;opacity:0}to{opacity:var(--mdc-ripple-fg-opacity, 0)}}@keyframes mdc-ripple-fg-opacity-out{from{animation-timing-function:linear;opacity:var(--mdc-ripple-fg-opacity, 0)}to{opacity:0}}.mdc-line-ripple::before,.mdc-line-ripple::after{position:absolute;bottom:0;left:0;width:100%;border-bottom-style:solid;content:""}.mdc-line-ripple::before{border-bottom-width:1px}.mdc-line-ripple::before{z-index:1}.mdc-line-ripple::after{transform:scaleX(0);border-bottom-width:2px;opacity:0;z-index:2}.mdc-line-ripple::after{transition:transform 180ms cubic-bezier(0.4, 0, 0.2, 1),opacity 180ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-line-ripple--active::after{transform:scaleX(1);opacity:1}.mdc-line-ripple--deactivating::after{opacity:0}.mdc-notched-outline{display:flex;position:absolute;top:0;right:0;left:0;box-sizing:border-box;width:100%;max-width:100%;height:100%;text-align:left;pointer-events:none}[dir=rtl] .mdc-notched-outline,.mdc-notched-outline[dir=rtl]{text-align:right}.mdc-notched-outline__leading,.mdc-notched-outline__notch,.mdc-notched-outline__trailing{box-sizing:border-box;height:100%;border-top:1px solid;border-bottom:1px solid;pointer-events:none}.mdc-notched-outline__leading{border-left:1px solid;border-right:none;width:12px}[dir=rtl] .mdc-notched-outline__leading,.mdc-notched-outline__leading[dir=rtl]{border-left:none;border-right:1px solid}.mdc-notched-outline__trailing{border-left:none;border-right:1px solid;flex-grow:1}[dir=rtl] .mdc-notched-outline__trailing,.mdc-notched-outline__trailing[dir=rtl]{border-left:1px solid;border-right:none}.mdc-notched-outline__notch{flex:0 0 auto;width:auto;max-width:calc(100% - 12px * 2)}.mdc-notched-outline .mdc-floating-label{display:inline-block;position:relative;max-width:100%}.mdc-notched-outline .mdc-floating-label--float-above{text-overflow:clip}.mdc-notched-outline--upgraded .mdc-floating-label--float-above{max-width:calc(100% / 0.75)}.mdc-notched-outline--notched .mdc-notched-outline__notch{padding-left:0;padding-right:8px;border-top:none}[dir=rtl] .mdc-notched-outline--notched .mdc-notched-outline__notch,.mdc-notched-outline--notched .mdc-notched-outline__notch[dir=rtl]{padding-left:8px;padding-right:0}.mdc-notched-outline--no-label .mdc-notched-outline__notch{display:none}.mdc-select{display:inline-flex;position:relative}.mdc-select:not(.mdc-select--disabled) .mdc-select__selected-text{color:rgba(0, 0, 0, 0.87)}.mdc-select.mdc-select--disabled .mdc-select__selected-text{color:rgba(0, 0, 0, 0.38)}.mdc-select:not(.mdc-select--disabled) .mdc-floating-label{color:rgba(0, 0, 0, 0.6)}.mdc-select:not(.mdc-select--disabled).mdc-select--focused .mdc-floating-label{color:rgba(98, 0, 238, 0.87)}.mdc-select.mdc-select--disabled .mdc-floating-label{color:rgba(0, 0, 0, 0.38)}.mdc-select:not(.mdc-select--disabled) .mdc-select__dropdown-icon{fill:rgba(0, 0, 0, 0.54)}.mdc-select:not(.mdc-select--disabled).mdc-select--focused .mdc-select__dropdown-icon{fill:#6200ee;fill:var(--mdc-theme-primary, #6200ee)}.mdc-select.mdc-select--disabled .mdc-select__dropdown-icon{fill:rgba(0, 0, 0, 0.38)}.mdc-select:not(.mdc-select--disabled)+.mdc-select-helper-text{color:rgba(0, 0, 0, 0.6)}.mdc-select.mdc-select--disabled+.mdc-select-helper-text{color:rgba(0, 0, 0, 0.38)}.mdc-select:not(.mdc-select--disabled) .mdc-select__icon{color:rgba(0, 0, 0, 0.54)}.mdc-select.mdc-select--disabled .mdc-select__icon{color:rgba(0, 0, 0, 0.38)}@media screen and (forced-colors: active),(-ms-high-contrast: active){.mdc-select.mdc-select--disabled .mdc-select__selected-text{color:GrayText}.mdc-select.mdc-select--disabled .mdc-select__dropdown-icon{fill:red}.mdc-select.mdc-select--disabled .mdc-floating-label{color:GrayText}.mdc-select.mdc-select--disabled .mdc-line-ripple::before{border-bottom-color:GrayText}.mdc-select.mdc-select--disabled .mdc-notched-outline__leading,.mdc-select.mdc-select--disabled .mdc-notched-outline__notch,.mdc-select.mdc-select--disabled .mdc-notched-outline__trailing{border-color:GrayText}.mdc-select.mdc-select--disabled .mdc-select__icon{color:GrayText}.mdc-select.mdc-select--disabled+.mdc-select-helper-text{color:GrayText}}.mdc-select .mdc-floating-label{top:50%;transform:translateY(-50%);pointer-events:none}.mdc-select .mdc-select__anchor{padding-left:16px;padding-right:0}[dir=rtl] .mdc-select .mdc-select__anchor,.mdc-select .mdc-select__anchor[dir=rtl]{padding-left:0;padding-right:16px}.mdc-select.mdc-select--with-leading-icon .mdc-select__anchor{padding-left:0;padding-right:0}[dir=rtl] .mdc-select.mdc-select--with-leading-icon .mdc-select__anchor,.mdc-select.mdc-select--with-leading-icon .mdc-select__anchor[dir=rtl]{padding-left:0;padding-right:0}.mdc-select .mdc-select__icon{width:24px;height:24px;font-size:24px}.mdc-select .mdc-select__dropdown-icon{width:24px;height:24px}.mdc-select .mdc-select__menu .mdc-deprecated-list-item{padding-left:16px;padding-right:16px}[dir=rtl] .mdc-select .mdc-select__menu .mdc-deprecated-list-item,.mdc-select .mdc-select__menu .mdc-deprecated-list-item[dir=rtl]{padding-left:16px;padding-right:16px}.mdc-select .mdc-select__menu .mdc-deprecated-list-item__graphic{margin-left:0;margin-right:12px}[dir=rtl] .mdc-select .mdc-select__menu .mdc-deprecated-list-item__graphic,.mdc-select .mdc-select__menu .mdc-deprecated-list-item__graphic[dir=rtl]{margin-left:12px;margin-right:0}.mdc-select__dropdown-icon{margin-left:12px;margin-right:12px;display:inline-flex;position:relative;align-self:center;align-items:center;justify-content:center;flex-shrink:0;pointer-events:none}.mdc-select__dropdown-icon .mdc-select__dropdown-icon-active,.mdc-select__dropdown-icon .mdc-select__dropdown-icon-inactive{position:absolute;top:0;left:0}.mdc-select__dropdown-icon .mdc-select__dropdown-icon-graphic{width:41.6666666667%;height:20.8333333333%}.mdc-select__dropdown-icon .mdc-select__dropdown-icon-inactive{opacity:1;transition:opacity 75ms linear 75ms}.mdc-select__dropdown-icon .mdc-select__dropdown-icon-active{opacity:0;transition:opacity 75ms linear}[dir=rtl] .mdc-select__dropdown-icon,.mdc-select__dropdown-icon[dir=rtl]{margin-left:12px;margin-right:12px}.mdc-select--activated .mdc-select__dropdown-icon .mdc-select__dropdown-icon-inactive{opacity:0;transition:opacity 49.5ms linear}.mdc-select--activated .mdc-select__dropdown-icon .mdc-select__dropdown-icon-active{opacity:1;transition:opacity 100.5ms linear 49.5ms}.mdc-select__anchor{width:200px;min-width:0;flex:1 1 auto;position:relative;box-sizing:border-box;overflow:hidden;outline:none;cursor:pointer}.mdc-select__anchor .mdc-floating-label--float-above{transform:translateY(-106%) scale(0.75)}.mdc-select__selected-text-container{display:flex;appearance:none;pointer-events:none;box-sizing:border-box;width:auto;min-width:0;flex-grow:1;height:28px;border:none;outline:none;padding:0;background-color:transparent;color:inherit}.mdc-select__selected-text{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-subtitle1-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:1rem;font-size:var(--mdc-typography-subtitle1-font-size, 1rem);line-height:1.75rem;line-height:var(--mdc-typography-subtitle1-line-height, 1.75rem);font-weight:400;font-weight:var(--mdc-typography-subtitle1-font-weight, 400);letter-spacing:0.009375em;letter-spacing:var(--mdc-typography-subtitle1-letter-spacing, 0.009375em);text-decoration:inherit;text-decoration:var(--mdc-typography-subtitle1-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-subtitle1-text-transform, inherit);text-overflow:ellipsis;white-space:nowrap;overflow:hidden;display:block;width:100%;text-align:left}[dir=rtl] .mdc-select__selected-text,.mdc-select__selected-text[dir=rtl]{text-align:right}.mdc-select--invalid:not(.mdc-select--disabled) .mdc-floating-label{color:#b00020;color:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-floating-label{color:#b00020;color:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--invalid+.mdc-select-helper-text--validation-msg{color:#b00020;color:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled) .mdc-select__dropdown-icon{fill:#b00020;fill:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-select__dropdown-icon{fill:#b00020;fill:var(--mdc-theme-error, #b00020)}.mdc-select--disabled{cursor:default;pointer-events:none}.mdc-select--with-leading-icon .mdc-select__menu .mdc-deprecated-list-item{padding-left:12px;padding-right:12px}[dir=rtl] .mdc-select--with-leading-icon .mdc-select__menu .mdc-deprecated-list-item,.mdc-select--with-leading-icon .mdc-select__menu .mdc-deprecated-list-item[dir=rtl]{padding-left:12px;padding-right:12px}@media screen and (forced-colors: active),(-ms-high-contrast: active){.mdc-select__menu::before{position:absolute;box-sizing:border-box;width:100%;height:100%;top:0;left:0;border:1px solid transparent;border-radius:inherit;content:"";pointer-events:none}}@media screen and (forced-colors: active)and (forced-colors: active),screen and (-ms-high-contrast: active)and (forced-colors: active){.mdc-select__menu::before{border-color:CanvasText}}.mdc-select__menu .mdc-deprecated-list .mdc-select__icon,.mdc-select__menu .mdc-list .mdc-select__icon{margin-left:0;margin-right:0}[dir=rtl] .mdc-select__menu .mdc-deprecated-list .mdc-select__icon,[dir=rtl] .mdc-select__menu .mdc-list .mdc-select__icon,.mdc-select__menu .mdc-deprecated-list .mdc-select__icon[dir=rtl],.mdc-select__menu .mdc-list .mdc-select__icon[dir=rtl]{margin-left:0;margin-right:0}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--activated,.mdc-select__menu .mdc-list .mdc-deprecated-list-item--selected,.mdc-select__menu .mdc-list .mdc-deprecated-list-item--activated{color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected .mdc-deprecated-list-item__graphic,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--activated .mdc-deprecated-list-item__graphic,.mdc-select__menu .mdc-list .mdc-deprecated-list-item--selected .mdc-deprecated-list-item__graphic,.mdc-select__menu .mdc-list .mdc-deprecated-list-item--activated .mdc-deprecated-list-item__graphic{color:#000;color:var(--mdc-theme-on-surface, #000)}.mdc-select__menu .mdc-list-item__start{display:inline-flex;align-items:center}.mdc-select__option{padding-left:16px;padding-right:16px}[dir=rtl] .mdc-select__option,.mdc-select__option[dir=rtl]{padding-left:16px;padding-right:16px}.mdc-select__one-line-option.mdc-list-item--with-one-line{height:48px}.mdc-select__two-line-option.mdc-list-item--with-two-lines{height:64px}.mdc-select__two-line-option.mdc-list-item--with-two-lines .mdc-list-item__start{margin-top:20px}.mdc-select__two-line-option.mdc-list-item--with-two-lines .mdc-list-item__primary-text{display:block;margin-top:0;line-height:normal;margin-bottom:-20px}.mdc-select__two-line-option.mdc-list-item--with-two-lines .mdc-list-item__primary-text::before{display:inline-block;width:0;height:28px;content:"";vertical-align:0}.mdc-select__two-line-option.mdc-list-item--with-two-lines .mdc-list-item__primary-text::after{display:inline-block;width:0;height:20px;content:"";vertical-align:-20px}.mdc-select__two-line-option.mdc-list-item--with-two-lines.mdc-list-item--with-trailing-meta .mdc-list-item__end{display:block;margin-top:0;line-height:normal}.mdc-select__two-line-option.mdc-list-item--with-two-lines.mdc-list-item--with-trailing-meta .mdc-list-item__end::before{display:inline-block;width:0;height:36px;content:"";vertical-align:0}.mdc-select__option-with-leading-content{padding-left:0;padding-right:12px}.mdc-select__option-with-leading-content.mdc-list-item{padding-left:0;padding-right:auto}[dir=rtl] .mdc-select__option-with-leading-content.mdc-list-item,.mdc-select__option-with-leading-content.mdc-list-item[dir=rtl]{padding-left:auto;padding-right:0}.mdc-select__option-with-leading-content .mdc-list-item__start{margin-left:12px;margin-right:0}[dir=rtl] .mdc-select__option-with-leading-content .mdc-list-item__start,.mdc-select__option-with-leading-content .mdc-list-item__start[dir=rtl]{margin-left:0;margin-right:12px}.mdc-select__option-with-leading-content .mdc-list-item__start{width:36px;height:24px}[dir=rtl] .mdc-select__option-with-leading-content,.mdc-select__option-with-leading-content[dir=rtl]{padding-left:12px;padding-right:0}.mdc-select__option-with-meta.mdc-list-item{padding-left:auto;padding-right:0}[dir=rtl] .mdc-select__option-with-meta.mdc-list-item,.mdc-select__option-with-meta.mdc-list-item[dir=rtl]{padding-left:0;padding-right:auto}.mdc-select__option-with-meta .mdc-list-item__end{margin-left:12px;margin-right:12px}[dir=rtl] .mdc-select__option-with-meta .mdc-list-item__end,.mdc-select__option-with-meta .mdc-list-item__end[dir=rtl]{margin-left:12px;margin-right:12px}.mdc-select--filled .mdc-select__anchor{height:56px;display:flex;align-items:baseline}.mdc-select--filled .mdc-select__anchor::before{display:inline-block;width:0;height:40px;content:"";vertical-align:0}.mdc-select--filled.mdc-select--no-label .mdc-select__anchor .mdc-select__selected-text::before{content:"​"}.mdc-select--filled.mdc-select--no-label .mdc-select__anchor .mdc-select__selected-text-container{height:100%;display:inline-flex;align-items:center}.mdc-select--filled.mdc-select--no-label .mdc-select__anchor::before{display:none}.mdc-select--filled .mdc-select__anchor{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:0;border-bottom-left-radius:0}.mdc-select--filled:not(.mdc-select--disabled) .mdc-select__anchor{background-color:whitesmoke}.mdc-select--filled.mdc-select--disabled .mdc-select__anchor{background-color:#fafafa}.mdc-select--filled:not(.mdc-select--disabled) .mdc-line-ripple::before{border-bottom-color:rgba(0, 0, 0, 0.42)}.mdc-select--filled:not(.mdc-select--disabled):hover .mdc-line-ripple::before{border-bottom-color:rgba(0, 0, 0, 0.87)}.mdc-select--filled:not(.mdc-select--disabled) .mdc-line-ripple::after{border-bottom-color:#6200ee;border-bottom-color:var(--mdc-theme-primary, #6200ee)}.mdc-select--filled.mdc-select--disabled .mdc-line-ripple::before{border-bottom-color:rgba(0, 0, 0, 0.06)}.mdc-select--filled .mdc-floating-label{max-width:calc(100% - 64px)}.mdc-select--filled .mdc-floating-label--float-above{max-width:calc(100% / 0.75 - 64px / 0.75)}.mdc-select--filled .mdc-menu-surface--is-open-below{border-top-left-radius:0px;border-top-right-radius:0px}.mdc-select--filled.mdc-select--focused.mdc-line-ripple::after{transform:scale(1, 2);opacity:1}.mdc-select--filled .mdc-floating-label{left:16px;right:initial}[dir=rtl] .mdc-select--filled .mdc-floating-label,.mdc-select--filled .mdc-floating-label[dir=rtl]{left:initial;right:16px}.mdc-select--filled.mdc-select--with-leading-icon .mdc-floating-label{left:48px;right:initial}[dir=rtl] .mdc-select--filled.mdc-select--with-leading-icon .mdc-floating-label,.mdc-select--filled.mdc-select--with-leading-icon .mdc-floating-label[dir=rtl]{left:initial;right:48px}.mdc-select--filled.mdc-select--with-leading-icon .mdc-floating-label{max-width:calc(100% - 96px)}.mdc-select--filled.mdc-select--with-leading-icon .mdc-floating-label--float-above{max-width:calc(100% / 0.75 - 96px / 0.75)}.mdc-select--invalid:not(.mdc-select--disabled) .mdc-line-ripple::before{border-bottom-color:#b00020;border-bottom-color:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled):hover .mdc-line-ripple::before{border-bottom-color:#b00020;border-bottom-color:var(--mdc-theme-error, #b00020)}.mdc-select--invalid:not(.mdc-select--disabled) .mdc-line-ripple::after{border-bottom-color:#b00020;border-bottom-color:var(--mdc-theme-error, #b00020)}.mdc-select--outlined{border:none}.mdc-select--outlined .mdc-select__anchor{height:56px}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--float-above{transform:translateY(-37.25px) scale(1)}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--float-above{font-size:.75rem}.mdc-select--outlined .mdc-select__anchor.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined .mdc-select__anchor .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-34.75px) scale(0.75)}.mdc-select--outlined .mdc-select__anchor.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined .mdc-select__anchor .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-select-outlined-56px 250ms 1}@keyframes mdc-floating-label-shake-float-above-select-outlined-56px{0%{transform:translateX(calc(0 - 0%)) translateY(-34.75px) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 0%)) translateY(-34.75px) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 0%)) translateY(-34.75px) scale(0.75)}100%{transform:translateX(calc(0 - 0%)) translateY(-34.75px) scale(0.75)}}.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__leading{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}[dir=rtl] .mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__leading[dir=rtl]{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}@supports(top: max(0%)){.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__leading{width:max(12px, var(--mdc-shape-small, 4px))}}@supports(top: max(0%)){.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__notch{max-width:calc(100% - max(12px, var(--mdc-shape-small, 4px)) * 2)}}.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__trailing{border-top-left-radius:0;border-top-right-radius:4px;border-top-right-radius:var(--mdc-shape-small, 4px);border-bottom-right-radius:4px;border-bottom-right-radius:var(--mdc-shape-small, 4px);border-bottom-left-radius:0}[dir=rtl] .mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__trailing,.mdc-select--outlined .mdc-notched-outline .mdc-notched-outline__trailing[dir=rtl]{border-top-left-radius:4px;border-top-left-radius:var(--mdc-shape-small, 4px);border-top-right-radius:0;border-bottom-right-radius:0;border-bottom-left-radius:4px;border-bottom-left-radius:var(--mdc-shape-small, 4px)}@supports(top: max(0%)){.mdc-select--outlined .mdc-select__anchor{padding-left:max(16px, calc(var(--mdc-shape-small, 4px) + 4px))}}[dir=rtl] .mdc-select--outlined .mdc-select__anchor,.mdc-select--outlined .mdc-select__anchor[dir=rtl]{padding-left:0}@supports(top: max(0%)){[dir=rtl] .mdc-select--outlined .mdc-select__anchor,.mdc-select--outlined .mdc-select__anchor[dir=rtl]{padding-right:max(16px, calc(var(--mdc-shape-small, 4px) + 4px))}}@supports(top: max(0%)){.mdc-select--outlined+.mdc-select-helper-text{margin-left:max(16px, calc(var(--mdc-shape-small, 4px) + 4px))}}[dir=rtl] .mdc-select--outlined+.mdc-select-helper-text,.mdc-select--outlined+.mdc-select-helper-text[dir=rtl]{margin-left:0}@supports(top: max(0%)){[dir=rtl] .mdc-select--outlined+.mdc-select-helper-text,.mdc-select--outlined+.mdc-select-helper-text[dir=rtl]{margin-right:max(16px, calc(var(--mdc-shape-small, 4px) + 4px))}}.mdc-select--outlined:not(.mdc-select--disabled) .mdc-select__anchor{background-color:transparent}.mdc-select--outlined.mdc-select--disabled .mdc-select__anchor{background-color:transparent}.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__leading,.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__notch,.mdc-select--outlined:not(.mdc-select--disabled) .mdc-notched-outline__trailing{border-color:rgba(0, 0, 0, 0.38)}.mdc-select--outlined:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__trailing{border-color:rgba(0, 0, 0, 0.87)}.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__trailing{border-width:2px}.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__trailing{border-color:#6200ee;border-color:var(--mdc-theme-primary, #6200ee)}.mdc-select--outlined.mdc-select--disabled .mdc-notched-outline__leading,.mdc-select--outlined.mdc-select--disabled .mdc-notched-outline__notch,.mdc-select--outlined.mdc-select--disabled .mdc-notched-outline__trailing{border-color:rgba(0, 0, 0, 0.06)}.mdc-select--outlined .mdc-select__anchor :not(.mdc-notched-outline--notched) .mdc-notched-outline__notch{max-width:calc(100% - 60px)}.mdc-select--outlined .mdc-select__anchor{display:flex;align-items:baseline;overflow:visible}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-select-outlined 250ms 1}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--float-above{transform:translateY(-37.25px) scale(1)}.mdc-select--outlined .mdc-select__anchor .mdc-floating-label--float-above{font-size:.75rem}.mdc-select--outlined .mdc-select__anchor.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined .mdc-select__anchor .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-34.75px) scale(0.75)}.mdc-select--outlined .mdc-select__anchor.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined .mdc-select__anchor .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-select--outlined .mdc-select__anchor .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:1px}.mdc-select--outlined .mdc-select__anchor .mdc-select__selected-text::before{content:"​"}.mdc-select--outlined .mdc-select__anchor .mdc-select__selected-text-container{height:100%;display:inline-flex;align-items:center}.mdc-select--outlined .mdc-select__anchor::before{display:none}.mdc-select--outlined .mdc-select__selected-text-container{display:flex;border:none;z-index:1;background-color:transparent}.mdc-select--outlined .mdc-select__icon{z-index:2}.mdc-select--outlined .mdc-floating-label{line-height:1.15rem;left:4px;right:initial}[dir=rtl] .mdc-select--outlined .mdc-floating-label,.mdc-select--outlined .mdc-floating-label[dir=rtl]{left:initial;right:4px}.mdc-select--outlined.mdc-select--focused .mdc-notched-outline--notched .mdc-notched-outline__notch{padding-top:2px}.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled) .mdc-notched-outline__leading,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled) .mdc-notched-outline__notch,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled) .mdc-notched-outline__trailing{border-color:#b00020;border-color:var(--mdc-theme-error, #b00020)}.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled):not(.mdc-select--focused) .mdc-select__anchor:hover .mdc-notched-outline .mdc-notched-outline__trailing{border-color:#b00020;border-color:var(--mdc-theme-error, #b00020)}.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__trailing{border-width:2px}.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__leading,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__notch,.mdc-select--outlined.mdc-select--invalid:not(.mdc-select--disabled).mdc-select--focused .mdc-notched-outline .mdc-notched-outline__trailing{border-color:#b00020;border-color:var(--mdc-theme-error, #b00020)}.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label{left:36px;right:initial}[dir=rtl] .mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label,.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label[dir=rtl]{left:initial;right:36px}.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--float-above{transform:translateY(-37.25px) translateX(-32px) scale(1)}[dir=rtl] .mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--float-above,.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--float-above[dir=rtl]{transform:translateY(-37.25px) translateX(32px) scale(1)}.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--float-above{font-size:.75rem}.mdc-select--outlined.mdc-select--with-leading-icon.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined.mdc-select--with-leading-icon .mdc-notched-outline--upgraded .mdc-floating-label--float-above{transform:translateY(-34.75px) translateX(-32px) scale(0.75)}[dir=rtl] .mdc-select--outlined.mdc-select--with-leading-icon.mdc-notched-outline--upgraded .mdc-floating-label--float-above,[dir=rtl] .mdc-select--outlined.mdc-select--with-leading-icon .mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined.mdc-select--with-leading-icon.mdc-notched-outline--upgraded .mdc-floating-label--float-above[dir=rtl],.mdc-select--outlined.mdc-select--with-leading-icon .mdc-notched-outline--upgraded .mdc-floating-label--float-above[dir=rtl]{transform:translateY(-34.75px) translateX(32px) scale(0.75)}.mdc-select--outlined.mdc-select--with-leading-icon.mdc-notched-outline--upgraded .mdc-floating-label--float-above,.mdc-select--outlined.mdc-select--with-leading-icon .mdc-notched-outline--upgraded .mdc-floating-label--float-above{font-size:1rem}.mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-select-outlined-leading-icon-56px 250ms 1}@keyframes mdc-floating-label-shake-float-above-select-outlined-leading-icon-56px{0%{transform:translateX(calc(0 - 32px)) translateY(-34.75px) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - 32px)) translateY(-34.75px) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - 32px)) translateY(-34.75px) scale(0.75)}100%{transform:translateX(calc(0 - 32px)) translateY(-34.75px) scale(0.75)}}[dir=rtl] .mdc-select--outlined.mdc-select--with-leading-icon .mdc-floating-label--shake,.mdc-select--outlined.mdc-select--with-leading-icon[dir=rtl] .mdc-floating-label--shake{animation:mdc-floating-label-shake-float-above-select-outlined-leading-icon-56px 250ms 1}@keyframes mdc-floating-label-shake-float-above-select-outlined-leading-icon-56px-rtl{0%{transform:translateX(calc(0 - -32px)) translateY(-34.75px) scale(0.75)}33%{animation-timing-function:cubic-bezier(0.5, 0, 0.701732, 0.495819);transform:translateX(calc(4% - -32px)) translateY(-34.75px) scale(0.75)}66%{animation-timing-function:cubic-bezier(0.302435, 0.381352, 0.55, 0.956352);transform:translateX(calc(-4% - -32px)) translateY(-34.75px) scale(0.75)}100%{transform:translateX(calc(0 - -32px)) translateY(-34.75px) scale(0.75)}}.mdc-select--outlined.mdc-select--with-leading-icon .mdc-select__anchor :not(.mdc-notched-outline--notched) .mdc-notched-outline__notch{max-width:calc(100% - 96px)}.mdc-select--outlined .mdc-menu-surface{margin-bottom:8px}.mdc-select--outlined.mdc-select--no-label .mdc-menu-surface,.mdc-select--outlined .mdc-menu-surface--is-open-below{margin-bottom:0}.mdc-select__anchor{--mdc-ripple-fg-size: 0;--mdc-ripple-left: 0;--mdc-ripple-top: 0;--mdc-ripple-fg-scale: 1;--mdc-ripple-fg-translate-end: 0;--mdc-ripple-fg-translate-start: 0;-webkit-tap-highlight-color:rgba(0,0,0,0);will-change:transform,opacity}.mdc-select__anchor .mdc-select__ripple::before,.mdc-select__anchor .mdc-select__ripple::after{position:absolute;border-radius:50%;opacity:0;pointer-events:none;content:""}.mdc-select__anchor .mdc-select__ripple::before{transition:opacity 15ms linear,background-color 15ms linear;z-index:1;z-index:var(--mdc-ripple-z-index, 1)}.mdc-select__anchor .mdc-select__ripple::after{z-index:0;z-index:var(--mdc-ripple-z-index, 0)}.mdc-select__anchor.mdc-ripple-upgraded .mdc-select__ripple::before{transform:scale(var(--mdc-ripple-fg-scale, 1))}.mdc-select__anchor.mdc-ripple-upgraded .mdc-select__ripple::after{top:0;left:0;transform:scale(0);transform-origin:center center}.mdc-select__anchor.mdc-ripple-upgraded--unbounded .mdc-select__ripple::after{top:var(--mdc-ripple-top, 0);left:var(--mdc-ripple-left, 0)}.mdc-select__anchor.mdc-ripple-upgraded--foreground-activation .mdc-select__ripple::after{animation:mdc-ripple-fg-radius-in 225ms forwards,mdc-ripple-fg-opacity-in 75ms forwards}.mdc-select__anchor.mdc-ripple-upgraded--foreground-deactivation .mdc-select__ripple::after{animation:mdc-ripple-fg-opacity-out 150ms;transform:translate(var(--mdc-ripple-fg-translate-end, 0)) scale(var(--mdc-ripple-fg-scale, 1))}.mdc-select__anchor .mdc-select__ripple::before,.mdc-select__anchor .mdc-select__ripple::after{top:calc(50% - 100%);left:calc(50% - 100%);width:200%;height:200%}.mdc-select__anchor.mdc-ripple-upgraded .mdc-select__ripple::after{width:var(--mdc-ripple-fg-size, 100%);height:var(--mdc-ripple-fg-size, 100%)}.mdc-select__anchor .mdc-select__ripple::before,.mdc-select__anchor .mdc-select__ripple::after{background-color:rgba(0, 0, 0, 0.87);background-color:var(--mdc-ripple-color, rgba(0, 0, 0, 0.87))}.mdc-select__anchor:hover .mdc-select__ripple::before,.mdc-select__anchor.mdc-ripple-surface--hover .mdc-select__ripple::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-select__anchor.mdc-ripple-upgraded--background-focused .mdc-select__ripple::before,.mdc-select__anchor:not(.mdc-ripple-upgraded):focus .mdc-select__ripple::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-select__anchor .mdc-select__ripple{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected .mdc-deprecated-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected .mdc-deprecated-list-item__ripple::after{background-color:#000;background-color:var(--mdc-ripple-color, var(--mdc-theme-on-surface, #000))}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:hover .mdc-deprecated-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-surface--hover .mdc-deprecated-list-item__ripple::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-upgraded--background-focused .mdc-deprecated-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded):focus .mdc-deprecated-list-item__ripple::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded) .mdc-deprecated-list-item__ripple::after{transition:opacity 150ms linear}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded):active .mdc-deprecated-list-item__ripple::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected .mdc-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected .mdc-list-item__ripple::after{background-color:#000;background-color:var(--mdc-ripple-color, var(--mdc-theme-on-surface, #000))}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:hover .mdc-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-surface--hover .mdc-list-item__ripple::before{opacity:0.04;opacity:var(--mdc-ripple-hover-opacity, 0.04)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-upgraded--background-focused .mdc-list-item__ripple::before,.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded):focus .mdc-list-item__ripple::before{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-focus-opacity, 0.12)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded) .mdc-list-item__ripple::after{transition:opacity 150ms linear}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected:not(.mdc-ripple-upgraded):active .mdc-list-item__ripple::after{transition-duration:75ms;opacity:0.12;opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-select__menu .mdc-deprecated-list .mdc-deprecated-list-item--selected.mdc-ripple-upgraded{--mdc-ripple-fg-opacity:var(--mdc-ripple-press-opacity, 0.12)}.mdc-select-helper-text{margin:0;margin-left:16px;margin-right:16px;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-family:Roboto, sans-serif;font-family:var(--mdc-typography-caption-font-family, var(--mdc-typography-font-family, Roboto, sans-serif));font-size:0.75rem;font-size:var(--mdc-typography-caption-font-size, 0.75rem);line-height:1.25rem;line-height:var(--mdc-typography-caption-line-height, 1.25rem);font-weight:400;font-weight:var(--mdc-typography-caption-font-weight, 400);letter-spacing:0.0333333333em;letter-spacing:var(--mdc-typography-caption-letter-spacing, 0.0333333333em);text-decoration:inherit;text-decoration:var(--mdc-typography-caption-text-decoration, inherit);text-transform:inherit;text-transform:var(--mdc-typography-caption-text-transform, inherit);display:block;margin-top:0;line-height:normal}[dir=rtl] .mdc-select-helper-text,.mdc-select-helper-text[dir=rtl]{margin-left:16px;margin-right:16px}.mdc-select-helper-text::before{display:inline-block;width:0;height:16px;content:"";vertical-align:0}.mdc-select-helper-text--validation-msg{opacity:0;transition:opacity 180ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-select--invalid+.mdc-select-helper-text--validation-msg,.mdc-select-helper-text--validation-msg-persistent{opacity:1}.mdc-select--with-leading-icon .mdc-select__icon{display:inline-block;box-sizing:border-box;border:none;text-decoration:none;cursor:pointer;user-select:none;flex-shrink:0;align-self:center;background-color:transparent;fill:currentColor}.mdc-select--with-leading-icon .mdc-select__icon{margin-left:12px;margin-right:12px}[dir=rtl] .mdc-select--with-leading-icon .mdc-select__icon,.mdc-select--with-leading-icon .mdc-select__icon[dir=rtl]{margin-left:12px;margin-right:12px}.mdc-select__icon:not([tabindex]),.mdc-select__icon[tabindex="-1"]{cursor:default;pointer-events:none}.material-icons{font-family:var(--mdc-icon-font, "Material Icons");font-weight:normal;font-style:normal;font-size:var(--mdc-icon-size, 24px);line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;-moz-osx-font-smoothing:grayscale;font-feature-settings:"liga"}:host{display:inline-block;vertical-align:top;outline:none}.mdc-select{width:100%}[hidden]{display:none}.mdc-select__icon{z-index:2}.mdc-select--with-leading-icon{--mdc-list-item-graphic-margin: calc( 48px - var(--mdc-list-item-graphic-size, 24px) - var(--mdc-list-side-padding, 16px) )}.mdc-select .mdc-select__anchor .mdc-select__selected-text{overflow:hidden}.mdc-select .mdc-select__anchor *{display:inline-flex}.mdc-select .mdc-select__anchor .mdc-floating-label{display:inline-block}mwc-notched-outline{--mdc-notched-outline-border-color: var( --mdc-select-outlined-idle-border-color, rgba(0, 0, 0, 0.38) );--mdc-notched-outline-notch-offset: 1px}:host(:not([disabled]):hover) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) mwc-notched-outline{--mdc-notched-outline-border-color: var( --mdc-select-outlined-hover-border-color, rgba(0, 0, 0, 0.87) )}:host(:not([disabled])) .mdc-select:not(.mdc-select--disabled) .mdc-select__selected-text{color:rgba(0, 0, 0, 0.87);color:var(--mdc-select-ink-color, rgba(0, 0, 0, 0.87))}:host(:not([disabled])) .mdc-select:not(.mdc-select--disabled) .mdc-line-ripple::before{border-bottom-color:rgba(0, 0, 0, 0.42);border-bottom-color:var(--mdc-select-idle-line-color, rgba(0, 0, 0, 0.42))}:host(:not([disabled])) .mdc-select:not(.mdc-select--disabled):hover .mdc-line-ripple::before{border-bottom-color:rgba(0, 0, 0, 0.87);border-bottom-color:var(--mdc-select-hover-line-color, rgba(0, 0, 0, 0.87))}:host(:not([disabled])) .mdc-select:not(.mdc-select--outlined):not(.mdc-select--disabled) .mdc-select__anchor{background-color:whitesmoke;background-color:var(--mdc-select-fill-color, whitesmoke)}:host(:not([disabled])) .mdc-select.mdc-select--invalid .mdc-select__dropdown-icon{fill:var(--mdc-select-error-dropdown-icon-color, var(--mdc-select-error-color, var(--mdc-theme-error, #b00020)))}:host(:not([disabled])) .mdc-select.mdc-select--invalid .mdc-floating-label,:host(:not([disabled])) .mdc-select.mdc-select--invalid .mdc-floating-label::after{color:var(--mdc-select-error-color, var(--mdc-theme-error, #b00020))}:host(:not([disabled])) .mdc-select.mdc-select--invalid mwc-notched-outline{--mdc-notched-outline-border-color: var(--mdc-select-error-color, var(--mdc-theme-error, #b00020))}.mdc-select__menu--invalid{--mdc-theme-primary: var(--mdc-select-error-color, var(--mdc-theme-error, #b00020))}:host(:not([disabled])) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) .mdc-floating-label,:host(:not([disabled])) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) .mdc-floating-label::after{color:rgba(0, 0, 0, 0.6);color:var(--mdc-select-label-ink-color, rgba(0, 0, 0, 0.6))}:host(:not([disabled])) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) .mdc-select__dropdown-icon{fill:rgba(0, 0, 0, 0.54);fill:var(--mdc-select-dropdown-icon-color, rgba(0, 0, 0, 0.54))}:host(:not([disabled])) .mdc-select.mdc-select--focused mwc-notched-outline{--mdc-notched-outline-stroke-width: 2px;--mdc-notched-outline-notch-offset: 2px}:host(:not([disabled])) .mdc-select.mdc-select--focused:not(.mdc-select--invalid) mwc-notched-outline{--mdc-notched-outline-border-color: var( --mdc-select-focused-label-color, var(--mdc-theme-primary, rgba(98, 0, 238, 0.87)) )}:host(:not([disabled])) .mdc-select.mdc-select--focused:not(.mdc-select--invalid) .mdc-select__dropdown-icon{fill:rgba(98,0,238,.87);fill:var(--mdc-select-focused-dropdown-icon-color, var(--mdc-theme-primary, rgba(98, 0, 238, 0.87)))}:host(:not([disabled])) .mdc-select.mdc-select--focused:not(.mdc-select--invalid) .mdc-floating-label{color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}:host(:not([disabled])) .mdc-select.mdc-select--focused:not(.mdc-select--invalid) .mdc-floating-label::after{color:#6200ee;color:var(--mdc-theme-primary, #6200ee)}:host(:not([disabled])) .mdc-select-helper-text:not(.mdc-select-helper-text--validation-msg){color:var(--mdc-select-label-ink-color, rgba(0, 0, 0, 0.6))}:host([disabled]){pointer-events:none}:host([disabled]) .mdc-select:not(.mdc-select--outlined).mdc-select--disabled .mdc-select__anchor{background-color:#fafafa;background-color:var(--mdc-select-disabled-fill-color, #fafafa)}:host([disabled]) .mdc-select.mdc-select--outlined mwc-notched-outline{--mdc-notched-outline-border-color: var( --mdc-select-outlined-disabled-border-color, rgba(0, 0, 0, 0.06) )}:host([disabled]) .mdc-select .mdc-select__dropdown-icon{fill:rgba(0, 0, 0, 0.38);fill:var(--mdc-select-disabled-dropdown-icon-color, rgba(0, 0, 0, 0.38))}:host([disabled]) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) .mdc-floating-label,:host([disabled]) .mdc-select:not(.mdc-select--invalid):not(.mdc-select--focused) .mdc-floating-label::after{color:rgba(0, 0, 0, 0.38);color:var(--mdc-select-disabled-ink-color, rgba(0, 0, 0, 0.38))}:host([disabled]) .mdc-select-helper-text{color:rgba(0, 0, 0, 0.38);color:var(--mdc-select-disabled-ink-color, rgba(0, 0, 0, 0.38))}:host([disabled]) .mdc-select__selected-text{color:rgba(0, 0, 0, 0.38);color:var(--mdc-select-disabled-ink-color, rgba(0, 0, 0, 0.38))}`;
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+let Select = class Select extends SelectBase {
+};
+Select.styles = [styles$1];
+Select = __decorate([
+    e$6('mwc-select')
+], Select);
 
 /**
  * @license
@@ -6795,7 +10066,13 @@ var MDCTextFieldFoundation$1 = MDCTextFieldFoundation;
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const l=e$1(class extends i$1{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===T$1||t$1===A$1)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return T$1}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return T$1}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return T$1;return a(i),t$1}});
+ */const e=o=>void 0===o.strings,s$1={},a=(o,l=s$1)=>o._$AH=l;
+
+/**
+ * @license
+ * Copyright 2020 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const l$1=e$1(class extends i$1{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===T$1||t$1===A$1)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return T$1}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return T$1}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return T$1;return a(i),t$1}});
 
 /**
  * @license
@@ -7036,7 +10313,7 @@ class TextFieldBase extends FormElement {
           aria-describedby="${l$2(ariaDescribedbyOrUndef)}"
           class="mdc-text-field__input"
           type="${this.type}"
-          .value="${l(this.value)}"
+          .value="${l$1(this.value)}"
           ?disabled="${this.disabled}"
           placeholder="${this.placeholder}"
           ?required="${this.required}"
@@ -7418,6 +10695,22 @@ TextField.styles = [styles];
 TextField = __decorate([
     e$6('mwc-textfield')
 ], TextField);
+
+function newEditEvent(edit) {
+    return new CustomEvent('oscd-edit', {
+        composed: true,
+        bubbles: true,
+        detail: edit,
+    });
+}
+
+/**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: BSD-3-Clause
+ */const s=(i,t)=>{var e,o;const r=i._$AN;if(void 0===r)return !1;for(const i of r)null===(o=(e=i)._$AO)||void 0===o||o.call(e,t,!1),s(i,t);return !0},o=i=>{let t,e;do{if(void 0===(t=i._$AM))break;e=t._$AN,e.delete(i),i=t;}while(0===(null==e?void 0:e.size))},r=i=>{for(let t;t=i._$AM;i=t){let e=t._$AN;if(void 0===e)t._$AN=e=new Set;else if(e.has(i))break;e.add(i),l(t);}};function n$1(i){void 0!==this._$AN?(o(this),this._$AM=i,r(this)):this._$AM=i;}function h$1(i,t=!1,e=0){const r=this._$AH,n=this._$AN;if(void 0!==n&&0!==n.size)if(t)if(Array.isArray(r))for(let i=e;i<r.length;i++)s(r[i],!1),o(r[i]);else null!=r&&(s(r,!1),o(r));else s(this,i);}const l=i=>{var t$1,s,o,r;i.type==t.CHILD&&(null!==(t$1=(o=i)._$AP)&&void 0!==t$1||(o._$AP=h$1),null!==(s=(r=i)._$AQ)&&void 0!==s||(r._$AQ=n$1));};class c extends i$1{constructor(){super(...arguments),this._$AN=void 0;}_$AT(i,t,e){super._$AT(i,t,e),r(this),this.isConnected=i._$AU;}_$AO(i,t=!0){var e,r;i!==this.isConnected&&(this.isConnected=i,i?null===(e=this.reconnected)||void 0===e||e.call(this):null===(r=this.disconnected)||void 0===r||r.call(this)),t&&(s(this,i),o(this));}setValue(t){if(e(this._$Ct))this._$Ct._$AI(t,this);else {const i=[...this._$Ct._$AH];i[this._$Ci]=t,this._$Ct._$AI(i,this,0);}}disconnected(){}reconnected(){}}
+
+const h=new WeakMap,n=e$1(class extends c{render(t){return A$1}update(t,[s]){var e;const o=s!==this.G;return o&&void 0!==this.G&&this.ot(void 0),(o||this.rt!==this.lt)&&(this.G=s,this.dt=null===(e=t.options)||void 0===e?void 0:e.host,this.ot(this.lt=t.element)),A$1}ot(i){var t;if("function"==typeof this.G){const s=null!==(t=this.dt)&&void 0!==t?t:globalThis;let e=h.get(s);void 0===e&&(e=new WeakMap,h.set(s,e)),void 0!==e.get(this.G)&&this.G.call(this.dt,void 0),e.set(this.G,i),void 0!==i&&this.G.call(this.dt,i);}else this.G.value=i;}get rt(){var i,t,s;return "function"==typeof this.G?null===(t=h.get(null!==(i=this.dt)&&void 0!==i?i:globalThis))||void 0===t?void 0:t.get(this.G):null===(s=this.G)||void 0===s?void 0:s.value}disconnected(){this.rt===this.lt&&this.ot(void 0);}reconnected(){this.ot(this.lt);}});
 
 function samePath(a, b) {
     if (a.length !== (b === null || b === void 0 ? void 0 : b.length))
@@ -11395,6 +14688,178 @@ function createSingleLNode(parent, ln) {
     inserts.push({ parent: private6100, node: lNodeSpec, reference: null });
     return inserts;
 }
+function createSourceRef(lNode, options) {
+    var _a;
+    const doc = lNode.ownerDocument;
+    const { paths } = options;
+    const sources = paths ? getSourceDef(paths) : [];
+    const { service } = options;
+    const { resourceName } = options;
+    const sourceRefEdits = [];
+    let lNodeInputs = lNode.querySelector(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs');
+    let private6100 = lNode.querySelector(':scope > Private[type="eIEC61850-6-100"]');
+    let lNodeSpec = lNode.querySelector(':scope > Private[type="eIEC61850-6-100"] > LNodeSpecNaming');
+    const addPrivate = () => {
+        private6100 = doc.createElementNS(doc.documentElement.namespaceURI, 'Private');
+        private6100.setAttribute('type', 'eIEC61850-6-100');
+        sourceRefEdits.push({
+            parent: lNode,
+            node: private6100,
+            reference: null,
+        });
+    };
+    const addLNodeSpecNaming = (parent) => {
+        if (!lNodeSpec) {
+            lNodeSpec = doc.createElementNS(uri6100, `${prefix6100}:LNodeSpecNaming`);
+            const attrs = {
+                iedName: 'sIedName',
+                ldInst: 'sLdInst',
+                prefix: 'sPrefix',
+                lnClass: 'sLnClass',
+                lnInst: 'sLnInst',
+            };
+            Object.entries(attrs).forEach(([attr, sAttr]) => {
+                const value = lNode.getAttribute(attr);
+                if (value)
+                    lNodeSpec.setAttribute(sAttr, value);
+            });
+        }
+        sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
+    };
+    const addLNodeInputs = (parent) => {
+        lNodeInputs = doc.createElementNS(uri6100, `${prefix6100}:LNodeInputs`);
+        sourceRefEdits.push({
+            parent,
+            node: lNodeInputs,
+            reference: null,
+        });
+    };
+    if (!private6100)
+        addPrivate();
+    if (!lNodeSpec)
+        addLNodeSpecNaming(private6100);
+    if (!lNodeInputs)
+        addLNodeInputs(private6100);
+    if (resourceName) {
+        const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+        const input = 'resourceRefInput';
+        const inst = ((_a = lNode.querySelectorAll('SourceRef').length) !== null && _a !== void 0 ? _a : 0) + 1;
+        sourceRef.setAttribute('input', input);
+        sourceRef.setAttribute('inputInst', `${inst}`);
+        sourceRef.setAttribute('resourceName', resourceName);
+        sourceRef.setAttribute('service', service);
+        sourceRefEdits.push({
+            parent: lNodeInputs,
+            node: sourceRef,
+            reference: null,
+        });
+    }
+    else {
+        sources.forEach((source, i) => {
+            var _a;
+            const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+            const path = source.split('/');
+            const input = path[path.length - 2];
+            const inst = ((_a = lNode.querySelectorAll('SourceRef').length) !== null && _a !== void 0 ? _a : 0) + i + 1;
+            sourceRef.setAttribute('source', source);
+            sourceRef.setAttribute('input', input);
+            sourceRef.setAttribute('inputInst', `${inst}`);
+            sourceRef.setAttribute('service', service);
+            sourceRefEdits.push({
+                parent: lNodeInputs,
+                node: sourceRef,
+                reference: null,
+            });
+        });
+    }
+    return sourceRefEdits;
+}
+function singleton(parent, leaf) {
+    const { children } = parent;
+    if (parent === leaf && children.length <= 1)
+        return true;
+    if (children.length > 1)
+        return false;
+    return singleton(parent.children[0], leaf);
+}
+function remove9030Element(element) {
+    const priv = element.closest('Private[type="eIEC61850-6-100"]');
+    if (priv && singleton(priv, element))
+        return [{ node: priv }];
+    return [{ node: element }];
+}
+function createProcessResource(parent, options) {
+    const doc = parent.ownerDocument;
+    const { name } = options;
+    const { selector } = options;
+    const { cardinality } = options;
+    const { max } = options;
+    const edits = [];
+    let private6100 = parent.querySelector(':scope > Private[type="eIEC61850-6-100"]');
+    const addPrivate = () => {
+        private6100 = doc.createElementNS(doc.documentElement.namespaceURI, 'Private');
+        private6100.setAttribute('type', 'eIEC61850-6-100');
+        edits.push({
+            parent,
+            node: private6100,
+            reference: getReference(parent, 'Private'),
+        });
+    };
+    if (!private6100)
+        addPrivate();
+    const proResRef = doc.createElementNS(uri6100, `${prefix6100}:ProcessResource`);
+    proResRef.setAttribute('name', name);
+    if (selector)
+        proResRef.setAttribute('selector', selector);
+    if (cardinality)
+        proResRef.setAttribute('cardinality', cardinality);
+    if (max)
+        proResRef.setAttribute('max', max);
+    edits.push({
+        parent: private6100,
+        node: proResRef,
+        reference: null,
+    });
+    return edits;
+}
+function isInPath(parent, lNode) {
+    return parent.contains(lNode);
+}
+function findProcessResourceParent(lNode, name) {
+    var _a;
+    const oldProcRes = lNode.ownerDocument.querySelector(`ProcessResource[name="${name}"]`);
+    if (!oldProcRes)
+        return lNode.closest('Function,EqFunction');
+    let newParent = (_a = oldProcRes.parentElement) === null || _a === void 0 ? void 0 : _a.parentElement; // not the private
+    while (newParent) {
+        if (isInPath(newParent, lNode))
+            return newParent;
+        newParent = newParent.parentElement;
+    }
+    return null;
+}
+function moveProcessResource(lNode, resourceName) {
+    const oldProcessResource = lNode.ownerDocument.querySelector(`ProcessResource[name="${resourceName}"]`);
+    if (!oldProcessResource)
+        return [];
+    const oldParent = oldProcessResource === null || oldProcessResource === void 0 ? void 0 : oldProcessResource.closest('Function,EqFunction');
+    const newParent = findProcessResourceParent(lNode, resourceName);
+    if (oldParent === newParent)
+        return [];
+    if (!newParent)
+        return [];
+    const edits = [];
+    const selector = oldProcessResource.getAttribute('selector');
+    const cardinality = oldProcessResource.getAttribute('cardinality');
+    const max = oldProcessResource.getAttribute('max');
+    edits.push(...remove9030Element(oldProcessResource), createProcessResource(newParent, {
+        name: resourceName,
+        selector,
+        cardinality,
+        max,
+    }));
+    return edits;
+}
 class SclBayTemplate extends s$2 {
     constructor() {
         super(...arguments);
@@ -11453,84 +14918,125 @@ class SclBayTemplate extends s$2 {
         this.lnodeparent = func;
     }
     saveSourceRef() {
-        var _a, _b, _c;
         const { paths } = this.daPicker;
-        const sources = getSourceDef(paths);
         const service = this.serviceSelector.value;
-        const sourceRefEdits = [];
-        let lNodeInputs = (_a = this.selectedLNode) === null || _a === void 0 ? void 0 : _a.querySelector(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs');
-        let private6100 = (_b = this.selectedLNode) === null || _b === void 0 ? void 0 : _b.querySelector(':scope > Private[type="eIEC61850-6-100"]');
-        let lNodeSpec = (_c = this.selectedLNode) === null || _c === void 0 ? void 0 : _c.querySelector(':scope > Private[type="eIEC61850-6-100"] > LNodeSpecNaming');
-        const addPrivate = () => {
-            private6100 = this.doc.createElementNS(this.doc.documentElement.namespaceURI, 'Private');
-            private6100.setAttribute('type', 'eIEC61850-6-100');
-            sourceRefEdits.push({
-                parent: this.selectedLNode,
-                node: private6100,
-                reference: null,
-            });
-        };
-        const addLNodeSpecNaming = (parent) => {
-            if (!lNodeSpec) {
-                lNodeSpec = this.doc.createElementNS(uri6100, `${prefix6100}:LNodeSpecNaming`);
-                const attrs = {
-                    iedName: 'sIedName',
-                    ldInst: 'sLdInst',
-                    prefix: 'sPrefix',
-                    lnClass: 'sLnClass',
-                    lnInst: 'sLnInst',
-                };
-                Object.entries(attrs).forEach(([attr, sAttr]) => {
-                    const value = this.selectedLNode.getAttribute(attr);
-                    if (value)
-                        lNodeSpec.setAttribute(sAttr, value);
-                });
-            }
-            sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
-        };
-        const addLNodeInputs = (parent) => {
-            lNodeInputs = this.doc.createElementNS(uri6100, `${prefix6100}:LNodeInputs`);
-            sourceRefEdits.push({
-                parent,
-                node: lNodeInputs,
-                reference: null,
-            });
-        };
-        if (!private6100)
-            addPrivate();
-        if (!lNodeSpec)
-            addLNodeSpecNaming(private6100);
-        if (!lNodeInputs)
-            addLNodeInputs(private6100);
-        sources.forEach((source, i) => {
-            var _a, _b;
-            const sourceRef = this.doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
-            const path = source.split('/');
-            const input = path[path.length - 2];
-            const inst = ((_b = (_a = this.selectedLNode) === null || _a === void 0 ? void 0 : _a.querySelectorAll('SourceRef').length) !== null && _b !== void 0 ? _b : 0) + i + 1;
-            sourceRef.setAttribute('source', source);
-            sourceRef.setAttribute('input', input);
-            sourceRef.setAttribute('inputInst', `${inst}`);
-            sourceRef.setAttribute('service', service);
-            sourceRefEdits.push({
-                parent: lNodeInputs,
-                node: sourceRef,
-                reference: null,
-            });
+        const sourceRefEdits = createSourceRef(this.selectedLNode, {
+            paths,
+            service,
         });
         this.dispatchEvent(newEditEvent(sourceRefEdits));
     }
+    saveProcessRef(isNew) {
+        const resourceName = this.proResName.value;
+        const selector = this.proResSelector.value;
+        const cardinality = this.proResCardinality.value;
+        const max = this.proResMax.value;
+        const service = this.proResService.value;
+        const sourceRefEdits = createSourceRef(this.selectedLNode, {
+            service,
+            resourceName,
+        });
+        const processResourceEdits = [];
+        if (isNew) {
+            const newParent = findProcessResourceParent(this.selectedLNode, resourceName);
+            if (newParent) {
+                processResourceEdits.push(...createProcessResource(this.selectedLNode.closest('Function,EqFunction'), {
+                    name: resourceName,
+                    selector,
+                    cardinality,
+                    max,
+                }));
+            }
+        }
+        else {
+            processResourceEdits.push(...moveProcessResource(this.selectedLNode, resourceName));
+        }
+        this.dispatchEvent(newEditEvent([...sourceRefEdits, ...processResourceEdits]));
+    }
+    renderProcessResourcePicker() {
+        var _a, _b, _c, _d, _e, _f;
+        const isNew = this.proResNameSel && this.proResNameSel.value === 'new';
+        const name = isNew ? 'NewInput' : (_b = (_a = this.proResNameSel) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : '';
+        const processResource = (_c = this.doc) === null || _c === void 0 ? void 0 : _c.querySelector(`Private[type="eIEC61850-6-100"] ProcessResource[name="${name}"]`);
+        const selector = (_d = processResource === null || processResource === void 0 ? void 0 : processResource.getAttribute('selector')) !== null && _d !== void 0 ? _d : '';
+        const cardinality = (_e = processResource === null || processResource === void 0 ? void 0 : processResource.getAttribute('cardinality')) !== null && _e !== void 0 ? _e : '';
+        const max = (_f = processResource === null || processResource === void 0 ? void 0 : processResource.getAttribute('max')) !== null && _f !== void 0 ? _f : '';
+        return x ` <mwc-dialog id="processrecource" heading="Add ProcessResource">
+      <div class="content prores">
+        <mwc-select
+          name="existing resource"
+          id="existProcessResource"
+          @click="${() => this.requestUpdate()}"
+          value="new"
+        >
+          <mwc-list-item value="new">Add new ProcessResource</mwc-list-item>
+          ${Array.from(this.doc.querySelectorAll('Private[type="eIEC61850-6-100"] ProcessResource')
+        // eslint-disable-next-line array-callback-return
+        ).map(proRes => x `<mwc-list-item value="${proRes.getAttribute('name')}">
+                ${proRes.getAttribute('name')}
+              </mwc-list-item>`)}
+        </mwc-select>
+        <mwc-textfield
+          id="proresname"
+          label="name"
+          ?disabled=${!isNew}
+          .value="${name}"
+        ></mwc-textfield>
+        <mwc-textfield
+          id="proresselector"
+          label="selector"
+          ?disabled=${!isNew}
+          .value="${selector}"
+        ></mwc-textfield>
+        <mwc-select
+          id="prorescardinality"
+          label="cardinality"
+          ?disabled=${!isNew}
+          .value="${cardinality}"
+          >${['0..1', '1..1', '0..n', '1..n'].map(card => x `<mwc-list-item value="${card}">${card}</mwc-list-item>`)}</mwc-select
+        >
+        <mwc-textfield
+          id="proresmax"
+          label="max"
+          ?disabled=${!isNew}
+          .value="${max}"
+          type="number"
+        ></mwc-textfield>
+        <mwc-select
+          id="proresservice"
+          label="service"
+          ?disabled=${!isNew}
+          value="GOOSE"
+          >${['GOOSE', 'SMV', 'Report', 'Poll', 'Wired', 'Internal'].map(service => x `<mwc-list-item value="${service}">${service}</mwc-list-item>`)}</mwc-select
+        >
+      </div>
+      <mwc-button
+        slot="secondaryAction"
+        label="close"
+        @click=${() => { var _a; return (_a = this.processResourceDiag) === null || _a === void 0 ? void 0 : _a.close(); }}
+      ></mwc-button>
+      <mwc-button
+        slot="primaryAction"
+        label="save"
+        icon="save"
+        @click="${() => this.saveProcessRef(isNew)}"
+      ></mwc-button>
+    </mwc-dialog>`;
+    }
     renderDataAttributePicker() {
         return x ` <mwc-dialog id="dapicker" heading="Add Data Attributes"
-      ><select name="service" id="service">
-        <option value="GOOSE">"GOOSE"</option>
-        <option value="SMV">SMV</option>
-        <option value="Report">Report</option>
-        <option value="Poll">Poll</option>
-        <option value="Wired">Wired</option>
-        <option value="Internal">Internal</option>
-      </select>
-      <oscd-tree-grid .tree="${dataAttributeTree(this.doc)}"></oscd-tree-grid>
+      ><div style="display:flex;flex-direction:column;">
+        <mwc-select
+          style="margin:10px;max-width:270px;"
+          id="service"
+          label="service"
+          value="GOOSE"
+          >${['GOOSE', 'SMV', 'Report', 'Poll', 'Wired', 'Internal'].map(service => x `<mwc-list-item value="${service}">${service}</mwc-list-item>`)}</mwc-select
+        >
+        <oscd-tree-grid
+          .tree="${dataAttributeTree(this.doc)}"
+        ></oscd-tree-grid>
+      </div>
       <mwc-button
         slot="secondaryAction"
         label="close"
@@ -11685,6 +15191,12 @@ class SclBayTemplate extends s$2 {
         <mwc-icon-button
           id="daPickerButton"
           icon="input_circle"
+          @click=${() => this.processResourceDiag.show()}
+        >
+        </mwc-icon-button>
+        <mwc-icon-button
+          id="processResourceButton"
+          icon="add_link"
           @click=${() => this.daPickerDialog.show()}
         >
         </mwc-icon-button>
@@ -11737,6 +15249,7 @@ class SclBayTemplate extends s$2 {
         Select function for more detail.
       </div>`;
         return x `${this.renderInputs()} ${this.renderDataAttributePicker()}
+      ${this.renderProcessResourcePicker()}
       <div class="container func detail">
         <nav>
           ${((_a = this.selectedFunc) === null || _a === void 0 ? void 0 : _a.tagName) === 'SubEquipment'
@@ -11937,6 +15450,15 @@ SclBayTemplate.styles = i$5 `
       background-color: #93a1a1;
     }
 
+    .content.prores {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content.prores > * {
+      margin: 8px 10px 16px;
+    }
+
     .link {
       background-color: #002b36;
     }
@@ -12043,6 +15565,9 @@ __decorate([
     i$2('#dapicker')
 ], SclBayTemplate.prototype, "daPickerDialog", void 0);
 __decorate([
+    i$2('#processrecource')
+], SclBayTemplate.prototype, "processResourceDiag", void 0);
+__decorate([
     i$2('#dapicker > oscd-tree-grid')
 ], SclBayTemplate.prototype, "daPicker", void 0);
 __decorate([
@@ -12051,6 +15576,24 @@ __decorate([
 __decorate([
     i$2('input')
 ], SclBayTemplate.prototype, "libInput", void 0);
+__decorate([
+    i$2('#existProcessResource')
+], SclBayTemplate.prototype, "proResNameSel", void 0);
+__decorate([
+    i$2('#proresname')
+], SclBayTemplate.prototype, "proResName", void 0);
+__decorate([
+    i$2('#proresselector')
+], SclBayTemplate.prototype, "proResSelector", void 0);
+__decorate([
+    i$2('#prorescardinality')
+], SclBayTemplate.prototype, "proResCardinality", void 0);
+__decorate([
+    i$2('#proresmax')
+], SclBayTemplate.prototype, "proResMax", void 0);
+__decorate([
+    i$2('#proresservice')
+], SclBayTemplate.prototype, "proResService", void 0);
 
 export { SclBayTemplate as default };
 //# sourceMappingURL=scl-bay-template.js.map
