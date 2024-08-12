@@ -9,14 +9,19 @@ import '@material/mwc-dialog';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
 import '@material/mwc-icon';
+import '@material/mwc-select';
+
+import '@material/mwc-textfield';
+
 import type { Dialog } from '@material/mwc-dialog';
 import type { OscdFilteredList } from '@openscd/oscd-filtered-list';
 import type { ListItemBase } from '@material/mwc-list/mwc-list-item-base.js';
+import type { TextField } from '@material/mwc-textfield';
 
-import { Insert, newEditEvent } from '@openscd/open-scd-core';
+import { Edit, Insert, newEditEvent, Remove } from '@openscd/open-scd-core';
 
 import '@openscd/oscd-tree-grid';
-import type { TreeGrid } from '@openscd/oscd-tree-grid';
+import type { Path, TreeGrid } from '@openscd/oscd-tree-grid';
 
 import './sld-viewer.js';
 import { classMap } from 'lit/directives/class-map.js';
@@ -233,6 +238,254 @@ function createSingleLNode(parent: Element, ln: Element): Insert[] {
   return inserts;
 }
 
+type CreateSourceRefOptions = {
+  paths?: Path[];
+  service: string;
+  resourceName?: string;
+};
+
+type CreateProcessResourceOptions = {
+  name: string;
+  selector: string | null;
+  cardinality: string | null;
+  max: string | null;
+};
+
+function createSourceRef(
+  lNode: Element,
+  options: CreateSourceRefOptions
+): Edit[] {
+  const doc = lNode.ownerDocument;
+
+  const { paths } = options;
+  const sources = paths ? getSourceDef(paths) : [];
+
+  const { service } = options;
+  const { resourceName } = options;
+
+  const sourceRefEdits: Insert[] = [];
+
+  let lNodeInputs = lNode.querySelector(
+    ':scope > Private[type="eIEC61850-6-100"] > LNodeInputs'
+  );
+  let private6100 = lNode.querySelector(
+    ':scope > Private[type="eIEC61850-6-100"]'
+  );
+  let lNodeSpec = lNode.querySelector(
+    ':scope > Private[type="eIEC61850-6-100"] > LNodeSpecNaming'
+  );
+
+  const addPrivate = (): void => {
+    private6100 = doc.createElementNS(
+      doc.documentElement.namespaceURI,
+      'Private'
+    );
+    private6100.setAttribute('type', 'eIEC61850-6-100');
+
+    sourceRefEdits.push({
+      parent: lNode,
+      node: private6100,
+      reference: null,
+    });
+  };
+
+  const addLNodeSpecNaming = (parent: Element): void => {
+    if (!lNodeSpec) {
+      lNodeSpec = doc.createElementNS(uri6100, `${prefix6100}:LNodeSpecNaming`);
+
+      const attrs: Record<string, string> = {
+        iedName: 'sIedName',
+        ldInst: 'sLdInst',
+        prefix: 'sPrefix',
+        lnClass: 'sLnClass',
+        lnInst: 'sLnInst',
+      };
+
+      Object.entries(attrs).forEach(([attr, sAttr]) => {
+        const value = lNode.getAttribute(attr);
+        if (value) lNodeSpec!.setAttribute(sAttr, value);
+      });
+    }
+
+    sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
+  };
+
+  const addLNodeInputs = (parent: Element): void => {
+    lNodeInputs = doc.createElementNS(uri6100, `${prefix6100}:LNodeInputs`);
+
+    sourceRefEdits.push({
+      parent,
+      node: lNodeInputs,
+      reference: null,
+    });
+  };
+
+  if (!private6100) addPrivate();
+  if (!lNodeSpec) addLNodeSpecNaming(private6100!);
+  if (!lNodeInputs) addLNodeInputs(private6100!);
+
+  if (resourceName) {
+    const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+
+    const input = 'resourceRefInput';
+    const inst = (lNode.querySelectorAll('SourceRef').length ?? 0) + 1;
+
+    sourceRef.setAttribute('input', input);
+    sourceRef.setAttribute('inputInst', `${inst}`);
+    sourceRef.setAttribute('resourceName', resourceName);
+    sourceRef.setAttribute('service', service);
+    sourceRefEdits.push({
+      parent: lNodeInputs!,
+      node: sourceRef,
+      reference: null,
+    });
+  } else {
+    sources.forEach((source, i) => {
+      const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+
+      const path = source.split('/');
+      const input = path[path.length - 2];
+
+      const inst = (lNode.querySelectorAll('SourceRef').length ?? 0) + i + 1;
+
+      sourceRef.setAttribute('source', source);
+      sourceRef.setAttribute('input', input);
+      sourceRef.setAttribute('inputInst', `${inst}`);
+      sourceRef.setAttribute('service', service);
+
+      sourceRefEdits.push({
+        parent: lNodeInputs!,
+        node: sourceRef,
+        reference: null,
+      });
+    });
+  }
+
+  return sourceRefEdits;
+}
+
+function singleton(parent: Element, leaf: Element): boolean {
+  const { children } = parent;
+
+  if (parent === leaf && children.length <= 1) return true;
+  if (children.length > 1) return false;
+  return singleton(parent.children[0], leaf);
+}
+
+function remove9030Element(element: Element): Remove[] {
+  const priv = element.closest('Private[type="eIEC61850-6-100"]');
+
+  if (priv && singleton(priv, element)) return [{ node: priv }];
+
+  return [{ node: element }];
+}
+
+function createProcessResource(
+  parent: Element,
+  options: CreateProcessResourceOptions
+): Edit[] {
+  const doc = parent.ownerDocument;
+
+  const { name } = options;
+  const { selector } = options;
+  const { cardinality } = options;
+  const { max } = options;
+
+  const edits: Insert[] = [];
+
+  let private6100 = parent.querySelector(
+    ':scope > Private[type="eIEC61850-6-100"]'
+  );
+
+  const addPrivate = (): void => {
+    private6100 = doc.createElementNS(
+      doc.documentElement.namespaceURI,
+      'Private'
+    );
+    private6100.setAttribute('type', 'eIEC61850-6-100');
+
+    edits.push({
+      parent,
+      node: private6100,
+      reference: getReference(parent, 'Private'),
+    });
+  };
+
+  if (!private6100) addPrivate();
+
+  const proResRef = doc.createElementNS(
+    uri6100,
+    `${prefix6100}:ProcessResource`
+  );
+
+  proResRef.setAttribute('name', name);
+  if (selector) proResRef.setAttribute('selector', selector);
+  if (cardinality) proResRef.setAttribute('cardinality', cardinality);
+  if (max) proResRef.setAttribute('max', max);
+  edits.push({
+    parent: private6100!,
+    node: proResRef,
+    reference: null,
+  });
+
+  return edits;
+}
+
+function isInPath(parent: Element, lNode: Element): boolean {
+  return parent.contains(lNode);
+}
+
+function findProcessResourceParent(
+  lNode: Element,
+  name: string
+): Element | null {
+  const oldProcRes = lNode.ownerDocument.querySelector(
+    `ProcessResource[name="${name}"]`
+  );
+
+  if (!oldProcRes) return lNode.closest('Function,EqFunction');
+
+  let newParent = oldProcRes.parentElement?.parentElement; // not the private
+  while (newParent) {
+    if (isInPath(newParent, lNode)) return newParent;
+    newParent = newParent.parentElement;
+  }
+
+  return null;
+}
+
+function moveProcessResource(lNode: Element, resourceName: string): Edit[] {
+  const oldProcessResource = lNode.ownerDocument.querySelector(
+    `ProcessResource[name="${resourceName}"]`
+  );
+  if (!oldProcessResource) return [];
+
+  const oldParent = oldProcessResource?.closest('Function,EqFunction');
+
+  const newParent = findProcessResourceParent(lNode, resourceName);
+  if (oldParent === newParent) return [];
+
+  if (!newParent) return [];
+
+  const edits: Edit[] = [];
+
+  const selector = oldProcessResource.getAttribute('selector');
+  const cardinality = oldProcessResource.getAttribute('cardinality');
+  const max = oldProcessResource.getAttribute('max');
+
+  edits.push(
+    ...remove9030Element(oldProcessResource),
+    createProcessResource(newParent, {
+      name: resourceName,
+      selector,
+      cardinality,
+      max,
+    })
+  );
+
+  return edits;
+}
+
 export default class SclBayTemplate extends LitElement {
   @property({ attribute: false })
   doc?: XMLDocument;
@@ -285,11 +538,25 @@ export default class SclBayTemplate extends LitElement {
 
   @query('#dapicker') daPickerDialog!: Dialog;
 
+  @query('#processrecource') processResourceDiag!: Dialog;
+
   @query('#dapicker > oscd-tree-grid') daPicker!: TreeGrid;
 
   @query('#service') serviceSelector!: HTMLSelectElement;
 
   @query('input') libInput!: HTMLInputElement;
+
+  @query('#existProcessResource') proResNameSel!: HTMLSelectElement;
+
+  @query('#proresname') proResName!: TextField;
+
+  @query('#proresselector') proResSelector!: TextField;
+
+  @query('#prorescardinality') proResCardinality!: TextField;
+
+  @query('#proresmax') proResMax!: TextField;
+
+  @query('#proresservice') proResService!: TextField;
 
   private openCreateWizard(tagName: string): void {
     if (this.parent)
@@ -352,115 +619,161 @@ export default class SclBayTemplate extends LitElement {
 
   private saveSourceRef(): void {
     const { paths } = this.daPicker;
-
-    const sources = getSourceDef(paths);
     const service = this.serviceSelector.value;
 
-    const sourceRefEdits: Insert[] = [];
-
-    let lNodeInputs = this.selectedLNode?.querySelector(
-      ':scope > Private[type="eIEC61850-6-100"] > LNodeInputs'
-    );
-    let private6100 = this.selectedLNode?.querySelector(
-      ':scope > Private[type="eIEC61850-6-100"]'
-    );
-    let lNodeSpec = this.selectedLNode?.querySelector(
-      ':scope > Private[type="eIEC61850-6-100"] > LNodeSpecNaming'
-    );
-
-    const addPrivate = (): void => {
-      private6100 = this.doc!.createElementNS(
-        this.doc!.documentElement.namespaceURI,
-        'Private'
-      );
-      private6100.setAttribute('type', 'eIEC61850-6-100');
-
-      sourceRefEdits.push({
-        parent: this.selectedLNode!,
-        node: private6100,
-        reference: null,
-      });
-    };
-
-    const addLNodeSpecNaming = (parent: Element): void => {
-      if (!lNodeSpec) {
-        lNodeSpec = this.doc!.createElementNS(
-          uri6100,
-          `${prefix6100}:LNodeSpecNaming`
-        );
-
-        const attrs: Record<string, string> = {
-          iedName: 'sIedName',
-          ldInst: 'sLdInst',
-          prefix: 'sPrefix',
-          lnClass: 'sLnClass',
-          lnInst: 'sLnInst',
-        };
-
-        Object.entries(attrs).forEach(([attr, sAttr]) => {
-          const value = this.selectedLNode!.getAttribute(attr);
-          if (value) lNodeSpec!.setAttribute(sAttr, value);
-        });
-      }
-
-      sourceRefEdits.push({ parent, node: lNodeSpec, reference: null });
-    };
-
-    const addLNodeInputs = (parent: Element): void => {
-      lNodeInputs = this.doc!.createElementNS(
-        uri6100,
-        `${prefix6100}:LNodeInputs`
-      );
-
-      sourceRefEdits.push({
-        parent,
-        node: lNodeInputs,
-        reference: null,
-      });
-    };
-
-    if (!private6100) addPrivate();
-    if (!lNodeSpec) addLNodeSpecNaming(private6100!);
-    if (!lNodeInputs) addLNodeInputs(private6100!);
-
-    sources.forEach((source, i) => {
-      const sourceRef = this.doc!.createElementNS(
-        uri6100,
-        `${prefix6100}:SourceRef`
-      );
-
-      const path = source.split('/');
-      const input = path[path.length - 2];
-
-      const inst =
-        (this.selectedLNode?.querySelectorAll('SourceRef').length ?? 0) + i + 1;
-
-      sourceRef.setAttribute('source', source);
-      sourceRef.setAttribute('input', input);
-      sourceRef.setAttribute('inputInst', `${inst}`);
-      sourceRef.setAttribute('service', service);
-
-      sourceRefEdits.push({
-        parent: lNodeInputs!,
-        node: sourceRef,
-        reference: null,
-      });
+    const sourceRefEdits = createSourceRef(this.selectedLNode!, {
+      paths,
+      service,
     });
 
     this.dispatchEvent(newEditEvent(sourceRefEdits));
   }
 
+  private saveProcessRef(isNew: boolean): void {
+    const resourceName = this.proResName.value;
+    const selector = this.proResSelector.value;
+    const cardinality = this.proResCardinality.value;
+    const max = this.proResMax.value;
+    const service = this.proResService.value;
+
+    const sourceRefEdits = createSourceRef(this.selectedLNode!, {
+      service,
+      resourceName,
+    });
+
+    const processResourceEdits: Edit[] = [];
+
+    if (isNew) {
+      const newParent = findProcessResourceParent(
+        this.selectedLNode!,
+        resourceName
+      );
+
+      if (newParent) {
+        processResourceEdits.push(
+          ...createProcessResource(
+            this.selectedLNode!.closest('Function,EqFunction')!,
+            {
+              name: resourceName,
+              selector,
+              cardinality,
+              max,
+            }
+          )
+        );
+      }
+    } else {
+      processResourceEdits.push(
+        ...moveProcessResource(this.selectedLNode!, resourceName)
+      );
+    }
+
+    this.dispatchEvent(
+      newEditEvent([...sourceRefEdits, ...processResourceEdits])
+    );
+  }
+
+  private renderProcessResourcePicker(): TemplateResult {
+    const isNew = this.proResNameSel && this.proResNameSel.value === 'new';
+    const name = isNew ? 'NewInput' : this.proResNameSel?.value ?? '';
+    const processResource = this.doc?.querySelector(
+      `Private[type="eIEC61850-6-100"] ProcessResource[name="${name}"]`
+    );
+    const selector = processResource?.getAttribute('selector') ?? '';
+    const cardinality = processResource?.getAttribute('cardinality') ?? '';
+    const max = processResource?.getAttribute('max') ?? '';
+
+    return html` <mwc-dialog id="processrecource" heading="Add ProcessResource">
+      <div class="content prores">
+        <mwc-select
+          name="existing resource"
+          id="existProcessResource"
+          @click="${() => this.requestUpdate()}"
+          value="new"
+        >
+          <mwc-list-item value="new">Add new ProcessResource</mwc-list-item>
+          ${Array.from(
+            this.doc!.querySelectorAll(
+              'Private[type="eIEC61850-6-100"] ProcessResource'
+            )
+            // eslint-disable-next-line array-callback-return
+          ).map(
+            proRes =>
+              html`<mwc-list-item value="${proRes.getAttribute('name')!}">
+                ${proRes.getAttribute('name')!}
+              </mwc-list-item>`
+          )}
+        </mwc-select>
+        <mwc-textfield
+          id="proresname"
+          label="name"
+          ?disabled=${!isNew}
+          .value="${name}"
+        ></mwc-textfield>
+        <mwc-textfield
+          id="proresselector"
+          label="selector"
+          ?disabled=${!isNew}
+          .value="${selector}"
+        ></mwc-textfield>
+        <mwc-select
+          id="prorescardinality"
+          label="cardinality"
+          ?disabled=${!isNew}
+          .value="${cardinality}"
+          >${['0..1', '1..1', '0..n', '1..n'].map(
+            card => html`<mwc-list-item value="${card}">${card}</mwc-list-item>`
+          )}</mwc-select
+        >
+        <mwc-textfield
+          id="proresmax"
+          label="max"
+          ?disabled=${!isNew}
+          .value="${max}"
+          type="number"
+        ></mwc-textfield>
+        <mwc-select
+          id="proresservice"
+          label="service"
+          ?disabled=${!isNew}
+          value="GOOSE"
+          >${['GOOSE', 'SMV', 'Report', 'Poll', 'Wired', 'Internal'].map(
+            service =>
+              html`<mwc-list-item value="${service}">${service}</mwc-list-item>`
+          )}</mwc-select
+        >
+      </div>
+      <mwc-button
+        slot="secondaryAction"
+        label="close"
+        @click=${() => this.processResourceDiag?.close()}
+      ></mwc-button>
+      <mwc-button
+        slot="primaryAction"
+        label="save"
+        icon="save"
+        @click="${() => this.saveProcessRef(isNew)}"
+      ></mwc-button>
+    </mwc-dialog>`;
+  }
+
   private renderDataAttributePicker(): TemplateResult {
     return html` <mwc-dialog id="dapicker" heading="Add Data Attributes"
-      ><select name="service" id="service">
-        <option value="GOOSE">"GOOSE"</option>
-        <option value="SMV">SMV</option>
-        <option value="Report">Report</option>
-        <option value="Poll">Poll</option>
-        <option value="Wired">Wired</option>
-        <option value="Internal">Internal</option>
-      </select>
-      <oscd-tree-grid .tree="${dataAttributeTree(this.doc!)}"></oscd-tree-grid>
+      ><div style="display:flex;flex-direction:column;">
+        <mwc-select
+          style="margin:10px;max-width:270px;"
+          id="service"
+          label="service"
+          value="GOOSE"
+          >${['GOOSE', 'SMV', 'Report', 'Poll', 'Wired', 'Internal'].map(
+            service =>
+              html`<mwc-list-item value="${service}">${service}</mwc-list-item>`
+          )}</mwc-select
+        >
+        <oscd-tree-grid
+          .tree="${dataAttributeTree(this.doc!)}"
+        ></oscd-tree-grid>
+      </div>
       <mwc-button
         slot="secondaryAction"
         label="close"
@@ -637,6 +950,12 @@ export default class SclBayTemplate extends LitElement {
         <mwc-icon-button
           id="daPickerButton"
           icon="input_circle"
+          @click=${() => this.processResourceDiag.show()}
+        >
+        </mwc-icon-button>
+        <mwc-icon-button
+          id="processResourceButton"
+          icon="add_link"
           @click=${() => this.daPickerDialog.show()}
         >
         </mwc-icon-button>
@@ -702,6 +1021,7 @@ export default class SclBayTemplate extends LitElement {
       </div>`;
 
     return html`${this.renderInputs()} ${this.renderDataAttributePicker()}
+      ${this.renderProcessResourcePicker()}
       <div class="container func detail">
         <nav>
           ${this.selectedFunc?.tagName === 'SubEquipment'
@@ -920,6 +1240,15 @@ export default class SclBayTemplate extends LitElement {
 
     .container.selected {
       background-color: #93a1a1;
+    }
+
+    .content.prores {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content.prores > * {
+      margin: 8px 10px 16px;
     }
 
     .link {
