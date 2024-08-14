@@ -14880,7 +14880,6 @@ class SclBayTemplate extends s$2 {
     openCreateWizard(tagName) {
         if (this.parent)
             this.dispatchEvent(newCreateWizardEvent(this.parent, tagName));
-        this.dispatchEvent(newCreateWizardEvent(this.bay, tagName));
     }
     removeFunction(func) {
         this.dispatchEvent(newEditEvent({ node: func }));
@@ -14891,13 +14890,17 @@ class SclBayTemplate extends s$2 {
     addFunction() {
         var _a, _b;
         if ((this.parent && ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.tagName) === 'Bay') ||
-            ((_b = this.parent) === null || _b === void 0 ? void 0 : _b.tagName) === 'VoltageLevel')
+            ((_b = this.parent) === null || _b === void 0 ? void 0 : _b.tagName) === 'VoltageLevel') {
             this.openCreateWizard('Function');
+            return;
+        }
         this.openCreateWizard('EqFunction');
     }
     addSubFunction(parent) {
-        if (parent.tagName === 'Function' || parent.tagName === 'SubFunction')
+        if (parent.tagName === 'Function' || parent.tagName === 'SubFunction') {
             this.dispatchEvent(newCreateWizardEvent(parent, 'SubFunction'));
+            return;
+        }
         this.dispatchEvent(newCreateWizardEvent(parent, 'EqSubFunction'));
     }
     createNewLNodeElements() {
@@ -14925,6 +14928,7 @@ class SclBayTemplate extends s$2 {
             service,
         });
         this.dispatchEvent(newEditEvent(sourceRefEdits));
+        this.daPickerDialog.close();
     }
     saveProcessRef(isNew) {
         const resourceName = this.proResName.value;
@@ -15568,7 +15572,7 @@ __decorate([
     i$2('#processrecource')
 ], SclBayTemplate.prototype, "processResourceDiag", void 0);
 __decorate([
-    i$2('#dapicker > oscd-tree-grid')
+    i$2('#dapicker oscd-tree-grid')
 ], SclBayTemplate.prototype, "daPicker", void 0);
 __decorate([
     i$2('#service')
