@@ -540,7 +540,7 @@ export default class SclBayTemplate extends LitElement {
 
   @query('#processrecource') processResourceDiag!: Dialog;
 
-  @query('#dapicker > oscd-tree-grid') daPicker!: TreeGrid;
+  @query('#dapicker oscd-tree-grid') daPicker!: TreeGrid;
 
   @query('#service') serviceSelector!: HTMLSelectElement;
 
@@ -561,8 +561,6 @@ export default class SclBayTemplate extends LitElement {
   private openCreateWizard(tagName: string): void {
     if (this.parent)
       this.dispatchEvent(newCreateWizardEvent(this.parent, tagName));
-
-    this.dispatchEvent(newCreateWizardEvent(this.bay!, tagName));
   }
 
   private removeFunction(func: Element): void {
@@ -577,15 +575,19 @@ export default class SclBayTemplate extends LitElement {
     if (
       (this.parent && this.parent?.tagName === 'Bay') ||
       this.parent?.tagName === 'VoltageLevel'
-    )
+    ) {
       this.openCreateWizard('Function');
+      return;
+    }
 
     this.openCreateWizard('EqFunction');
   }
 
   addSubFunction(parent: Element): void {
-    if (parent.tagName === 'Function' || parent.tagName === 'SubFunction')
+    if (parent.tagName === 'Function' || parent.tagName === 'SubFunction') {
       this.dispatchEvent(newCreateWizardEvent(parent, 'SubFunction'));
+      return;
+    }
 
     this.dispatchEvent(newCreateWizardEvent(parent, 'EqSubFunction'));
   }
@@ -627,6 +629,7 @@ export default class SclBayTemplate extends LitElement {
     });
 
     this.dispatchEvent(newEditEvent(sourceRefEdits));
+    this.daPickerDialog.close();
   }
 
   private saveProcessRef(isNew: boolean): void {
