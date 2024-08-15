@@ -30,6 +30,8 @@ export default class SclBayTemplate extends LitElement {
     selectedLNode?: Element;
     lnodeparent?: Element;
     selectedSourceRef?: Element;
+    selectedResourceName?: Element;
+    sldWidth: number;
     selectedLibName?: string;
     inputs: Input[];
     dialog: Dialog;
@@ -51,7 +53,7 @@ export default class SclBayTemplate extends LitElement {
     addSubFunction(parent: Element): void;
     createNewLNodeElements(): void;
     openLNodeDialog(func: Element): void;
-    private saveSourceRef;
+    private createSourceRefs;
     private saveProcessRef;
     private renderProcessResourcePicker;
     private renderDataAttributePicker;
@@ -66,6 +68,8 @@ export default class SclBayTemplate extends LitElement {
     renderFuncContainers(): TemplateResult;
     renderSettings(): TemplateResult;
     updated(changedProperties: Map<string, any>): void;
+    sldWidthDiag?: Dialog;
+    private renderWidthDialog;
     render(): TemplateResult<1>;
     static styles: import("lit").CSSResult;
 }

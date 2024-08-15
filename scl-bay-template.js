@@ -14071,7 +14071,7 @@ function renderConnectivityNode(cNode) {
       </g>`;
 }
 function renderEquipment(equipment, options) {
-    var _a;
+    var _a, _b;
     const [x, y] = renderedPosition(equipment);
     const { flip, rot } = attributes(equipment);
     const deg = 90 * rot;
@@ -14113,6 +14113,7 @@ function renderEquipment(equipment, options) {
         source: true,
         parent: options.parent === equipment,
         linked: !!((_a = options.linked) === null || _a === void 0 ? void 0 : _a.includes(equipment)),
+        unmapped: !!((_b = options.unmapped) === null || _b === void 0 ? void 0 : _b.includes(equipment)),
     })}"
     id="${identity(equipment)}"
     transform="translate(${x} ${y}) rotate(${deg} 0.5 0.5)${flip ? ' scale(-1,1) translate(-1 0)' : ''}">
@@ -14128,6 +14129,7 @@ function renderEquipment(equipment, options) {
     </g>`;
 }
 function renderContainer(bayOrVL, options) {
+    var _a;
     const isVL = bayOrVL.tagName === 'VoltageLevel';
     const [x, y] = renderedPosition(bayOrVL);
     const { dim: [w, h], } = attributes(bayOrVL);
@@ -14135,6 +14137,7 @@ function renderContainer(bayOrVL, options) {
         voltagelevel: isVL,
         bay: !isVL,
         parent: options.parent === bayOrVL,
+        unmapped: !!((_a = options.unmapped) === null || _a === void 0 ? void 0 : _a.includes(bayOrVL)),
     })} tabindex="0" style="outline: none;">
       <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="white" stroke-dasharray="${isVL ? A : '0.18'}" stroke="${isVL ? '#2aa198' : '#6c71c4'}" />
       ${Array.from(bayOrVL.children)
@@ -14191,6 +14194,7 @@ let SldViewer = class SldViewer extends s$2 {
     constructor() {
         super(...arguments);
         this.linked = [];
+        this.unmapped = [];
     }
     render() {
         const { dim: [w, h], } = attributes(this.substation);
@@ -14210,6 +14214,7 @@ let SldViewer = class SldViewer extends s$2 {
             editMode: true,
             parent: this.parent,
             linked: this.linked,
+            unmapped: this.unmapped,
         })}
       </svg>
     </div>`;
@@ -14236,17 +14241,12 @@ SldViewer.styles = i$5 `
     }
 
     .linked > rect {
-      fill: black;
+      fill: red;
       opacity: 0.1;
     }
 
-    .source > rect {
-      fill: black;
-      opacity: 0;
-    }
-
-    .linked > rect {
-      fill: red;
+    .unmapped > rect {
+      fill: orange;
       opacity: 0.1;
     }
 
@@ -14273,6 +14273,9 @@ __decorate([
 __decorate([
     n$4({ attribute: false })
 ], SldViewer.prototype, "linked", void 0);
+__decorate([
+    n$4({ attribute: false })
+], SldViewer.prototype, "unmapped", void 0);
 SldViewer = __decorate([
     e$6('sld-viewer')
 ], SldViewer);
@@ -14629,6 +14632,9 @@ function linkedEquipment(doc, selectedFunc) {
         return lNodePaths.some(path => Array.from(selectedFunc.querySelectorAll(':scope LNode > Private SourceRef')).some(srcRef => { var _a; return (_a = srcRef.getAttribute('source')) === null || _a === void 0 ? void 0 : _a.startsWith(path); }));
     });
 }
+function unmappedEquipment(doc) {
+    return Array.from(doc.querySelectorAll('VoltageLevel,Bay,ConductingEquipment')).filter(procElement => !!procElement.querySelector(':scope > Function SourceRef:not([source]),:scope > EqFunction SourceRef:not([source])'));
+}
 function parentDepth(lNode) {
     const validParent = [
         'Function',
@@ -14695,6 +14701,7 @@ function createSourceRef(lNode, options) {
     const sources = paths ? getSourceDef(paths) : [];
     const { service } = options;
     const { resourceName } = options;
+    const { srcRef } = options;
     const sourceRefEdits = [];
     let lNodeInputs = lNode.querySelector(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs');
     let private6100 = lNode.querySelector(':scope > Private[type="eIEC61850-6-100"]');
@@ -14740,7 +14747,7 @@ function createSourceRef(lNode, options) {
         addLNodeSpecNaming(private6100);
     if (!lNodeInputs)
         addLNodeInputs(private6100);
-    if (resourceName) {
+    if (resourceName && !srcRef) {
         const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
         const input = 'resourceRefInput';
         const inst = ((_a = lNode.querySelectorAll('SourceRef').length) !== null && _a !== void 0 ? _a : 0) + 1;
@@ -14752,6 +14759,29 @@ function createSourceRef(lNode, options) {
             parent: lNodeInputs,
             node: sourceRef,
             reference: null,
+        });
+    }
+    else if (srcRef && resourceName) {
+        // there is a first SourceRef and we need to add other SourceRefs
+        const input = srcRef.getAttribute('input');
+        sourceRefEdits.push({
+            element: srcRef,
+            attributes: { source: sources[0] },
+        });
+        sources.slice(1).forEach((source, i) => {
+            var _a;
+            const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+            const inst = ((_a = lNode.querySelectorAll('SourceRef').length) !== null && _a !== void 0 ? _a : 0) + i + 1;
+            sourceRef.setAttribute('source', source);
+            sourceRef.setAttribute('input', input);
+            sourceRef.setAttribute('inputInst', `${inst}`);
+            sourceRef.setAttribute('service', service);
+            sourceRef.setAttribute('resourceName', resourceName);
+            sourceRefEdits.push({
+                parent: lNodeInputs,
+                node: sourceRef,
+                reference: null,
+            });
         });
     }
     else {
@@ -14867,6 +14897,7 @@ class SclBayTemplate extends s$2 {
         this.lNodeTypeSrc = [];
         this.gridSize = 32;
         this.editCount = -1;
+        this.sldWidth = 300;
         this.inputs = [];
     }
     get substation() {
@@ -14920,12 +14951,14 @@ class SclBayTemplate extends s$2 {
         this.dialog.show();
         this.lnodeparent = func;
     }
-    saveSourceRef() {
+    createSourceRefs() {
         const { paths } = this.daPicker;
         const service = this.serviceSelector.value;
         const sourceRefEdits = createSourceRef(this.selectedLNode, {
             paths,
             service,
+            resourceName: this.selectedResourceName.getAttribute('resourceName'),
+            srcRef: this.selectedResourceName,
         });
         this.dispatchEvent(newEditEvent(sourceRefEdits));
         this.daPickerDialog.close();
@@ -15050,7 +15083,7 @@ class SclBayTemplate extends s$2 {
         slot="primaryAction"
         label="save"
         icon="save"
-        @click="${this.saveSourceRef}"
+        @click="${this.createSourceRefs}"
       ></mwc-button>
     </mwc-dialog>`;
     }
@@ -15069,15 +15102,22 @@ class SclBayTemplate extends s$2 {
     renderLNodeDetail() {
         if (this.selectedLNode)
             return x `<div class="container lnode detail">
+        <nav style="float:right;">
+          <mwc-icon-button
+            icon="close"
+            @click="${() => (this.selectedLNode = undefined)}"
+          ></mwc-icon-button>
+        </nav>
         <div style="display: flex;">
-          <div style="flex: auto;">Input</div>
-          <div style="flex: auto;">Output</div>
-          <div style="flex: auto;">Settings</div>
+          <div class="lnode tab input">Input</div>
+          <div class="lnode tab output">Output</div>
+          <div class="lnode tab settings">Settings</div>
         </div>
         <div>
           <table>
             <thead>
               <tr>
+                <th></th>
                 <th></th>
                 <th scope="col">input</th>
                 <th scope="col">inputInst</th>
@@ -15092,6 +15132,17 @@ class SclBayTemplate extends s$2 {
             </thead>
             <tbody>
               ${Array.from(this.selectedLNode.querySelectorAll(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs > SourceRef')).map(srcRef => x `<tr>
+                  <th>
+                    ${!srcRef.getAttribute('source')
+                ? x `<mwc-icon-button
+                          icon="link"
+                          @click="${() => {
+                    this.selectedResourceName = srcRef;
+                    this.daPickerDialog.show();
+                }}"
+                        ></mwc-icon-button>`
+                : A}
+                  </th>
                   <th>
                     <mwc-icon-button
                       icon="delete"
@@ -15186,6 +15237,7 @@ class SclBayTemplate extends s$2 {
             container: true,
             lnode: true,
             selected: lNode === this.selectedLNode,
+            unmapped: !!lNode.querySelector(':scope SourceRef:not([source])'),
         })}"
       @click="${() => {
             this.selectedLNode = lNode;
@@ -15226,7 +15278,13 @@ class SclBayTemplate extends s$2 {
     }
     // eslint-disable-next-line class-methods-use-this
     renderSubFunction(subFunc) {
-        return x `<div class="container subfunc">
+        return x `<div
+      class="container subfunc"
+      class="${o$2({
+            container: true,
+            subfunc: true,
+        })}"
+    >
       <nav>
         <mwc-icon-button
           icon="delete"
@@ -15304,9 +15362,11 @@ class SclBayTemplate extends s$2 {
             func: true,
             selected: this.selectedFunc === func,
             linked: highlightFunc(func, this.selectedFunc),
+            unmapped: !!func.querySelector(':scope SourceRef:not([source])'),
         })}"
             @click="${() => {
             this.selectedFunc = func;
+            this.selectedLNode = undefined;
         }}"
           >
             <mwc-icon-button
@@ -15369,26 +15429,52 @@ class SclBayTemplate extends s$2 {
             this.doc.documentElement.setAttributeNS(xmlnsNs, `xmlns:${prefix6100}`, uri6100);
         }
     }
+    renderWidthDialog() {
+        return x `<mwc-dialog heading="SLD pane width" id="sldWidthDialog"
+      ><mwc-textfield type="number" value="${this.sldWidth}"></mwc-textfield>
+      <mwc-button
+        slot="primaryAction"
+        label="Save"
+        icon="save"
+        @click="${(evt) => {
+            this.sldWidth = parseInt(evt.target.previousElementSibling.value, 10);
+        }}"
+      ></mwc-button
+    ></mwc-dialog>`;
+    }
     render() {
         if (!this.substation)
             return x `<main>No substation section</main>`;
         return x `<main>
-      <sld-viewer
-        .substation=${this.substation}
-        .gridSize=${this.gridSize}
-        .parent=${this.parent}
-        .linked=${linkedEquipment(this.doc, this.selectedFunc)}
-        @select-equipment="${(evt) => {
+      <div style="margin:10px;max-width:${this.sldWidth}px">
+        <div>
+          <abbr title="Resize SLD"
+            ><mwc-icon-button
+              icon="resize"
+              style="--mdc-icon-button-size:48px;"
+              @click="${() => { var _a; return (_a = this.sldWidthDiag) === null || _a === void 0 ? void 0 : _a.show(); }}"
+            ></mwc-icon-button
+          ></abbr>
+        </div>
+        <sld-viewer
+          .substation=${this.substation}
+          .gridSize=${this.gridSize}
+          .parent=${this.parent}
+          .linked=${linkedEquipment(this.doc, this.selectedFunc)}
+          .unmapped=${unmappedEquipment(this.doc)}
+          @select-equipment="${(evt) => {
             this.parent = evt.detail.element;
             this.selectedFunc = undefined;
         }}"
-      ></sld-viewer>
+        ></sld-viewer>
+      </div>
       <div style="width:100%;overflow-y:scroll;">
         ${this.renderSettings()}
         <div style="flex:auto;display:flex; height:100%">
           ${this.renderFuncContainers()} ${this.renderFuncDetail()}
         </div>
         ${this.renderLNodeDialog()} ${this.renderLNodeDetail()}
+        ${this.renderWidthDialog()}
       </div>
     </main>`;
     }
@@ -15439,10 +15525,11 @@ SclBayTemplate.styles = i$5 `
     }
 
     .container.subfunc {
-      background-color: #daeed5;
+      background-color: #eee8d5;
     }
 
     .container.func.detail {
+      background-color: #fdf6e3;
       flex: auto;
     }
 
@@ -15450,8 +15537,13 @@ SclBayTemplate.styles = i$5 `
       background-color: #fdf6e3;
     }
 
+    .container.unmapped {
+      background: orange;
+      opacity: 1;
+    }
+
     .container.selected {
-      background-color: #93a1a1;
+      background-color: #268bd2;
     }
 
     .content.prores {
@@ -15508,6 +15600,16 @@ SclBayTemplate.styles = i$5 `
       background-color: white;
     }
 
+    .lnode.tab {
+      flex: auto;
+      text-align: center;
+    }
+
+    .lnode.tab:hover {
+      background-color: grey;
+      opacity: 0.4;
+    }
+
     * {
       --md-sys-color-primary: var(--oscd-primary);
       --md-sys-color-secondary: var(--oscd-secondary);
@@ -15561,6 +15663,12 @@ __decorate([
 ], SclBayTemplate.prototype, "selectedSourceRef", void 0);
 __decorate([
     t$1()
+], SclBayTemplate.prototype, "selectedResourceName", void 0);
+__decorate([
+    t$1()
+], SclBayTemplate.prototype, "sldWidth", void 0);
+__decorate([
+    t$1()
 ], SclBayTemplate.prototype, "selectedLibName", void 0);
 __decorate([
     i$2('#lnode-dialog')
@@ -15598,6 +15706,9 @@ __decorate([
 __decorate([
     i$2('#proresservice')
 ], SclBayTemplate.prototype, "proResService", void 0);
+__decorate([
+    i$2('#sldWidthDialog')
+], SclBayTemplate.prototype, "sldWidthDiag", void 0);
 
 export { SclBayTemplate as default };
 //# sourceMappingURL=scl-bay-template.js.map

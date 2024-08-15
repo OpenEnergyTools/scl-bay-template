@@ -6,6 +6,7 @@ export declare class SldViewer extends LitElement {
     container: HTMLDivElement;
     parent?: Element;
     linked: Element[];
+    unmapped: Element[];
     render(): import("lit").TemplateResult<1>;
     static styles: import("lit").CSSResult;
 }
