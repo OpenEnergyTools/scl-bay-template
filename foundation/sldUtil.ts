@@ -105,6 +105,7 @@ export type SldSvgOptions = {
   source?: Element;
   parent?: Element;
   linked?: Element[];
+  unmapped?: Element[];
 };
 
 export const robotoDataURL =

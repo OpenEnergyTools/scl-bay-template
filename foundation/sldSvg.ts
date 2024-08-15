@@ -498,6 +498,7 @@ function renderEquipment(equipment: Element, options: SldSvgOptions) {
     source: true,
     parent: options.parent === equipment,
     linked: !!options.linked?.includes(equipment),
+    unmapped: !!options.unmapped?.includes(equipment),
   })}"
     id="${identity(equipment)}"
     transform="translate(${x} ${y}) rotate(${deg} 0.5 0.5)${
@@ -532,6 +533,7 @@ function renderContainer(
     voltagelevel: isVL,
     bay: !isVL,
     parent: options.parent === bayOrVL,
+    unmapped: !!options.unmapped?.includes(bayOrVL),
   })} tabindex="0" style="outline: none;">
       <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="white" stroke-dasharray="${
     isVL ? nothing : '0.18'

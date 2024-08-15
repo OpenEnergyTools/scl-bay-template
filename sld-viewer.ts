@@ -23,6 +23,9 @@ export class SldViewer extends LitElement {
   @property({ attribute: false })
   linked: Element[] = [];
 
+  @property({ attribute: false })
+  unmapped: Element[] = [];
+
   render() {
     const {
       dim: [w, h],
@@ -44,6 +47,7 @@ export class SldViewer extends LitElement {
           editMode: true,
           parent: this.parent,
           linked: this.linked,
+          unmapped: this.unmapped,
         })}
       </svg>
     </div>`;
@@ -70,17 +74,12 @@ export class SldViewer extends LitElement {
     }
 
     .linked > rect {
-      fill: black;
+      fill: red;
       opacity: 0.1;
     }
 
-    .source > rect {
-      fill: black;
-      opacity: 0;
-    }
-
-    .linked > rect {
-      fill: red;
+    .unmapped > rect {
+      fill: orange;
       opacity: 0.1;
     }
 

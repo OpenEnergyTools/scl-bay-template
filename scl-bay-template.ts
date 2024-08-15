@@ -163,6 +163,17 @@ function linkedEquipment(doc: XMLDocument, selectedFunc?: Element): Element[] {
   });
 }
 
+function unmappedEquipment(doc: XMLDocument): Element[] {
+  return Array.from(
+    doc.querySelectorAll('VoltageLevel,Bay,ConductingEquipment')
+  ).filter(
+    procElement =>
+      !!procElement.querySelector(
+        ':scope > Function SourceRef:not([source]),:scope > EqFunction SourceRef:not([source])'
+      )
+  );
+}
+
 function parentDepth(lNode: Element): number {
   const validParent = [
     'Function',
@@ -242,6 +253,7 @@ type CreateSourceRefOptions = {
   paths?: Path[];
   service: string;
   resourceName?: string;
+  srcRef?: Element;
 };
 
 type CreateProcessResourceOptions = {
@@ -263,7 +275,9 @@ function createSourceRef(
   const { service } = options;
   const { resourceName } = options;
 
-  const sourceRefEdits: Insert[] = [];
+  const { srcRef } = options;
+
+  const sourceRefEdits: Edit[] = [];
 
   let lNodeInputs = lNode.querySelector(
     ':scope > Private[type="eIEC61850-6-100"] > LNodeInputs'
@@ -324,7 +338,7 @@ function createSourceRef(
   if (!lNodeSpec) addLNodeSpecNaming(private6100!);
   if (!lNodeInputs) addLNodeInputs(private6100!);
 
-  if (resourceName) {
+  if (resourceName && !srcRef) {
     const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
 
     const input = 'resourceRefInput';
@@ -338,6 +352,33 @@ function createSourceRef(
       parent: lNodeInputs!,
       node: sourceRef,
       reference: null,
+    });
+  } else if (srcRef && resourceName) {
+    // there is a first SourceRef and we need to add other SourceRefs
+
+    const input = srcRef.getAttribute('input')!;
+
+    sourceRefEdits.push({
+      element: srcRef,
+      attributes: { source: sources[0] },
+    });
+
+    sources.slice(1).forEach((source, i) => {
+      const sourceRef = doc.createElementNS(uri6100, `${prefix6100}:SourceRef`);
+
+      const inst = (lNode.querySelectorAll('SourceRef').length ?? 0) + i + 1;
+
+      sourceRef.setAttribute('source', source);
+      sourceRef.setAttribute('input', input);
+      sourceRef.setAttribute('inputInst', `${inst}`);
+      sourceRef.setAttribute('service', service);
+      sourceRef.setAttribute('resourceName', resourceName);
+
+      sourceRefEdits.push({
+        parent: lNodeInputs!,
+        node: sourceRef,
+        reference: null,
+      });
     });
   } else {
     sources.forEach((source, i) => {
@@ -530,6 +571,12 @@ export default class SclBayTemplate extends LitElement {
   selectedSourceRef?: Element;
 
   @state()
+  selectedResourceName?: Element;
+
+  @state()
+  sldWidth: number = 300;
+
+  @state()
   selectedLibName?: string;
 
   inputs: Input[] = [];
@@ -619,13 +666,15 @@ export default class SclBayTemplate extends LitElement {
     this.lnodeparent = func;
   }
 
-  private saveSourceRef(): void {
+  private createSourceRefs(): void {
     const { paths } = this.daPicker;
     const service = this.serviceSelector.value;
 
     const sourceRefEdits = createSourceRef(this.selectedLNode!, {
       paths,
       service,
+      resourceName: this.selectedResourceName!.getAttribute('resourceName')!,
+      srcRef: this.selectedResourceName,
     });
 
     this.dispatchEvent(newEditEvent(sourceRefEdits));
@@ -786,7 +835,7 @@ export default class SclBayTemplate extends LitElement {
         slot="primaryAction"
         label="save"
         icon="save"
-        @click="${this.saveSourceRef}"
+        @click="${this.createSourceRefs}"
       ></mwc-button>
     </mwc-dialog>`;
   }
@@ -808,15 +857,22 @@ export default class SclBayTemplate extends LitElement {
   renderLNodeDetail(): TemplateResult {
     if (this.selectedLNode)
       return html`<div class="container lnode detail">
+        <nav style="float:right;">
+          <mwc-icon-button
+            icon="close"
+            @click="${() => (this.selectedLNode = undefined)}"
+          ></mwc-icon-button>
+        </nav>
         <div style="display: flex;">
-          <div style="flex: auto;">Input</div>
-          <div style="flex: auto;">Output</div>
-          <div style="flex: auto;">Settings</div>
+          <div class="lnode tab input">Input</div>
+          <div class="lnode tab output">Output</div>
+          <div class="lnode tab settings">Settings</div>
         </div>
         <div>
           <table>
             <thead>
               <tr>
+                <th></th>
                 <th></th>
                 <th scope="col">input</th>
                 <th scope="col">inputInst</th>
@@ -836,6 +892,17 @@ export default class SclBayTemplate extends LitElement {
                 )
               ).map(
                 srcRef => html`<tr>
+                  <th>
+                    ${!srcRef.getAttribute('source')
+                      ? html`<mwc-icon-button
+                          icon="link"
+                          @click="${() => {
+                            this.selectedResourceName = srcRef;
+                            this.daPickerDialog.show();
+                          }}"
+                        ></mwc-icon-button>`
+                      : nothing}
+                  </th>
                   <th>
                     <mwc-icon-button
                       icon="delete"
@@ -944,6 +1011,7 @@ export default class SclBayTemplate extends LitElement {
         container: true,
         lnode: true,
         selected: lNode === this.selectedLNode,
+        unmapped: !!lNode.querySelector(':scope SourceRef:not([source])'),
       })}"
       @click="${() => {
         this.selectedLNode = lNode;
@@ -992,7 +1060,13 @@ export default class SclBayTemplate extends LitElement {
 
   // eslint-disable-next-line class-methods-use-this
   renderSubFunction(subFunc: Element): TemplateResult {
-    return html`<div class="container subfunc">
+    return html`<div
+      class="container subfunc"
+      class="${classMap({
+        container: true,
+        subfunc: true,
+      })}"
+    >
       <nav>
         <mwc-icon-button
           icon="delete"
@@ -1086,9 +1160,11 @@ export default class SclBayTemplate extends LitElement {
               func: true,
               selected: this.selectedFunc === func,
               linked: highlightFunc(func, this.selectedFunc!),
+              unmapped: !!func.querySelector(':scope SourceRef:not([source])'),
             })}"
             @click="${() => {
               this.selectedFunc = func;
+              this.selectedLNode = undefined;
             }}"
           >
             <mwc-icon-button
@@ -1160,26 +1236,58 @@ export default class SclBayTemplate extends LitElement {
     }
   }
 
+  @query('#sldWidthDialog') sldWidthDiag?: Dialog;
+
+  private renderWidthDialog(): TemplateResult {
+    return html`<mwc-dialog heading="SLD pane width" id="sldWidthDialog"
+      ><mwc-textfield type="number" value="${this.sldWidth}"></mwc-textfield>
+      <mwc-button
+        slot="primaryAction"
+        label="Save"
+        icon="save"
+        @click="${(evt: Event) => {
+          this.sldWidth = parseInt(
+            ((evt.target as Element).previousElementSibling as TextField).value,
+            10
+          );
+        }}"
+      ></mwc-button
+    ></mwc-dialog>`;
+  }
+
   render() {
     if (!this.substation) return html`<main>No substation section</main>`;
 
     return html`<main>
-      <sld-viewer
-        .substation=${this.substation}
-        .gridSize=${this.gridSize}
-        .parent=${this.parent}
-        .linked=${linkedEquipment(this.doc!, this.selectedFunc)}
-        @select-equipment="${(evt: CustomEvent) => {
-          this.parent = evt.detail.element;
-          this.selectedFunc = undefined;
-        }}"
-      ></sld-viewer>
+      <div style="margin:10px;max-width:${this.sldWidth}px">
+        <div>
+          <abbr title="Resize SLD"
+            ><mwc-icon-button
+              icon="resize"
+              style="--mdc-icon-button-size:48px;"
+              @click="${() => this.sldWidthDiag?.show()}"
+            ></mwc-icon-button
+          ></abbr>
+        </div>
+        <sld-viewer
+          .substation=${this.substation}
+          .gridSize=${this.gridSize}
+          .parent=${this.parent}
+          .linked=${linkedEquipment(this.doc!, this.selectedFunc)}
+          .unmapped=${unmappedEquipment(this.doc!)}
+          @select-equipment="${(evt: CustomEvent) => {
+            this.parent = evt.detail.element;
+            this.selectedFunc = undefined;
+          }}"
+        ></sld-viewer>
+      </div>
       <div style="width:100%;overflow-y:scroll;">
         ${this.renderSettings()}
         <div style="flex:auto;display:flex; height:100%">
           ${this.renderFuncContainers()} ${this.renderFuncDetail()}
         </div>
         ${this.renderLNodeDialog()} ${this.renderLNodeDetail()}
+        ${this.renderWidthDialog()}
       </div>
     </main>`;
   }
@@ -1230,10 +1338,11 @@ export default class SclBayTemplate extends LitElement {
     }
 
     .container.subfunc {
-      background-color: #daeed5;
+      background-color: #eee8d5;
     }
 
     .container.func.detail {
+      background-color: #fdf6e3;
       flex: auto;
     }
 
@@ -1241,8 +1350,13 @@ export default class SclBayTemplate extends LitElement {
       background-color: #fdf6e3;
     }
 
+    .container.unmapped {
+      background: orange;
+      opacity: 1;
+    }
+
     .container.selected {
-      background-color: #93a1a1;
+      background-color: #268bd2;
     }
 
     .content.prores {
@@ -1297,6 +1411,16 @@ export default class SclBayTemplate extends LitElement {
 
     .table {
       background-color: white;
+    }
+
+    .lnode.tab {
+      flex: auto;
+      text-align: center;
+    }
+
+    .lnode.tab:hover {
+      background-color: grey;
+      opacity: 0.4;
     }
 
     * {
