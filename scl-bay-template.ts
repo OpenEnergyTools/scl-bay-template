@@ -673,7 +673,8 @@ export default class SclBayTemplate extends LitElement {
     const sourceRefEdits = createSourceRef(this.selectedLNode!, {
       paths,
       service,
-      resourceName: this.selectedResourceName!.getAttribute('resourceName')!,
+      resourceName:
+        this.selectedResourceName?.getAttribute('resourceName') ?? undefined,
       srcRef: this.selectedResourceName,
     });
 
