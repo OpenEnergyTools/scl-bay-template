@@ -14952,12 +14952,13 @@ class SclBayTemplate extends s$2 {
         this.lnodeparent = func;
     }
     createSourceRefs() {
+        var _a, _b;
         const { paths } = this.daPicker;
         const service = this.serviceSelector.value;
         const sourceRefEdits = createSourceRef(this.selectedLNode, {
             paths,
             service,
-            resourceName: this.selectedResourceName.getAttribute('resourceName'),
+            resourceName: (_b = (_a = this.selectedResourceName) === null || _a === void 0 ? void 0 : _a.getAttribute('resourceName')) !== null && _b !== void 0 ? _b : undefined,
             srcRef: this.selectedResourceName,
         });
         this.dispatchEvent(newEditEvent(sourceRefEdits));
