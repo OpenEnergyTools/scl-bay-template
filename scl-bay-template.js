@@ -14017,10 +14017,24 @@ function renderTransformerWinding(winding) {
                 ${zigZagTransform}">${zigZagPath}</g>`;
     return b `<g class="winding"><circle cx="${cx}" cy="${cy}" r="${size}" stroke="black" stroke-width="0.06" />${arcPath}${zigZag}${ltcArrow}${ports}</g>`;
 }
-function renderPowerTransformer(transformer) {
+function renderPowerTransformer(transformer, options) {
+    const [x, y] = renderedPosition(transformer);
     const windings = Array.from(transformer.children).filter(c => c.tagName === 'TransformerWinding');
-    return b `<g class="${o$2({ transformer: true })}"
+    let handleClick = A;
+    handleClick = (evt) => {
+        var _a;
+        return (_a = evt.target) === null || _a === void 0 ? void 0 : _a.dispatchEvent(new CustomEvent('select-equipment', {
+            bubbles: true,
+            composed: true,
+            detail: { element: transformer },
+        }));
+    };
+    return b `<g class="${o$2({
+        transformer: true,
+        parent: options.parent === transformer,
+    })}"
         pointer-events="all" >
+        <rect x="${x - 0.2}" y="${y - 0.2}" width="1.4" height="2.4" fill="none" @click=${handleClick} />
         ${windings.map(w => renderTransformerWinding(w))}
       </g>`;
 }
@@ -14148,7 +14162,7 @@ function renderContainer(bayOrVL, options) {
         .map(equipment => renderEquipment(equipment, options))}
       ${Array.from(bayOrVL.children)
         .filter(child => child.tagName === 'PowerTransformer')
-        .map(equipment => renderPowerTransformer(equipment))}
+        .map(equipment => renderPowerTransformer(equipment, options))}
       </g>`;
 }
 function sldSvg(substation, options) {
@@ -14185,7 +14199,7 @@ function sldSvg(substation, options) {
         .filter(node => node.getAttribute('name') !== 'grounded' &&
         isBusBar(node.parentElement))
         .map(cNode => renderConnectivityNode(cNode))}
-    ${Array.from(substation.querySelectorAll(':scope > PowerTransformer')).map(transformer => renderPowerTransformer(transformer))}
+    ${Array.from(substation.querySelectorAll(':scope > PowerTransformer')).map(transformer => renderPowerTransformer(transformer, options))}
     ${Array.from(substation.querySelectorAll('VoltageLevel, Bay, ConductingEquipment, PowerTransformer, Line')).map(element => renderLabel(element, options))}
   </svg>`;
 }
@@ -14515,16 +14529,22 @@ function voltLvObject(voltLv) {
 function subStObject(subSt) {
     const tree = {};
     const children = {};
-    Array.from(subSt.querySelectorAll(':scope > VoltageLevel, :scope > Function')).forEach(subStChild => {
-        var _a, _b;
+    Array.from(subSt.querySelectorAll(':scope > VoltageLevel, :scope > Function, :scope > PowerTransformer')).forEach(subStChild => {
+        var _a, _b, _c;
         if (subStChild.tagName === 'VoltageLevel') {
             const subStName = `${(_a = subStChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${subStChild.tagName}: ${subStName}`;
             children[id] = voltLvObject(subStChild);
             children[id].text = subStName;
         }
+        else if (subStChild.tagName === 'PowerTransformer') {
+            const subStName = `${(_b = subStChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
+            const id = `${subStChild.tagName}: ${subStName}`;
+            children[id] = condEqObject(subStChild);
+            children[id].text = subStName;
+        }
         else {
-            const funcName = `${(_b = subStChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
+            const funcName = `${(_c = subStChild.getAttribute('name')) !== null && _c !== void 0 ? _c : 'UNKNOWN_INST'}`;
             const id = `${subStChild.tagName}: ${funcName}`;
             children[id] = funcObject(subStChild);
             children[id].text = funcName;
@@ -15129,6 +15149,7 @@ class SclBayTemplate extends s$2 {
                 <th scope="col">pLN</th>
                 <th scope="col">pDO</th>
                 <th scope="col">pDA</th>
+                <th scope="col">extRefAddr</th>
               </tr>
             </thead>
             <tbody>
@@ -15159,6 +15180,14 @@ class SclBayTemplate extends s$2 {
                   <th>${srcRef.getAttribute('pLN')}</th>
                   <th>${srcRef.getAttribute('pDO')}</th>
                   <th>${srcRef.getAttribute('pDA')}</th>
+                  ${srcRef.getAttribute('extRefAddr')
+                ? x `<th>${srcRef.getAttribute('extRefAdd')}</th>`
+                : x `<mwc-icon-button
+                        icon="edit"
+                        @click="${() => {
+                    this.selectedSourceRef = srcRef;
+                }}"
+                      ></mwc-icon-button>`}
                 </tr>`)}
             </tbody>
           </table>
