@@ -884,6 +884,7 @@ export default class SclBayTemplate extends LitElement {
                 <th scope="col">pLN</th>
                 <th scope="col">pDO</th>
                 <th scope="col">pDA</th>
+                <th scope="col">extRefAddr</th>
               </tr>
             </thead>
             <tbody>
@@ -919,6 +920,14 @@ export default class SclBayTemplate extends LitElement {
                   <th>${srcRef.getAttribute('pLN')}</th>
                   <th>${srcRef.getAttribute('pDO')}</th>
                   <th>${srcRef.getAttribute('pDA')}</th>
+                  ${srcRef.getAttribute('extRefAddr')
+                    ? html`<th>${srcRef.getAttribute('extRefAdd')}</th>`
+                    : html`<mwc-icon-button
+                        icon="edit"
+                        @click="${() => {
+                          this.selectedSourceRef = srcRef;
+                        }}"
+                      ></mwc-icon-button>`}
                 </tr>`
               )}
             </tbody>

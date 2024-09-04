@@ -245,13 +245,21 @@ function subStObject(subSt: Element): Tree {
   const children: Tree = {};
 
   Array.from(
-    subSt.querySelectorAll(':scope > VoltageLevel, :scope > Function')
+    subSt.querySelectorAll(
+      ':scope > VoltageLevel, :scope > Function, :scope > PowerTransformer'
+    )
   ).forEach(subStChild => {
     if (subStChild.tagName === 'VoltageLevel') {
       const subStName = `${subStChild.getAttribute('name') ?? 'UNKNOWN_INST'}`;
 
       const id = `${subStChild.tagName}: ${subStName}`;
       children[id] = voltLvObject(subStChild);
+      children[id]!.text = subStName;
+    } else if (subStChild.tagName === 'PowerTransformer') {
+      const subStName = `${subStChild.getAttribute('name') ?? 'UNKNOWN_INST'}`;
+
+      const id = `${subStChild.tagName}: ${subStName}`;
+      children[id] = condEqObject(subStChild);
       children[id]!.text = subStName;
     } else {
       const funcName = `${subStChild.getAttribute('name') ?? 'UNKNOWN_INST'}`;

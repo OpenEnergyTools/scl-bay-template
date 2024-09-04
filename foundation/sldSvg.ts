@@ -377,13 +377,33 @@ function renderTransformerWinding(winding: Element): TemplateResult<2> {
   return svg`<g class="winding"><circle cx="${cx}" cy="${cy}" r="${size}" stroke="black" stroke-width="0.06" />${arcPath}${zigZag}${ltcArrow}${ports}</g>`;
 }
 
-function renderPowerTransformer(transformer: Element): TemplateResult<2> {
+function renderPowerTransformer(
+  transformer: Element,
+  options: SldSvgOptions
+): TemplateResult<2> {
+  const [x, y] = renderedPosition(transformer);
+
   const windings = Array.from(transformer.children).filter(
     c => c.tagName === 'TransformerWinding'
   );
+  let handleClick: ((evt: Event) => void) | symbol = nothing;
+  handleClick = (evt: Event) =>
+    evt.target?.dispatchEvent(
+      new CustomEvent('select-equipment', {
+        bubbles: true,
+        composed: true,
+        detail: { element: transformer },
+      })
+    );
 
-  return svg`<g class="${classMap({ transformer: true })}"
+  return svg`<g class="${classMap({
+    transformer: true,
+    parent: options.parent === transformer,
+  })}"
         pointer-events="all" >
+        <rect x="${x - 0.2}" y="${
+    y - 0.2
+  }" width="1.4" height="2.4" fill="none" @click=${handleClick} />
         ${windings.map(w => renderTransformerWinding(w))}
       </g>`;
 }
@@ -546,7 +566,7 @@ function renderContainer(
         .map(equipment => renderEquipment(equipment, options))}
       ${Array.from(bayOrVL.children)
         .filter(child => child.tagName === 'PowerTransformer')
-        .map(equipment => renderPowerTransformer(equipment))}
+        .map(equipment => renderPowerTransformer(equipment, options))}
       </g>`;
 }
 
@@ -598,7 +618,7 @@ export function sldSvg(
       )
       .map(cNode => renderConnectivityNode(cNode))}
     ${Array.from(substation.querySelectorAll(':scope > PowerTransformer')).map(
-      transformer => renderPowerTransformer(transformer)
+      transformer => renderPowerTransformer(transformer, options)
     )}
     ${Array.from(
       substation.querySelectorAll(
