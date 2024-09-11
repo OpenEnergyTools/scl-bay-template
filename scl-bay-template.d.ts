@@ -10,6 +10,7 @@ import type { TextField } from '@material/mwc-textfield';
 import '@openscd/oscd-tree-grid';
 import type { TreeGrid } from '@openscd/oscd-tree-grid';
 import './sld-viewer.js';
+import '@openenergytools/function-editor';
 type Input = {
     source: string;
     srcRefs: Element[];
