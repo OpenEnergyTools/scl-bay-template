@@ -31162,7 +31162,7 @@ function extRefAddress(extRef, sourceRef) {
         return `@${intAddr}`;
     return `${iedName}/${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''}${lnClass}${lnInst}.${intAddr}`;
 }
-let FunctionEditor = class FunctionEditor extends s$3 {
+let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
     constructor() {
         super(...arguments);
         this.docs = {};
@@ -31887,7 +31887,7 @@ let FunctionEditor = class FunctionEditor extends s$3 {
     </main>`;
     }
 };
-FunctionEditor.styles = i$6 `
+FunctionEditor9030.styles = i$6 `
     main {
       width: 100%;
       height: 100%;
@@ -32043,103 +32043,103 @@ FunctionEditor.styles = i$6 `
   `;
 __decorate([
     n$5({ attribute: false })
-], FunctionEditor.prototype, "function", void 0);
+], FunctionEditor9030.prototype, "function", void 0);
 __decorate([
     n$5()
-], FunctionEditor.prototype, "docs", void 0);
+], FunctionEditor9030.prototype, "docs", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "lNodeTypeSrc", void 0);
+], FunctionEditor9030.prototype, "lNodeTypeSrc", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "gridSize", void 0);
+], FunctionEditor9030.prototype, "gridSize", void 0);
 __decorate([
     n$5({ type: Number })
-], FunctionEditor.prototype, "editCount", void 0);
+], FunctionEditor9030.prototype, "editCount", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "parent", void 0);
+], FunctionEditor9030.prototype, "parent", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "selectedFunc", void 0);
+], FunctionEditor9030.prototype, "selectedFunc", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "lNodeForDetail", void 0);
+], FunctionEditor9030.prototype, "lNodeForDetail", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "lNodeForCalculation", void 0);
+], FunctionEditor9030.prototype, "lNodeForCalculation", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "lnodeparent", void 0);
+], FunctionEditor9030.prototype, "lnodeparent", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "selectedSourceRef", void 0);
+], FunctionEditor9030.prototype, "selectedSourceRef", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "selectedResourceName", void 0);
+], FunctionEditor9030.prototype, "selectedResourceName", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "sldWidth", void 0);
+], FunctionEditor9030.prototype, "sldWidth", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "selectedLibName", void 0);
+], FunctionEditor9030.prototype, "selectedLibName", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "outputs", void 0);
+], FunctionEditor9030.prototype, "outputs", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "isControlRef", void 0);
+], FunctionEditor9030.prototype, "isControlRef", void 0);
 __decorate([
     t$1()
-], FunctionEditor.prototype, "lNodeDetail", void 0);
+], FunctionEditor9030.prototype, "lNodeDetail", void 0);
 __decorate([
     i$3('#lnode-dialog')
-], FunctionEditor.prototype, "dialog", void 0);
+], FunctionEditor9030.prototype, "dialog", void 0);
 __decorate([
     i$3('#dapicker')
-], FunctionEditor.prototype, "daPickerDialog", void 0);
+], FunctionEditor9030.prototype, "daPickerDialog", void 0);
 __decorate([
     i$3('#extRefPicker')
-], FunctionEditor.prototype, "extRefPicker", void 0);
+], FunctionEditor9030.prototype, "extRefPicker", void 0);
 __decorate([
     i$3('#processrecource')
-], FunctionEditor.prototype, "processResourceDiag", void 0);
+], FunctionEditor9030.prototype, "processResourceDiag", void 0);
 __decorate([
     i$3('#dapicker oscd-tree-grid')
-], FunctionEditor.prototype, "daPicker", void 0);
+], FunctionEditor9030.prototype, "daPicker", void 0);
 __decorate([
     i$3('#service')
-], FunctionEditor.prototype, "serviceSelector", void 0);
+], FunctionEditor9030.prototype, "serviceSelector", void 0);
 __decorate([
     i$3('input')
-], FunctionEditor.prototype, "libInput", void 0);
+], FunctionEditor9030.prototype, "libInput", void 0);
 __decorate([
     i$3('#existProcessResource')
-], FunctionEditor.prototype, "proResNameSel", void 0);
+], FunctionEditor9030.prototype, "proResNameSel", void 0);
 __decorate([
     i$3('#proresname')
-], FunctionEditor.prototype, "proResName", void 0);
+], FunctionEditor9030.prototype, "proResName", void 0);
 __decorate([
     i$3('#proresselector')
-], FunctionEditor.prototype, "proResSelector", void 0);
+], FunctionEditor9030.prototype, "proResSelector", void 0);
 __decorate([
     i$3('#prorescardinality')
-], FunctionEditor.prototype, "proResCardinality", void 0);
+], FunctionEditor9030.prototype, "proResCardinality", void 0);
 __decorate([
     i$3('#proresmax')
-], FunctionEditor.prototype, "proResMax", void 0);
+], FunctionEditor9030.prototype, "proResMax", void 0);
 __decorate([
     i$3('#proresservice')
-], FunctionEditor.prototype, "proResService", void 0);
+], FunctionEditor9030.prototype, "proResService", void 0);
 __decorate([
     i$3('#sldWidthDialog')
-], FunctionEditor.prototype, "sldWidthDiag", void 0);
+], FunctionEditor9030.prototype, "sldWidthDiag", void 0);
 __decorate([
     i$3('#lnlist')
-], FunctionEditor.prototype, "lnList", void 0);
-FunctionEditor = __decorate([
-    e$8('function-editor')
-], FunctionEditor);
+], FunctionEditor9030.prototype, "lnList", void 0);
+FunctionEditor9030 = __decorate([
+    e$8('function-editor-90-30')
+], FunctionEditor9030);
 
 /** Common `CSS` styles used by substation subeditors */
 i$d `
@@ -33348,12 +33348,12 @@ class SclBayTemplate extends s$c {
       <div style="width:100%;overflow-y:scroll;">
         <div style="flex:auto;display:flex; height:100%">
           ${this.renderFuncContainers()}
-          <function-editor
+          <function-editor-90-30
             style="flex:auto;"
             .doc="${this.doc}"
             editCount="${this.editCount}"
             .function="${this.selectedFunc}"
-          ></function-editor>
+          ></function-editor-90-30>
         </div>
       </div>
     </main>`;
