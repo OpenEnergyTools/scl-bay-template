@@ -28066,7 +28066,7 @@ function newCreateWizardEvent$1(parent, tagName, subWizard, eventInitDict) {
 let LIBDOC;
 let LIBDOCNAME;
 const uri6100 = 'http://www.iec.ch/61850/2019/SCL/6-100';
-const xmlnsNs = 'http://www.w3.org/2000/xmlns/';
+const xmlnsNs$1 = 'http://www.w3.org/2000/xmlns/';
 const prefix6100 = 'eTr_6-100';
 function compareSrcRef(a, b) {
     const as = `${a.getAttribute('input')}${a.getAttribute('inputInst')}${a.getAttribute('source')}`;
@@ -28674,7 +28674,7 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
             return;
         const sldNsPrefix = this.function.ownerDocument.documentElement.lookupPrefix(uri6100);
         if (!sldNsPrefix) {
-            this.function.ownerDocument.documentElement.setAttributeNS(xmlnsNs, `xmlns:${prefix6100}`, uri6100);
+            this.function.ownerDocument.documentElement.setAttributeNS(xmlnsNs$1, `xmlns:${prefix6100}`, uri6100);
         }
     }
     renderProcessResourcePicker() {
@@ -32248,6 +32248,9 @@ SldViewer = __decorate$1([
     e$l('sld-viewer')
 ], SldViewer);
 
+const xmlnsNs = 'http://www.w3.org/2000/xmlns/';
+const ns6100 = 'http://www.iec.ch/61850/2019/SCL/6-100';
+const pref6100 = 'eTr_6-100';
 function funcPath(func, path) {
     var _a, _b;
     if (!func.parentElement || func.parentElement.tagName === 'SCL') {
@@ -32363,11 +32366,16 @@ class SclBayTemplate extends s$b {
         if (!file)
             return;
         const text = await file.text();
-        const fsd = new DOMParser().parseFromString(text, 'application/xml');
-        const func = fsd.querySelector('Function');
+        const func = new DOMParser()
+            .parseFromString(text, 'application/xml')
+            .querySelector('Function');
         if (!func || !this.parent)
             return;
         const funcClone = updateFuncClone(func, this.parent);
+        // check if current doc has xmlns:eTr_6-100
+        const hasXmlns6100 = !!this.doc.documentElement.lookupNamespaceURI('eTr_6-100');
+        if (!hasXmlns6100)
+            this.doc.documentElement.setAttributeNS(xmlnsNs, 'xmlns:eTr_6-100', ns6100);
         const uniqueLnTypes = new Set(Array.from(funcClone.querySelectorAll(':scope LNode'))
             .map(lNode => lNode.getAttribute('lnType'))
             .filter(lnType => lnType));
@@ -32671,5 +32679,5 @@ __decorate$1([
     i$a('#sldWidthDialog')
 ], SclBayTemplate.prototype, "sldWidthDiag", void 0);
 
-export { SclBayTemplate as default };
+export { SclBayTemplate as default, ns6100, pref6100, xmlnsNs };
 //# sourceMappingURL=scl-bay-template.js.map

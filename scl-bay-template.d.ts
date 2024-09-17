@@ -9,6 +9,9 @@ import type { Dialog } from '@material/mwc-dialog';
 import type { TextField } from '@material/mwc-textfield';
 import '@openenergytools/function-editor-90-30';
 import './sld-viewer.js';
+export declare const xmlnsNs = "http://www.w3.org/2000/xmlns/";
+export declare const ns6100 = "http://www.iec.ch/61850/2019/SCL/6-100";
+export declare const pref6100 = "eTr_6-100";
 export default class SclBayTemplate extends LitElement {
     doc?: XMLDocument;
     docs: Record<string, XMLDocument>;
