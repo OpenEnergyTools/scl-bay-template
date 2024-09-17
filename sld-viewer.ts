@@ -79,12 +79,12 @@ export class SldViewer extends LitElement {
     }
 
     .unmapped > rect {
-      fill: orange;
+      fill: var(--oscd-secondary);
       opacity: 0.1;
     }
 
     .parent > rect {
-      fill: #268bd2;
+      fill: var(--oscd-primary);
       opacity: 0.1;
     }
   `;
