@@ -27,6 +27,12 @@ import { newCreateWizardEvent } from './foundation.js';
 
 import './sld-viewer.js';
 
+export const xmlnsNs = 'http://www.w3.org/2000/xmlns/';
+
+export const ns6100 = 'http://www.iec.ch/61850/2019/SCL/6-100';
+
+export const pref6100 = 'eTr_6-100';
+
 function funcPath(func: Element, path: string[]): string {
   if (!func.parentElement || func.parentElement.tagName === 'SCL') {
     const name = func.getAttribute('name') ?? '';
@@ -218,12 +224,24 @@ export default class SclBayTemplate extends LitElement {
     if (!file) return;
 
     const text = await file.text();
-    const fsd = new DOMParser().parseFromString(text, 'application/xml');
+    const func = new DOMParser()
+      .parseFromString(text, 'application/xml')
+      .querySelector('Function');
 
-    const func = fsd.querySelector('Function');
     if (!func || !this.parent) return;
 
     const funcClone = updateFuncClone(func, this.parent);
+
+    // check if current doc has xmlns:eTr_6-100
+    const hasXmlns6100 =
+      !!this.doc!.documentElement.lookupNamespaceURI('eTr_6-100');
+
+    if (!hasXmlns6100)
+      this.doc!.documentElement.setAttributeNS(
+        xmlnsNs,
+        'xmlns:eTr_6-100',
+        ns6100
+      );
 
     const uniqueLnTypes = new Set(
       Array.from(funcClone.querySelectorAll(':scope LNode'))
