@@ -21,6 +21,8 @@ import { newEditEvent } from '@openscd/open-scd-core';
 
 import '@openenergytools/function-editor-90-30';
 
+import { createElement } from '@openenergytools/scl-lib/dist/foundation/utils.js';
+
 import { getReference, importLNodeType } from '@openenergytools/scl-lib';
 
 import { newCreateWizardEvent } from './foundation.js';
@@ -205,7 +207,7 @@ export default class SclBayTemplate extends LitElement {
   }
 
   subFunction(subFunc: Element): Element {
-    const eqSubFunc = this.doc!.createElement('EqSubFunction');
+    const eqSubFunc = createElement(this.doc!, 'EqSubFunction', {});
     const name = subFunc.getAttribute('name');
     if (name) eqSubFunc.setAttribute('name', name);
 
@@ -258,7 +260,7 @@ export default class SclBayTemplate extends LitElement {
     });
 
     if (this.parent?.tagName === 'ConductingEquipment') {
-      const eqFunc = this.doc!.createElement('EqFunction');
+      const eqFunc = createElement(this.doc!, 'EqFunction', {});
       const name = funcClone.getAttribute('name');
       if (name) eqFunc.setAttribute('name', name);
 
