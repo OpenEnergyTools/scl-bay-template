@@ -32384,7 +32384,9 @@ class SclBayTemplate extends s$b {
             if (lNodeType)
                 this.dispatchEvent(newEditEvent$1(importLNodeType(lNodeType, this.doc)));
         });
-        if (((_c = this.parent) === null || _c === void 0 ? void 0 : _c.tagName) === 'ConductingEquipment') {
+        if (((_c = this.parent) === null || _c === void 0 ? void 0 : _c.tagName) === 'ConductingEquipment' ||
+            this.parent.tagName === 'PowerTransformer' ||
+            this.parent.tagName === 'TransformerWinding') {
             const eqFunc = createElement(this.doc, 'EqFunction', {});
             const name = funcClone.getAttribute('name');
             if (name)
