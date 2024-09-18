@@ -32347,7 +32347,7 @@ class SclBayTemplate extends s$b {
         this.dispatchEvent(newCreateWizardEvent(parent, 'EqSubFunction'));
     }
     subFunction(subFunc) {
-        const eqSubFunc = this.doc.createElement('EqSubFunction');
+        const eqSubFunc = createElement(this.doc, 'EqSubFunction', {});
         const name = subFunc.getAttribute('name');
         if (name)
             eqSubFunc.setAttribute('name', name);
@@ -32385,7 +32385,7 @@ class SclBayTemplate extends s$b {
                 this.dispatchEvent(newEditEvent$1(importLNodeType(lNodeType, this.doc)));
         });
         if (((_c = this.parent) === null || _c === void 0 ? void 0 : _c.tagName) === 'ConductingEquipment') {
-            const eqFunc = this.doc.createElement('EqFunction');
+            const eqFunc = createElement(this.doc, 'EqFunction', {});
             const name = funcClone.getAttribute('name');
             if (name)
                 eqFunc.setAttribute('name', name);
