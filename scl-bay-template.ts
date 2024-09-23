@@ -259,7 +259,11 @@ export default class SclBayTemplate extends LitElement {
         this.dispatchEvent(newEditEvent(importLNodeType(lNodeType, this.doc!)));
     });
 
-    if (this.parent?.tagName === 'ConductingEquipment') {
+    if (
+      this.parent?.tagName === 'ConductingEquipment' ||
+      this.parent.tagName === 'PowerTransformer' ||
+      this.parent.tagName === 'TransformerWinding'
+    ) {
       const eqFunc = createElement(this.doc!, 'EqFunction', {});
       const name = funcClone.getAttribute('name');
       if (name) eqFunc.setAttribute('name', name);
