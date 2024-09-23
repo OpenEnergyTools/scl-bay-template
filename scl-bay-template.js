@@ -27786,8 +27786,11 @@ function hasLeafNode(element, leafNode) {
     return getLeafNode(element).includes(leafNode);
 }
 function lNodeTitle(lNode) {
-    var _a, _b, _c;
-    return `${(_a = lNode.getAttribute('prefix')) !== null && _a !== void 0 ? _a : ''}${(_b = lNode.getAttribute('lnClass')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}${(_c = lNode.getAttribute('lnInst')) !== null && _c !== void 0 ? _c : ''}`;
+    var _a, _b, _c, _d, _e, _f;
+    const lNodeSpec = lNode.querySelector(':scope LNodeSpecNaming');
+    if (lNodeSpec)
+        return `${(_a = lNodeSpec.getAttribute('sPrefix')) !== null && _a !== void 0 ? _a : ''}${(_b = lNodeSpec.getAttribute('sLnClass')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}${(_c = lNodeSpec.getAttribute('sLnInst')) !== null && _c !== void 0 ? _c : ''}`;
+    return `${(_d = lNode.getAttribute('prefix')) !== null && _d !== void 0 ? _d : ''}${(_e = lNode.getAttribute('lnClass')) !== null && _e !== void 0 ? _e : 'UNKNOWN_INST'}${(_f = lNode.getAttribute('lnInst')) !== null && _f !== void 0 ? _f : ''}`;
 }
 function dataAttributeObject(da, leafNode) {
     const tree = {};
@@ -28523,7 +28526,7 @@ function extRefAddress(extRef, sourceRef) {
         (srcLnInst !== null && srcLnInst !== void 0 ? srcLnInst : '') === (lnInst !== null && lnInst !== void 0 ? lnInst : '');
     if (isSameLNode)
         return `@${intAddr}`;
-    return `${iedName}/${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''}${lnClass}${lnInst}.${intAddr}`;
+    return `${iedName}/${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''}${lnClass}${lnInst}/${intAddr}`;
 }
 let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
     constructor() {
@@ -29388,6 +29391,10 @@ FunctionEditor9030.styles = i$6 `
       border-radius: 10px;
       background-color: var(--fedit-detail-base2);
       padding: 10px;
+      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12), 0 5px 5px -3px rgba(0, 0, 0, 0.2);
+      outline-width: 4px;
+      transition: all 250ms linear;
     }
 
     .input.selectpane:hover {
