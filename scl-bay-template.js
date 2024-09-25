@@ -28865,13 +28865,15 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
                 headline: (_a = extRef.getAttribute('intAddr')) !== null && _a !== void 0 ? _a : 'UNKNOWN',
                 supportingText: identity$1(extRef.parentElement.parentElement),
                 primaryAction: () => {
-                    if (this.selectedSourceRef)
+                    if (this.selectedSourceRef) {
                         this.dispatchEvent(newEditEvent({
                             element: this.selectedSourceRef,
                             attributes: {
                                 extRefAddr: extRefAddress(extRef, this.selectedSourceRef),
                             },
                         }));
+                        this.extRefPicker.close();
+                    }
                 },
             });
         });
@@ -28879,16 +28881,6 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
       <action-list filterable .items="${items}"></action-list>
       <mwc-button slot="secondaryAction" dialogAction="close">
         Cancel
-      </mwc-button>
-      <mwc-button
-        slot="primaryAction"
-        dialogAction="close"
-        @click="${() => {
-            this.createNewLNodeElements();
-            this.extRefPicker.close();
-        }}"
-      >
-        Save
       </mwc-button>
     </mwc-dialog> `;
     }
