@@ -27780,10 +27780,15 @@ function getLeafNode(element) {
         return [element.getAttribute('name')];
     return children.flatMap(child => getLeafNode(child));
 }
-function hasLeafNode(element, leafNode) {
-    if (!leafNode)
+function hasLeafNode(element, filter) {
+    if (!filter.leafNode)
         return true;
-    return getLeafNode(element).includes(leafNode);
+    return getLeafNode(element).includes(filter.leafNode);
+}
+function hasLnClass(element, filter) {
+    if (!filter.lnClass)
+        return true;
+    return !!element.querySelector(`:scope LNodeSpecNaming[sLnClass="${filter.lnClass}"]`);
 }
 function lNodeTitle(lNode) {
     var _a, _b, _c, _d, _e, _f;
@@ -27792,17 +27797,17 @@ function lNodeTitle(lNode) {
         return `${(_a = lNodeSpec.getAttribute('sPrefix')) !== null && _a !== void 0 ? _a : ''}${(_b = lNodeSpec.getAttribute('sLnClass')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}${(_c = lNodeSpec.getAttribute('sLnInst')) !== null && _c !== void 0 ? _c : ''}`;
     return `${(_d = lNode.getAttribute('prefix')) !== null && _d !== void 0 ? _d : ''}${(_e = lNode.getAttribute('lnClass')) !== null && _e !== void 0 ? _e : 'UNKNOWN_INST'}${(_f = lNode.getAttribute('lnInst')) !== null && _f !== void 0 ? _f : ''}`;
 }
-function dataAttributeObject(da, leafNode) {
+function dataAttributeObject(da, filter) {
     const tree = {};
     const children = {};
     getChildren(da)
-        .filter(daChild => hasLeafNode(daChild, leafNode))
+        .filter(daChild => hasLeafNode(daChild, filter))
         .forEach(bda => {
         var _a;
         const bdaName = (_a = bda.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_BDA';
         if (bda.getAttribute('bType') === 'Struct') {
             const id = `BDA: ${bdaName}`;
-            children[id] = dataAttributeObject(bda, leafNode);
+            children[id] = dataAttributeObject(bda, filter);
             children[id].text = bdaName;
         }
         else {
@@ -27814,24 +27819,24 @@ function dataAttributeObject(da, leafNode) {
     tree.children = children;
     return tree;
 }
-function subDataObjectsObject(sdo, leafNode) {
+function subDataObjectsObject(sdo, filter) {
     const tree = {};
     const children = {};
     getChildren(sdo)
-        .filter(sdoChild => hasLeafNode(sdoChild, leafNode))
+        .filter(sdoChild => hasLeafNode(sdoChild, filter))
         .forEach(sDoOrDa => {
         var _a, _b;
         if (sDoOrDa.tagName === 'SDO') {
             const sDoName = (_a = sDoOrDa.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_SDO';
             const id = `SDO: ${sDoName}`;
-            children[id] = subDataObjectsObject(sDoOrDa, leafNode);
+            children[id] = subDataObjectsObject(sDoOrDa, filter);
             children[id].text = sDoName;
         }
         else {
             const daName = (_b = sDoOrDa.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_DA';
             if (sDoOrDa.getAttribute('bType') === 'Struct') {
                 const id = `DA: ${daName}`;
-                children[id] = dataAttributeObject(sDoOrDa, leafNode);
+                children[id] = dataAttributeObject(sDoOrDa, filter);
                 children[id].text = daName;
             }
             else {
@@ -27844,24 +27849,24 @@ function subDataObjectsObject(sdo, leafNode) {
     tree.children = children;
     return tree;
 }
-function dataObjectObject(dO, leafNode) {
+function dataObjectObject(dO, filter) {
     const tree = {};
     const children = {};
     getChildren(dO)
-        .filter(dOChild => hasLeafNode(dOChild, leafNode))
+        .filter(dOChild => hasLeafNode(dOChild, filter))
         .forEach(sDoOrDa => {
         var _a, _b;
         if (sDoOrDa.tagName === 'SDO') {
             const sDoName = (_a = sDoOrDa.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_SDO';
             const id = `SDO: ${sDoName}`;
-            children[id] = subDataObjectsObject(sDoOrDa, leafNode);
+            children[id] = subDataObjectsObject(sDoOrDa, filter);
             children[id].text = sDoName;
         }
         else {
             const daName = (_b = sDoOrDa.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_DA';
             if (sDoOrDa.getAttribute('bType') === 'Struct') {
                 const id = `DA: ${daName}`;
-                children[id] = dataAttributeObject(sDoOrDa, leafNode);
+                children[id] = dataAttributeObject(sDoOrDa, filter);
                 children[id].text = daName;
             }
             else {
@@ -27874,97 +27879,100 @@ function dataObjectObject(dO, leafNode) {
     tree.children = children;
     return tree;
 }
-function anyLnObject(lNode, leafNode) {
+function anyLnObject(lNode, filter) {
     const tree = {};
     const children = {};
     getChildren(lNode)
-        .filter(lNodeChild => hasLeafNode(lNodeChild, leafNode))
+        .filter(lNodeChild => hasLeafNode(lNodeChild, filter))
         .forEach(dO => {
         var _a;
         const doName = (_a = dO.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_DO';
         const id = `DO: ${doName}`;
-        children[id] = dataObjectObject(dO, leafNode);
+        children[id] = dataObjectObject(dO, filter);
         children[id].text = doName;
     });
     tree.children = children;
     return tree;
 }
-function funcObject(func, leafNode) {
+function funcObject(func, filter) {
     const tree = {};
     const children = {};
     getChildren(func)
-        .filter(funcChild => hasLeafNode(funcChild, leafNode))
+        .filter(funcChild => hasLeafNode(funcChild, filter))
+        .filter(funcChild => hasLnClass(funcChild, filter))
         .forEach(funcChild => {
         var _a;
         if (funcChild.tagName === 'LNode') {
             const title = lNodeTitle(funcChild);
             const id = `${funcChild.tagName}: ${title}`;
-            children[id] = anyLnObject(funcChild, leafNode);
+            children[id] = anyLnObject(funcChild, filter);
             children[id].text = title;
         }
         else {
             const funcName = `${(_a = funcChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${funcChild.tagName}: ${funcName}`;
-            children[id] = funcObject(funcChild, leafNode);
+            children[id] = funcObject(funcChild, filter);
             children[id].text = funcName;
         }
     });
     tree.children = children;
     return tree;
 }
-function condEqObject(condEq, leafNode) {
+function condEqObject(condEq, filter) {
     const tree = {};
     const children = {};
     getChildren(condEq)
-        .filter(condEqChild => hasLeafNode(condEqChild, leafNode))
+        .filter(condEqChild => hasLeafNode(condEqChild, filter))
+        .filter(funcChild => hasLnClass(funcChild, filter))
         .forEach(condEqChild => {
         var _a, _b;
         if (condEqChild.tagName === 'LNode') {
             const title = lNodeTitle(condEqChild);
             const id = `${condEqChild.tagName}: ${title}`;
-            children[id] = anyLnObject(condEqChild, leafNode);
+            children[id] = anyLnObject(condEqChild, filter);
             children[id].text = title;
         }
         else if (condEqChild.tagName === 'SubEquipment') {
             const subEqName = `${(_a = condEqChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${condEqChild.tagName}: ${subEqName}`;
-            children[id] = condEqObject(condEqChild, leafNode);
+            children[id] = condEqObject(condEqChild, filter);
             children[id].text = subEqName;
         }
         else {
             const funcName = `${(_b = condEqChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
             const id = `${condEqChild.tagName}: ${funcName}`;
-            children[id] = funcObject(condEqChild, leafNode);
+            children[id] = funcObject(condEqChild, filter);
             children[id].text = funcName;
         }
     });
     tree.children = children;
     return tree;
 }
-function bayObject(bay, leafNode) {
+function bayObject(bay, filter) {
     const tree = {};
     const children = {};
     getChildren(bay)
-        .filter(bayChild => hasLeafNode(bayChild, leafNode))
+        .filter(bayChild => hasLeafNode(bayChild, filter))
+        .filter(funcChild => hasLnClass(funcChild, filter))
         .forEach(bayChild => {
         var _a, _b;
         if (bayChild.tagName === 'ConductingEquipment') {
             const condEqName = `${(_a = bayChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${bayChild.tagName}: ${condEqName}`;
-            children[id] = condEqObject(bayChild, leafNode);
+            children[id] = condEqObject(bayChild, filter);
             children[id].text = condEqName;
         }
         else {
             const funcName = `${(_b = bayChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
             const id = `${bayChild.tagName}: ${funcName}`;
-            children[id] = funcObject(bayChild, leafNode);
+            children[id] = funcObject(bayChild, filter);
             children[id].text = funcName;
         }
     });
     tree.children = children;
     return tree;
 }
-function voltLvObject(voltLv, leafNode) {
+function voltLvObject(voltLv, filter) {
     const tree = {};
     const children = {};
     getChildren(voltLv).forEach(voltLvChild => {
@@ -27972,20 +27980,20 @@ function voltLvObject(voltLv, leafNode) {
         if (voltLvChild.tagName === 'Bay') {
             const bayName = `${(_a = voltLvChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${voltLvChild.tagName}: ${bayName}`;
-            children[id] = bayObject(voltLvChild, leafNode);
+            children[id] = bayObject(voltLvChild, filter);
             children[id].text = bayName;
         }
         else {
             const funcName = `${(_b = voltLvChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
             const id = `${voltLvChild.tagName}: ${funcName}`;
-            children[id] = funcObject(voltLvChild, leafNode);
+            children[id] = funcObject(voltLvChild, filter);
             children[id].text = funcName;
         }
     });
     tree.children = children;
     return tree;
 }
-function subStObject(subSt, leafNode) {
+function subStObject(subSt, filter) {
     const tree = {};
     const children = {};
     getChildren(subSt).forEach(subStChild => {
@@ -27993,32 +28001,32 @@ function subStObject(subSt, leafNode) {
         if (subStChild.tagName === 'VoltageLevel') {
             const subStName = `${(_a = subStChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_INST'}`;
             const id = `${subStChild.tagName}: ${subStName}`;
-            children[id] = voltLvObject(subStChild, leafNode);
+            children[id] = voltLvObject(subStChild, filter);
             children[id].text = subStName;
         }
         else if (subStChild.tagName === 'PowerTransformer') {
             const subStName = `${(_b = subStChild.getAttribute('name')) !== null && _b !== void 0 ? _b : 'UNKNOWN_INST'}`;
             const id = `${subStChild.tagName}: ${subStName}`;
-            children[id] = condEqObject(subStChild, leafNode);
+            children[id] = condEqObject(subStChild, filter);
             children[id].text = subStName;
         }
         else {
             const funcName = `${(_c = subStChild.getAttribute('name')) !== null && _c !== void 0 ? _c : 'UNKNOWN_INST'}`;
             const id = `${subStChild.tagName}: ${funcName}`;
-            children[id] = funcObject(subStChild, leafNode);
+            children[id] = funcObject(subStChild, filter);
             children[id].text = funcName;
         }
     });
     tree.children = children;
     return tree;
 }
-function dataAttributeTree(doc, leafNode) {
+function dataAttributeTree(doc, filter) {
     const tree = {};
     getChildren(doc.querySelector('SCL')).forEach(subStChild => {
         var _a;
         const subStName = (_a = subStChild.getAttribute('name')) !== null && _a !== void 0 ? _a : 'UNKNOWN_LDEVICE';
         const id = `Substation: ${subStName}`;
-        tree[id] = subStObject(subStChild, leafNode);
+        tree[id] = subStObject(subStChild, filter);
         tree[id].text = subStName;
     });
     return tree;
@@ -28185,23 +28193,22 @@ function createSingleLNode(parent, ln) {
     inserts.push({ parent: private6100, node: lNodeSpec, reference: null });
     return inserts;
 }
-function updateSourceRef(srcRef, options) {
+function updateSourceRef(srcRefs, options) {
     const edits = [];
     const { paths } = options;
     const sources = paths ? getSourceDef(paths) : [];
-    const resourceName = srcRef.getAttribute('resourceName');
-    const service = srcRef.getAttribute('service');
-    const lNodeInputs = srcRef.parentElement;
+    const resourceName = srcRefs[0].getAttribute('resourceName');
+    const service = srcRefs[0].getAttribute('service');
+    const lNodeInputs = srcRefs[0].parentElement;
     if (!lNodeInputs)
         return [];
     // there is a first SourceRef and we need to add other SourceRefs
-    const input = srcRef.getAttribute('input');
-    if (sources.length > 0)
-        edits.push({
-            element: srcRef,
-            attributes: { source: sources[0] },
-        });
-    sources.slice(1).forEach((source, i) => {
+    const input = srcRefs[0].getAttribute('input');
+    srcRefs.forEach((srcRef, i) => {
+        if (sources[i])
+            edits.push({ element: srcRef, attributes: { source: sources[i] } });
+    });
+    sources.slice(srcRefs.length).forEach((source, i) => {
         var _a;
         const sourceRef = lNodeInputs.ownerDocument.createElementNS(uri6100, `${prefix6100}:SourceRef`);
         const inst = ((_a = lNodeInputs.querySelectorAll('SourceRef').length) !== null && _a !== void 0 ? _a : 0) + i + 1;
@@ -28528,6 +28535,25 @@ function extRefAddress(extRef, sourceRef) {
         return `@${intAddr}`;
     return `${iedName}/${ldInst}/${prefix !== null && prefix !== void 0 ? prefix : ''}${lnClass}${lnInst}/${intAddr}`;
 }
+function findResourceRef(element, resourceName) {
+    if (element.tagName === 'SCL')
+        return null;
+    const resource = element.ownerDocument.querySelector(`ProcessResource[name="${resourceName}"]`);
+    if (resource)
+        return resource;
+    if (!element.parentElement)
+        return null;
+    return findResourceRef(element.parentElement, resourceName);
+}
+function lnClassFilter(srcRef) {
+    var _a, _b;
+    const rscRef = findResourceRef(srcRef, (_a = srcRef.getAttribute('resourceName')) !== null && _a !== void 0 ? _a : '');
+    if (!rscRef)
+        return;
+    const selector = rscRef.getAttribute('selector');
+    // eslint-disable-next-line consistent-return
+    return (_b = selector === null || selector === void 0 ? void 0 : selector.match('lnClass="(.*?)"')) === null || _b === void 0 ? void 0 : _b[1];
+}
 let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
     constructor() {
         super(...arguments);
@@ -28587,13 +28613,13 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
         this.lnodeparent = func;
     }
     createSourceRefs(addProcRef, isNewProcRef) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b, _c;
         const { paths } = this.daPicker;
         const service = (_b = (_a = this.serviceSelector) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : 'Internal';
         const resourceName = (_c = this.proResName2) === null || _c === void 0 ? void 0 : _c.value;
         let edits = [];
-        if (this.isSrcRefUpdate) {
-            edits = updateSourceRef(this.selectedResourceName, {
+        if (this.isSrcRefUpdate && this.toBeUpdatedSrcRefs) {
+            edits = updateSourceRef(this.toBeUpdatedSrcRefs, {
                 paths,
             });
         }
@@ -28601,7 +28627,7 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
             edits = createSourceRef(this.lNodeForCalculation, {
                 paths,
                 service,
-                resourceName: (_e = (_d = this.selectedResourceName) === null || _d === void 0 ? void 0 : _d.getAttribute('resourceName')) !== null && _e !== void 0 ? _e : resourceName,
+                resourceName,
             });
         }
         if (addProcRef) {
@@ -28765,7 +28791,10 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
             >`
             : A}
       <oscd-tree-grid
-        .tree="${dataAttributeTree(this.function.ownerDocument, leafNode)}"
+        .tree="${dataAttributeTree(this.function.ownerDocument, {
+            leafNode,
+            lnClass: this.lnClass,
+        })}"
       ></oscd-tree-grid>
     </div> `;
     }
@@ -28918,19 +28947,66 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
       </mwc-button>
     </mwc-dialog> `;
     }
+    // eslint-disable-next-line class-methods-use-this
+    renderProcResSelector(srcRef, i, srcRefs) {
+        const rscName = srcRef.getAttribute('resourceName');
+        const nextRscName = srcRefs.find((val, index) => index > i && val.getAttribute('resourceName') !== rscName);
+        if (!rscName)
+            return x `<th></th>`;
+        const nextRscNameIndex = nextRscName
+            ? srcRefs.indexOf(nextRscName)
+            : srcRefs.length;
+        if (i === 0) {
+            return x `<th rowspan="${nextRscNameIndex || '1'}">
+        <mwc-icon-button
+          icon="link"
+          @click="${() => {
+                this.isSrcRefUpdate = true;
+                this.toBeUpdatedSrcRefs = srcRefs.slice(i, nextRscNameIndex);
+                this.lnClass = lnClassFilter(srcRef);
+                this.daPickerDialog.show();
+            }}"
+        ></mwc-icon-button>
+      </th>`;
+        }
+        const isChanged = srcRefs[i].getAttribute('resourceName') !==
+            srcRefs[i - 1].getAttribute('resourceName');
+        return isChanged
+            ? x `<th rowspan="${nextRscNameIndex || '1'}">
+          <mwc-icon-button
+            icon="link"
+            @click="${() => {
+                this.isSrcRefUpdate = true;
+                this.toBeUpdatedSrcRefs = srcRefs.slice(i, nextRscNameIndex);
+                this.lnClass = lnClassFilter(srcRef);
+                this.daPickerDialog.show();
+            }}"
+          ></mwc-icon-button>
+        </th>`
+            : x `${A}`;
+    }
     renderLNodeDetailContent() {
-        if (this.lNodeDetail === 'inputs')
+        if (this.lNodeDetail === 'inputs') {
+            const srcRefs = Array.from(this.lNodeForDetail.querySelectorAll(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs > SourceRef')).sort((a, b) => {
+                var _a, _b;
+                const nameA = (_a = a.getAttribute('resourceName')) !== null && _a !== void 0 ? _a : 'undefined';
+                const nameB = (_b = b.getAttribute('resourceName')) !== null && _b !== void 0 ? _b : 'undefined';
+                if (nameA < nameB)
+                    return -1;
+                if (nameA > nameB)
+                    return 1;
+                return 0;
+            });
             return x ` <table>
         <thead>
           <tr>
-            <th></th>
             <th></th>
             <th scope="col">input</th>
             <th scope="col">inputInst</th>
             <th scope="col">source</th>
             <th scope="col">service</th>
             <th scope="col">desc</th>
-            <th scope="col">resourceName</th>
+            <th scope="col" colspan="2">resourceName</th>
             <th scope="col">pLN</th>
             <th scope="col">pDO</th>
             <th scope="col">pDA</th>
@@ -28938,19 +29014,7 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
           </tr>
         </thead>
         <tbody>
-          ${Array.from(this.lNodeForDetail.querySelectorAll(':scope > Private[type="eIEC61850-6-100"] > LNodeInputs > SourceRef')).map(srcRef => x `<tr>
-              <th>
-                ${!srcRef.getAttribute('source')
-                ? x `<mwc-icon-button
-                      icon="link"
-                      @click="${() => {
-                    this.isSrcRefUpdate = true;
-                    this.selectedResourceName = srcRef;
-                    this.daPickerDialog.show();
-                }}"
-                    ></mwc-icon-button>`
-                : A}
-              </th>
+          ${srcRefs.map((srcRef, i, arr) => x `<tr>
               <th>
                 <mwc-icon-button
                   icon="delete"
@@ -28959,9 +29023,22 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
               </th>
               <th>${srcRef.getAttribute('input')}</th>
               <th>${srcRef.getAttribute('inputInst')}</th>
-              <th>${srcRef.getAttribute('source')}</th>
+              <th>
+                ${!srcRef.getAttribute('source')
+                ? x `<mwc-icon-button
+                      icon="link"
+                      @click="${() => {
+                    this.isSrcRefUpdate = true;
+                    this.lnClass = lnClassFilter(srcRef);
+                    this.toBeUpdatedSrcRefs = [srcRef];
+                    this.daPickerDialog.show();
+                }}"
+                    ></mwc-icon-button>`
+                : srcRef.getAttribute('source')}
+              </th>
               <th>${srcRef.getAttribute('service')}</th>
               <th>${srcRef.getAttribute('desc')}</th>
+              ${this.renderProcResSelector(srcRef, i, arr)}
               <th>${srcRef.getAttribute('resourceName')}</th>
               <th>${srcRef.getAttribute('pLN')}</th>
               <th>${srcRef.getAttribute('pDO')}</th>
@@ -28978,6 +29055,7 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
             </tr>`)}
         </tbody>
       </table>`;
+        }
         if (this.lNodeDetail === 'outputs')
             return x ` <table>
         <thead>
@@ -28998,7 +29076,7 @@ let FunctionEditor9030 = class FunctionEditor9030 extends s$3 {
                 ? x `<mwc-icon-button
                       icon="link"
                       @click="${() => {
-                    this.selectedResourceName = ctrlRef;
+                    this.toBeUpdatedSrcRefs = [ctrlRef];
                     this.daPickerDialog.show();
                 }}"
                     ></mwc-icon-button>`
@@ -29507,7 +29585,7 @@ __decorate([
 ], FunctionEditor9030.prototype, "selectedSourceRef", void 0);
 __decorate([
     t$1()
-], FunctionEditor9030.prototype, "selectedResourceName", void 0);
+], FunctionEditor9030.prototype, "toBeUpdatedSrcRefs", void 0);
 __decorate([
     t$1()
 ], FunctionEditor9030.prototype, "sldWidth", void 0);
@@ -29526,6 +29604,9 @@ __decorate([
 __decorate([
     t$1()
 ], FunctionEditor9030.prototype, "linkProcRes", void 0);
+__decorate([
+    t$1()
+], FunctionEditor9030.prototype, "lnClass", void 0);
 __decorate([
     t$1()
 ], FunctionEditor9030.prototype, "lNodeDetail", void 0);
