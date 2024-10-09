@@ -27735,6 +27735,28 @@ function identity$1(e) {
     return NaN;
 }
 
+function getLnType(element) {
+    var _a, _b;
+    let lnType = element.getAttribute('lnType');
+    if (!lnType) {
+        const [iedName, ldInst, prefix, lnClass, lnInst] = [
+            'iedName',
+            'ldInst',
+            'prefix',
+            'lnClass',
+            'lnInst',
+        ].map(attr => element.getAttribute(attr));
+        lnType =
+            (_b = (_a = Array.from(element.ownerDocument.querySelectorAll(`:root > IED[name="${iedName}"] LDevice[inst="${ldInst}"] > LN, :root > IED[id="${iedName}"] LDevice[inst="${ldInst}"] > LN0`))
+                .find(anyLn => {
+                var _a, _b, _c;
+                return (prefix !== null && prefix !== void 0 ? prefix : '') === ((_a = anyLn.getAttribute('prefix')) !== null && _a !== void 0 ? _a : '') &&
+                    (lnClass !== null && lnClass !== void 0 ? lnClass : '') === ((_b = anyLn.getAttribute('lnClass')) !== null && _b !== void 0 ? _b : '') &&
+                    (lnInst !== null && lnInst !== void 0 ? lnInst : '') === ((_c = anyLn.getAttribute('inst')) !== null && _c !== void 0 ? _c : '');
+            })) === null || _a === void 0 ? void 0 : _a.getAttribute('lnType')) !== null && _b !== void 0 ? _b : 'undefined';
+    }
+    return `${lnType}`;
+}
 function getChildren(parent) {
     if (parent.tagName === 'SCL')
         return Array.from(parent.querySelectorAll(':scope > Substation'));
@@ -27755,7 +27777,7 @@ function getChildren(parent) {
     if (parent.tagName === 'EqFunction' || parent.tagName === 'EqSubFunction')
         return Array.from(parent.querySelectorAll(':scope > EqSubFunction, :scope > LNode'));
     if (parent.tagName === 'LNode') {
-        const lNodeType = parent.ownerDocument.querySelector(`LNodeType[id="${parent.getAttribute('lnType')}"]`);
+        const lNodeType = parent.ownerDocument.querySelector(`LNodeType[id="${getLnType(parent)}"]`);
         if (!lNodeType)
             return [];
         return Array.from(lNodeType.querySelectorAll(':scope > DO'));
